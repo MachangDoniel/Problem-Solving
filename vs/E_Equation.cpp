@@ -69,7 +69,11 @@ ll combination(ll n,ll r){
 }
  
 // MyTask
- 
+ld c;
+
+bool good(ld mid){
+    return mid*mid+sqrt(mid)>=c;
+}
 
 int main()
 {
@@ -79,21 +83,18 @@ int main()
     //for(ll t=1;t<=T;t++){
     while(T--){
         ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vll v(n);
-        for(i=0;i<n;i++){
-            cin>>v[i];
+        cin>>c;
+        ld high=1,low=0;
+        while(!good(high)){
+            high*=2;
         }
-        for(i=0;i<k;i++){
-            cin>>in;
-            ll high=n,low=-1,mid;
-            while(high>low+1){
-                mid=(high+low)/2;
-                if(v[mid]>in) high=mid;
-                else low=mid;
-            }
-            cout<<low+1<<endl;
+        for(i=0;i<100;i++){
+            ld mid=(high+low)/2;
+            if(good(mid)) high=mid;
+            else low=mid;
         }
+        cout<<extra(20)<<high<<endl;
+        
     }
     return 0;
 }

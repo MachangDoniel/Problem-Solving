@@ -38,6 +38,8 @@ using ordered_set= tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_
 // Const
 const ll mod=1000000007;
 const ll N=200005;
+const ll inf=2e18;
+const ll minf=-2e18;
  
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
@@ -69,7 +71,13 @@ ll combination(ll n,ll r){
 }
  
 // MyTask
- 
+ll n,x,y;
+bool good(ll mid){
+    if(mid<min(x,y)) return false;
+    mid-=min(x,y);
+    return n<=(1+mid/x+mid/y);
+}
+
 
 int main()
 {
@@ -78,22 +86,16 @@ int main()
     // cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vll v(n);
-        for(i=0;i<n;i++){
-            cin>>v[i];
+        // ll in,n,m,i,j,k,x,y;
+        cin>>n>>x>>y;
+        ll high=max(x,y)*n,low=0;
+        while(high>low+1){
+            ll mid=(high+low)/2;
+            if(good(mid)) high=mid;
+            else low=mid;
         }
-        for(i=0;i<k;i++){
-            cin>>in;
-            ll high=n,low=-1,mid;
-            while(high>low+1){
-                mid=(high+low)/2;
-                if(v[mid]>in) high=mid;
-                else low=mid;
-            }
-            cout<<low+1<<endl;
-        }
+        cout<<high<<endl;
+        
     }
     return 0;
 }

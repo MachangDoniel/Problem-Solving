@@ -88,12 +88,13 @@ int main()
             cin>>in;
             ll high=n,low=-1,mid;
             while(high>low+1){
-                mid=(high+low)/2;
-                if(v[mid]>in) high=mid;
+                mid=(low+high)/2;
+                if(v[mid]>=in) high=mid;
                 else low=mid;
             }
-            cout<<low+1<<endl;
+            cout<<high+1<<endl;
         }
+        
     }
     return 0;
 }

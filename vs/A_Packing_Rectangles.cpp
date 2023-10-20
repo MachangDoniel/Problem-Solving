@@ -79,21 +79,20 @@ int main()
     //for(ll t=1;t<=T;t++){
     while(T--){
         ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vll v(n);
-        for(i=0;i<n;i++){
-            cin>>v[i];
+        ll w,h;
+        cin>>w>>h>>n;
+        ll low=0,high=1,mid,ans=INT_MAX;
+        while((high/w) * (high/h) < n){
+            high*=2;
         }
-        for(i=0;i<k;i++){
-            cin>>in;
-            ll high=n,low=-1,mid;
-            while(high>low+1){
-                mid=(high+low)/2;
-                if(v[mid]>in) high=mid;
-                else low=mid;
-            }
-            cout<<low+1<<endl;
+        while(high>low+1){
+            mid=(high+low)/2;
+            if((mid/w) * (mid/h)>=n) high=mid;
+            else low=mid;
+            // cout<<" "<<mid<<endl;
         }
+        cout<<high<<endl;
+
     }
     return 0;
 }

@@ -70,6 +70,16 @@ ll combination(ll n,ll r){
  
 // MyTask
 
+ll bin_search(vll &v,ll num){
+    ll high=v.size()-1,low=0;
+    while(high>=low){
+        ll mid=(low+high)/2;
+        if(v[mid]==num) return mid;
+        else if(v[mid]<num) low=mid+1;
+        else high=mid-1;
+    }
+    return -1;
+} 
 
 int main()
 {
@@ -86,16 +96,9 @@ int main()
         }
         for(i=0;i<k;i++){
             cin>>in;
-            ll high=v.size()-1,low=0;
-            bool ok=false;
-            while(high>=low){
-                ll mid=(low+high)/2;
-                if(v[mid]==in){ok=true; break;}
-                else if(v[mid]<in) low=mid+1;
-                else high=mid-1;
-            }
-            ok?YES:NO;
+            (bin_search(v,in)==-1)?NO:YES;
         }
+
     }
     return 0;
 }

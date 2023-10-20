@@ -69,7 +69,18 @@ ll combination(ll n,ll r){
 }
  
 // MyTask
- 
+
+ll n,k;
+vector<ll>v;
+
+bool good(ld mid){
+    ll count=0;
+    for(ll i=0;i<n;i++){
+        count+=floor(v[i]/mid);
+    }
+    // cout<<count<<endl;
+    return count>=k;
+}
 
 int main()
 {
@@ -78,22 +89,21 @@ int main()
     // cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
+        // ll in,n,m,i,j,k,x,y;
         cin>>n>>k;
-        vll v(n);
-        for(i=0;i<n;i++){
+        v.resize(n);
+        ld high=1e18,low=0;
+        for(ll i=0;i<n;i++){
             cin>>v[i];
         }
-        for(i=0;i<k;i++){
-            cin>>in;
-            ll high=n,low=-1,mid;
-            while(high>low+1){
-                mid=(high+low)/2;
-                if(v[mid]>in) high=mid;
-                else low=mid;
-            }
-            cout<<low+1<<endl;
+        for(ll i=0;i<100;i++){
+            // cout<<low<<" "<<high<<" ";
+            ld mid=(high+low)/2;
+            if(good(mid)) low=mid; 
+            else high=mid;
         }
+        cout<<extra(6)<<low<<endl;
+        
     }
     return 0;
 }

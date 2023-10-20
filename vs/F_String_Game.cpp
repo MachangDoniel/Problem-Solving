@@ -79,21 +79,8 @@ int main()
     //for(ll t=1;t<=T;t++){
     while(T--){
         ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vll v(n);
-        for(i=0;i<n;i++){
-            cin>>v[i];
-        }
-        for(i=0;i<k;i++){
-            cin>>in;
-            ll high=n,low=-1,mid;
-            while(high>low+1){
-                mid=(high+low)/2;
-                if(v[mid]>in) high=mid;
-                else low=mid;
-            }
-            cout<<low+1<<endl;
-        }
+        cin>>n;
+        
     }
     return 0;
 }
