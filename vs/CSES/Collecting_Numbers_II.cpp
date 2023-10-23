@@ -5,8 +5,6 @@ using namespace std;
 using namespace __gnu_pbds;
 template <typename T>
 using ordered_set= tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;  //ordered_set
-template <typename T>
-using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;  //multiple_ordered_set
  
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
@@ -36,7 +34,6 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define sll set<ll>
 #define msl multiset<ll>
 #define osl ordered_set<ll>
-#define mosl multi_ordered_set<ll>
  
 // Const
 const ll mod=1000000007;
@@ -70,9 +67,9 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
-
+ 
 // MyTask
-
+ 
 
 int main()
 {
@@ -82,7 +79,42 @@ int main()
     //for(ll t=1;t<=T;t++){
     while(T--){
         ll in,n,m,i,j,k,x,y;
-        cin>>n;
+        cin>>n>>m;
+        vll v(n+1);
+        mpl pos;
+        ll ans=0;
+        for(i=1;i<=n;i++){
+            cin>>v[i];
+            if(!pos[v[i]-1]) ans++;
+            pos[v[i]]=i;
+        }
+        pos[0]=0;
+        pos[n+1]=n+1;
+        for(i=0;i<m;i++){
+            cin>>x>>y;
+            ll count=0,presentx,nextx,presenty,nexty;
+            presentx=nexty=x;
+            presenty=nextx=y;
+            if(pos[v[x]-1]<presentx && pos[v[x]-1]>=nextx) count++;
+            if(pos[v[x]-1]>presentx && pos[v[x]-1]<=nextx) count--;
+            if(pos[v[x]+1]>presentx && pos[v[x]+1]<=nextx) count++;
+            if(pos[v[x]+1]<presentx && pos[v[x]+1]>=nextx) count--;
+            if(pos[v[y]-1]<presenty && pos[v[y]-1]>=nexty  && pos[v[y]-1]!=x) count++;
+            if(pos[v[y]-1]>presenty && pos[v[y]-1]<=nexty  && pos[v[y]-1]!=x) count--;
+            if(pos[v[y]+1]>presenty && pos[v[y]+1]<=nexty && pos[v[y]+1]!=x) count++;
+            if(pos[v[y]+1]<presenty && pos[v[y]+1]>=nexty && pos[v[y]+1]!=x) count--;
+            ll temp=pos[v[x]];
+            pos[v[x]]=pos[v[y]];
+            pos[v[y]]=temp;
+            temp=v[x];
+            v[x]=v[y];
+            v[y]=temp;
+            ans+=count;
+            cout<<ans<<endl;
+            // for(j=1;j<=n;j++){
+            //     cout<<v[j]<<" "<<pos[v[j]]<<endl;
+            // }
+        }
         
     }
     return 0;

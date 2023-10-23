@@ -1,0 +1,31 @@
+{
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "vector": "cpp",
+        "ostream": "cpp",
+        "utility": "cpp",
+        "iostream": "cpp",
+        "xtree": "cpp",
+        "stack": "cpp",
+        "set": "cpp",
+        "chrono": "cpp",
+        "ios": "cpp",
+        "cmath": "cpp",
+        "random": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "queue": "cpp",
+        "regex": "cpp",
+        "type_traits": "cpp",
+        "valarray": "cpp",
+        "xhash": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "algorithm": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled",
+    "cmake.configureOnOpen": true
+}

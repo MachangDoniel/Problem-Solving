@@ -5,8 +5,6 @@ using namespace std;
 using namespace __gnu_pbds;
 template <typename T>
 using ordered_set= tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;  //ordered_set
-template <typename T>
-using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;  //multiple_ordered_set
  
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
@@ -36,7 +34,6 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define sll set<ll>
 #define msl multiset<ll>
 #define osl ordered_set<ll>
-#define mosl multi_ordered_set<ll>
  
 // Const
 const ll mod=1000000007;
@@ -70,8 +67,21 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
-
+ 
 // MyTask
+ll n,i,j;
+vll v;
+string s,t;
+bool good(ll mid){
+    string str=s;
+    for(i=0;i<=mid;i++){
+        str[v[i]-1]='#';
+    }
+    for(i=0,j=0;i<n && j<t.size();i++){
+        if(str[i]==t[j]) j++;
+    }
+    return (j==t.size());
+}
 
 
 int main()
@@ -81,8 +91,20 @@ int main()
     // cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
-        cin>>n;
+        // ll in,n,m,i,j,k,x,y;
+        cin>>s>>t;
+        n=s.size();
+        v.resize(n);
+        for(i=0;i<n;i++){
+            cin>>v[i];
+        }
+        ll high=n,low=-1;
+        while(high>low+1){
+            ll mid=(high+low)/2;
+            if(good(mid)) low=mid;
+            else high=mid;
+        }
+        cout<<low+1<<endl;
         
     }
     return 0;

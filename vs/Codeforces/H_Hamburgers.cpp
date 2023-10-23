@@ -5,8 +5,6 @@ using namespace std;
 using namespace __gnu_pbds;
 template <typename T>
 using ordered_set= tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;  //ordered_set
-template <typename T>
-using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;  //multiple_ordered_set
  
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
@@ -36,7 +34,6 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define sll set<ll>
 #define msl multiset<ll>
 #define osl ordered_set<ll>
-#define mosl multi_ordered_set<ll>
  
 // Const
 const ll mod=1000000007;
@@ -70,9 +67,18 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
-
+ 
 // MyTask
-
+ll n,i,j,nB,nS,nC,pB,pS,pC,oB,oS,oC,rubble;
+bool good(ll mid){
+    ll needB=oB*mid,needS=oS*mid,needC=oC*mid;
+    ll costB,costS,costC;
+    (nB>=needB)? costB=0:costB=(needB-nB)*pB;
+    (nS>=needS)? costS=0:costS=(needS-nS)*pS;
+    (nC>=needC)? costC=0:costC=(needC-nC)*pC;
+    // cout<<costB<<" "<<costS<<" "<<costC<<endl;
+    return rubble>=(costB+costS+costC);
+}
 
 int main()
 {
@@ -81,8 +87,24 @@ int main()
     // cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
-        cin>>n;
+        // ll in,n,m,i,j,k,x,y;
+        string s;
+        cin>>s;
+        n=s.size();
+        for(i=0;i<n;i++){
+            if(s[i]=='B') oB++;
+            else if(s[i]=='S') oS++;
+            else if(s[i]=='C') oC++;
+        }
+        cin>>nB>>nS>>nC>>pB>>pS>>pC>>rubble;
+        ll high=1e12+101,low=0;
+        while(high>=low){
+            ll mid=(high+low)/2;
+            if(good(mid)) low=mid+1;
+            else high=mid-1;
+        }
+        cout<<low-1<<endl;
+        // cout<<" "<<oB<<" "<<oS<<" "<<oC<<endl;
         
     }
     return 0;

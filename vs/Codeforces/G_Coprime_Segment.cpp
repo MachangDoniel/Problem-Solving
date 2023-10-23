@@ -5,8 +5,6 @@ using namespace std;
 using namespace __gnu_pbds;
 template <typename T>
 using ordered_set= tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;  //ordered_set
-template <typename T>
-using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;  //multiple_ordered_set
  
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
@@ -36,7 +34,6 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define sll set<ll>
 #define msl multiset<ll>
 #define osl ordered_set<ll>
-#define mosl multi_ordered_set<ll>
  
 // Const
 const ll mod=1000000007;
@@ -70,9 +67,8 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
-
+ 
 // MyTask
-
 
 int main()
 {
@@ -83,6 +79,34 @@ int main()
     while(T--){
         ll in,n,m,i,j,k,x,y;
         cin>>n;
+        vll v(n);
+        ll ans=2e18;
+        for(i=0;i<n;i++){
+            cin>>v[i];
+        }
+        ll gcd;
+        for(i=0;i<n;i++){
+            if(i==0) gcd=v[i];
+            else gcd=__gcd(gcd,v[i]);
+            if(gcd==1){
+                ll tempgcd=v[i];
+                if(tempgcd==1){
+                    k=1;
+                    ans=min(ans,k);
+                }
+                else{
+                    for(j=i-1,k=2;j>=0;j--,k++){
+                        tempgcd=__gcd(tempgcd,v[j]);
+                        if(tempgcd==1){
+                            ans=min(ans,k);
+                            break;
+                        }
+                    }
+                }
+                gcd=v[i];
+            }
+        }
+        ans==2e18?cout<<-1<<endl:cout<<ans<<endl;
         
     }
     return 0;

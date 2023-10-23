@@ -70,9 +70,12 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
-
+ 
 // MyTask
-
+void print(vector<pll> v){
+    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
+    cout<<endl;
+}
 
 int main()
 {
@@ -82,8 +85,29 @@ int main()
     //for(ll t=1;t<=T;t++){
     while(T--){
         ll in,n,m,i,j,k,x,y;
-        cin>>n;
-        
+        cin>>n>>k;
+        vector<pll>v(n);
+        msl s;
+        for(i=0;i<n;i++){
+            cin>>x>>y;
+            v[i]={y,x};
+            if(i<k) s.insert(0);
+        }
+        s.insert(LLONG_MAX);
+        sort(all(v));
+        // print(v);
+        ll ans=0;
+        for(i=0;i<n;i++){
+            auto it=s.ub(v[i].second);
+            // cout<<v[i].second<<" "<<*it<<endl;
+            if(it!=s.begin()){
+                it--;
+                s.erase(it);
+                s.insert(v[i].first);
+                ans++;
+            }
+        }
+        cout<<ans<<endl;
     }
     return 0;
 }
