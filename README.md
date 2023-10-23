@@ -237,4 +237,4 @@ Lower_Bound of 5: 6
 Upper_Bound of 5: 6
 ```
 
-Note: Here, Upper_Bound & Lower_Bound works in ordered_set as usual, But in multiple_ordered_set, it worls different.
+Note: Here, Upper_Bound & Lower_Bound works in ordered_set as usual, But in multiple_ordered_set, it works different.
