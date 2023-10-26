@@ -1,6 +1,6 @@
 
 # Contest Programming
-KUET BANK is mobile financial service of a demo bank, that allows a user to conduct financial transactions via the Internet. 
+
 
 ## Tools Required
 1. [Code::Blocks](https://www.codeblocks.org/downloads/) or
