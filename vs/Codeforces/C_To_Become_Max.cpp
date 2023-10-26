@@ -41,7 +41,8 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // Const
 const ll mod=1000000007;
 const ll N=200005;
- 
+const ll inf=2e18;
+
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
 ll lcm(ll a, ll b) {return (a/gcd(a,b) * b);}
@@ -70,44 +71,54 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
+
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
+ll n,k;
+vector<ll>v;
+
+bool good(ll mid){
+    for(int i=0;i<n-1;i++){
+        ll need=mid,cost=0;
+        int j;
+        for(j=i;j<n;j++){
+            if(need<=v[j]){
+                break;
+            }
+            if(j==n-1){
+                cost=k+1;
+                break;
+            }
+            cost+=(need-v[j]);
+            need--;
+        }
+        if(cost<=k) return true;
+    }
+    return false;
 }
 
 int main()
 {
     Good_Luck;
-    ll T=1;
-    // cin>>T;
+    int T=1;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
+        // ll in,n,m,i,j,k,x,y;
         cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
-        for(i=0;i<n;i++){
-            cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
+        v.resize(n);
+        ll mx=0;
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+            mx=max(mx,v[i]);
         }
-        // s.insert(LLONG_MAX);
-        sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
-            }
+        ll low=-1,high=mx+k+1;       //high=*max_element(all(v))+k
+        while(high>low+1){
+            ll mid=(high+low)/2;
+            if(good(mid)) low=mid;
+            else high=mid;
         }
-        cout<<ans<<endl;
+        cout<<max(low,mx)<<endl;
+        
     }
     return 0;
 }

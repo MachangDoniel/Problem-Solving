@@ -70,11 +70,39 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
+
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
+#define n 7
+#define isValid(a,b,c) (a>=b && a<c?1:0)
+string s;
+bool visited[7][7];
+ll ans;
+
+bool valid(ll )
+void mission(ll x,ll y,ll pos){
+    visited[x][y]=true;
+    if(x==6 && y==0){
+        if(pos==s.size()) ans++;
+        return;
+    }
+    if(s[pos]=='?'){
+        if(!visited[x-1][y] && x-1) mission(x-1,y,++pos);   //up
+        mission(x+1,y,++pos);   //down
+        mission(x,y+1,++pos);   //right
+        mission(x,y-1,++pos);   //left
+    }
+    else if(s[pos]=='U'){
+        mission(x-1,y,++pos);   //up
+    }
+    else if(s[pos]=='D'){
+        mission(x+1,y,++pos);   //down
+    }
+    else if(s[pos]=='R'){
+        mission(x,y+1,++pos);   //right
+    }
+    else if(s[pos]=='L'){
+        mission(x,y-1,++pos);   //left
+    }
 }
 
 int main()
@@ -84,30 +112,10 @@ int main()
     // cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
-        for(i=0;i<n;i++){
-            cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
-        }
-        // s.insert(LLONG_MAX);
-        sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
-            }
-        }
-        cout<<ans<<endl;
+        // ll in,n,m,i,j,k,x,y;
+        cin>>s;
+        mission(0,0,0);
+        
     }
     return 0;
 }

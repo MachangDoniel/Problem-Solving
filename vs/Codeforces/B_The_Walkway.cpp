@@ -41,7 +41,8 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // Const
 const ll mod=1000000007;
 const ll N=200005;
- 
+const ll inf=2e18;
+
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
 ll lcm(ll a, ll b) {return (a/gcd(a,b) * b);}
@@ -70,44 +71,52 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
+
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
+
+int counter(int d,vector<int>s){    // to count the no of cookies petya will eat during the walkaway
+    int ans=0;
+    for(int i=1;i<s.size();i++){
+        ans+=(s[i]-s[i-1]-1)/d;     // find the no of cookies petya will eat between 2 sellers
+    }
+    ans+=s.size()-2;                // for the virtual (first and last) sellers that we added extra, we need to remove them
+    return ans;
 }
 
 int main()
 {
     Good_Luck;
-    ll T=1;
-    // cin>>T;
+    int T=1;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
-        for(i=0;i<n;i++){
-            cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
+        int in,n,m,i,j,k,x,y;
+        int d;
+        cin>>n>>m>>d;
+        vector<int> s(m);
+        for(i=0;i<m;i++){
+            cin>>s[i];
         }
-        // s.insert(LLONG_MAX);
-        sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
+        s.insert(s.begin(),1-d);    // added an extra seller to make compatible with the formula to count the no of cookies petya will eat before the 1st seller 
+        s.pb(n+1);                  // added an extra seller to make compatible with the formula to count the no of cookies petya will eat after the last seller 
+        int ans=2e9;
+        vector<int>cookiesseller;
+        for(i=1;i<=m;i++){
+            int cookiessaving=(s[i+1]-s[i-1]-1)/d-(1+(s[i]-s[i-1]-1)/d+(s[i+1]-s[i]-1)/d);
+            // cout<<": "<<s[i-1]<<" "<<s[i]<<" "<<s[i+1]<<endl;
+            if(cookiessaving<ans){   //find min cookiessaving to count removing of how many cookies seller cookiessellerults the min cookiessaving
+                ans=cookiessaving;
+                cookiesseller.clear();
+                // cout<<"<  "<<endl;
             }
+            if(cookiessaving==ans){
+                cookiesseller.pb(s[i]);
+                // cout<<"==  "<<endl;
+            }
+            // cout<<i<<": "<<cookiessaving<<" "<<ans<<" "<<cookiesseller.size()<<endl;
         }
-        cout<<ans<<endl;
+        cout<<ans+counter(d,s)<<" "<<cookiesseller.size()<<endl;
+
     }
     return 0;
 }

@@ -41,7 +41,8 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // Const
 const ll mod=1000000007;
 const ll N=200005;
- 
+const ll inf=2e18;
+
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
 ll lcm(ll a, ll b) {return (a/gcd(a,b) * b);}
@@ -70,44 +71,40 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
+
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
-}
+int i,j,n;
+vector<int>v;
 
 int main()
 {
     Good_Luck;
     ll T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
+        // ll in,n,m,i,j,k,x,y;
+        
+        cin>>n;
+        v.resize(n);
         for(i=0;i<n;i++){
-            cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
+            cin>>v[i];
         }
-        // s.insert(LLONG_MAX);
-        sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
+        int ans=0;
+        for(i=0;i<256;i++){
+            bool vis[256]={0};
+            int cur_xor=0;
+            for(j=0;j<n;j++){
+                cur_xor^=v[j];
+                vis[cur_xor]=true;
+                ans=max(ans,cur_xor);
+                if(vis[cur_xor^i]){
+                    ans=max(ans,i);
+                }
             }
         }
         cout<<ans<<endl;
+        
     }
     return 0;
 }

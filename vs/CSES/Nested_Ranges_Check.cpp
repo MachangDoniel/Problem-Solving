@@ -72,11 +72,8 @@ ll combination(ll n,ll r){
 }
  
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
-}
-
+ 
+ 
 int main()
 {
     Good_Luck;
@@ -85,29 +82,31 @@ int main()
     //for(ll t=1;t<=T;t++){
     while(T--){
         ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
+        cin>>n;
+        vector<pair<pll,ll>>v;
+        vector<pll>ans(n);
         for(i=0;i<n;i++){
             cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
+            v.pb({{x,-y},i});
         }
-        // s.insert(LLONG_MAX);
         sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
-            }
+        ordered_set<pair<ll,ll>> s1,s2;
+        for(i=n-1;i>=0;i--){
+            ans[v[i].second].first=s1.order_of_key({-v[i].first.second,-i});
+            s1.insert({-v[i].first.second,-i});
         }
-        cout<<ans<<endl;
+        for(i=0;i<n;i++){
+            ans[v[i].second].second=s2.size()-s2.order_of_key({-v[i].first.second,-i});
+            s2.insert({-v[i].first.second,-i});
+        }
+        for(i=0;i<n;i++){
+            ans[i].first?cout<<1<<" ":cout<<0<<" ";
+        }
+        cout<<endl;
+        for(i=0;i<n;i++){
+            ans[i].second?cout<<1<<" ":cout<<0<<" ";
+        }
+        cout<<endl;
     }
     return 0;
 }

@@ -39,9 +39,9 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define mosl multi_ordered_set<ll>
  
 // Const
-const ll mod=1000000007;
-const ll N=200005;
- 
+const ll N=200001;
+const ll inf=2e18;
+
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
 ll lcm(ll a, ll b) {return (a/gcd(a,b) * b);}
@@ -70,44 +70,89 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
+
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
-}
+
+
+// void bfs(int source){
+//     queue<int>q;
+//     q.push(source);
+//     first_access[source]=parent_of_source;
+//     ans[source]=1;
+//     vis[source]=true;
+//     while(!q.empty()){
+//         int parent=q.front();
+//         q.pop();
+//         for(int child:adj_list[parent]){
+//             if(!vis[child]){
+//                 q.push(child);
+//                 first_access[source]=pos[{min(parent,child),max(parent,child)}];
+//                 if(first_access[parent]<=first_access[child]) ans[child]=ans[parent];
+//                 else ans[child]=ans[parent]+1;
+//                 vis[child]=true;
+//             }
+//         }
+//     }
+// }
 
 int main()
 {
     Good_Luck;
-    ll T=1;
-    // cin>>T;
+    int T=1;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
-        for(i=0;i<n;i++){
+        // ll in,n,m,i,j,k,x,y;
+        int n,parent_of_source=-1;
+        cin>>n;
+        vector<int>first_access(n+1),ans(n+1),vis(n+1);
+        map<pair<int,int>,int>pos;
+        vector<int>adj_list[n+1];
+
+        for(int i=0;i<n-1;i++){
+            int x,y;
             cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
+            if(parent_of_source==-1 && (x==1 || y==1)) parent_of_source=i;
+            adj_list[x].pb(y);
+            adj_list[y].pb(x);
+            pos[{min(x,y),max(x,y)}]=i;
+            // cout<<min(x,y)<<" "<<max(x,y)<<": "<<pos[{min(x,y),max(x,y)}]<<endl;
         }
-        // s.insert(LLONG_MAX);
-        sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
+
+        //bfs part
+        int source=1;
+        queue<int>q;
+        q.push(source);
+        first_access[source]=parent_of_source;
+        ans[source]=1;
+        vis[source]=1;
+        while(!q.empty()){
+            int parent=q.front();
+            q.pop();
+            for(int child:adj_list[parent]){
+                if(!vis[child]){
+                    q.push(child);
+                    first_access[child]=pos[{min(parent,child),max(parent,child)}];
+                    if(first_access[parent]<=first_access[child]) ans[child]=ans[parent];
+                    else ans[child]=ans[parent]+1;
+                    vis[child]=1;
+                }
             }
         }
-        cout<<ans<<endl;
+        // for(int i=1;i<=n;i++){
+        //     cout<<ans[i]<<" ";
+        // }
+        // cout<<endl;
+        // for(int i=1;i<=n;i++){
+        //     cout<<first_access[i]<<" ";
+        // }
+        // cout<<endl;
+        sort(all(ans));
+        // for(int i=1;i<=n;i++){
+        //     cout<<ans[i]<<" ";
+        // }
+        // cout<<endl;
+        cout<<ans[n]<<endl;
     }
     return 0;
 }

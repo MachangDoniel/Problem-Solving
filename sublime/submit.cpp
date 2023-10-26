@@ -1,30 +1,62 @@
-#include<bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp> 
-#include <ext/pb_ds/tree_policy.hpp>
-using namespace std;
-using namespace __gnu_pbds;
-template <typename T>
-using ordered_set= tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;  //ordered_set
-template <typename T>
-using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;  //multiple_ordered_set
+#include <bits/stdc++.h>
  
-int main()
-{
-    int num;
-    multiset<int> s;
-    s.insert(4);
-    s.insert(3);
-    s.insert(3);
-    s.insert(2);
-    s.insert(1);
-    s.insert(6);
-
-    cout<<"The set is: ";
-    for(auto it:s) cout<<it<<" ";
-        cout<<endl;
-    for(int i=1;i<s.size();i++){
-        cout<<"Lower_Bound of "<<i<<": "<<*s.lower_bound(i)<<endl;
-        cout<<"Upper_Bound of "<<i<<": "<<*s.upper_bound(i)<<endl;
+#define all(x) (x).begin(), (x).end()
+#define allr(x) (x).rbegin(), (x).rend()
+#define gsize(x) (int)((x).size())
+ 
+const char nl = '\n';
+typedef long long ll;
+typedef long double ld;
+ 
+using namespace std;
+ 
+void solve() {
+    ll n, k;
+    cin >> n >> k;
+    
+    vector<ll> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+    
+    ll lb = 0, ub = *max_element(all(a)) + k, ans = 0;
+    while (lb <= ub) {
+        ll tm = (lb + ub) / 2;
+        bool good = false;
+        
+        for (int i = 0; i < n; i++) {
+            vector<ll> min_needed(n);
+            min_needed[i] = tm;
+            
+            ll c_used = 0;
+            for (int j = i; j < n; j++) {
+                if (min_needed[j] <= a[j]) break;
+                
+                if (j + 1 >= n) {
+                    c_used = k + 1;
+                    break;
+                }
+                
+                c_used += min_needed[j] - a[j];
+                min_needed[j + 1] = max(0LL, min_needed[j] - 1);
+            }
+            
+            if (c_used <= k) good = true;
+        }
+        
+        if (good) {
+            ans = tm;
+            lb = tm + 1;
+        } else {
+            ub = tm - 1;
+        }
     }
-    return 0;
+    
+    cout << ans << nl;
+}
+ 
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    
+    int T;
+    cin >> T;
+    while (T--) solve();
 }

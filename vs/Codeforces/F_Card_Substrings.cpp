@@ -41,7 +41,8 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // Const
 const ll mod=1000000007;
 const ll N=200005;
- 
+const ll inf=2e18;
+
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
 ll lcm(ll a, ll b) {return (a/gcd(a,b) * b);}
@@ -70,12 +71,9 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
+
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
-}
+
 
 int main()
 {
@@ -86,28 +84,22 @@ int main()
     while(T--){
         ll in,n,m,i,j,k,x,y;
         cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
-        for(i=0;i<n;i++){
-            cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
+        string s1,s2;
+        cin>>s1>>s2;
+        map<char,ll> mp1,mp2;
+        for(i=0;i<k;i++){
+            mp1[s2[i]]++;
         }
-        // s.insert(LLONG_MAX);
-        sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
+        ll left=0,ans=0;
+        for(ll right=0;right<n;right++){
+            mp2[s1[right]]++;
+            while(mp2[s1[right]]>mp1[s1[right]]){
+                mp2[s1[left++]]--;
             }
+            ans+=(right-left+1);
         }
         cout<<ans<<endl;
+        
     }
     return 0;
 }

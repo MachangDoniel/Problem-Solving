@@ -1,5 +1,12 @@
 #include<bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> 
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
+using namespace __gnu_pbds;
+template <typename T>
+using ordered_set= tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;  //ordered_set
+template <typename T>
+using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;  //multiple_ordered_set
  
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
@@ -16,26 +23,24 @@ using namespace std;
 #define all(v) v.begin(),v.end()
 #define rall(v) v.rbegin(),v.rend()
 #define extra(n) fixed<<setprecision(n)
+#define For(n) for(ll i=0;i<n;i++)
+#define endl "\n"
 #define vll vector<ll>
 #define pll pair<ll,ll>
 #define mpl map<ll,ll>
 #define umpl unordered_map<ll,ll>
-#define sll set<ll>
-#define msl multiset<ll>
 #define lll list<ll>
 #define stl stack<ll>
 #define qll queue<ll>
 #define pql priority_queue<ll>
-#define For(n) for(ll i=0;i<n;i++)
-#define endl "\n"
+#define sll set<ll>
+#define msl multiset<ll>
+#define osl ordered_set<ll>
+#define mosl multi_ordered_set<ll>
  
 // Const
 const ll mod=1000000007;
-const ll inf=2e9;
-const ll minf=-1e17;
 const ll N=200005;
-const ld eps=1e-8;
-const ll ll_MAX=9223372036854775807;
  
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
@@ -65,35 +70,29 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
 // MyTask
- 
-void printL(lll li){
-    for(auto it:li) cout<<it<<" ";
-        cout<<endl;
-}
  
 int main()
 {
     Good_Luck;
-    ll T=1;
+    int T=1;
     // cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        ll in,n,m,i,j,k,x,y;
+        int in,n,m,i,j,k,x,y;
         cin>>n>>k;
-        vll li(n);
+        osl s;
+        for(i=1;i<=n;i++){
+            s.insert(i);
+        }
+        ll index=0;
         for(i=0;i<n;i++){
-            li[i]=i+1;
+            index+=k;
+            index%=s.size();
+            ll element=*s.find_by_order(index);
+            cout<<element<<" ";
+            s.erase(element);
         }
-        ll pos=0;
-        while(n--){
-            pos+=k;
-            pos%=li.size();
-            cout<<li[pos]<<" ";
-            li.erase(li.begin()+pos);
-        }
-        cout<<endl;
     }
     return 0;
 }

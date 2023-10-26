@@ -40,8 +40,9 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
  
 // Const
 const ll mod=1000000007;
-const ll N=200005;
- 
+// const ll N=200005;
+const ll inf=2e18;
+
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
 ll lcm(ll a, ll b) {return (a/gcd(a,b) * b);}
@@ -70,44 +71,46 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
+
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
+
+#define N 250
+ll sqsum[N+1];
+void squaresum(){
+    sqsum[0]=0;
+    for(int i=1;i<=N;i++){
+        sqsum[i]+=(sqsum[i-1]+i*i);
+    }
+    // for(int i=0;i<=N;i++){
+    //     cout<<sqsum[i]<<endl;
+    // }
+    // cout<<endl;
 }
+
 
 int main()
 {
     Good_Luck;
     ll T=1;
-    // cin>>T;
+    cin>>T;
+    squaresum();
     //for(ll t=1;t<=T;t++){
     while(T--){
         ll in,n,m,i,j,k,x,y;
-        cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
-        for(i=0;i<n;i++){
-            cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
-        }
-        // s.insert(LLONG_MAX);
-        sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
+        cin>>n;
+        ll sum=sqsum[n]-n*n;
+        for(i=n-1;i>=0;i--){
+            ll tempsum=0,mx=0,temp=0;
+            for(j=n,k=0;j>=i;j--,k++){
+                temp+=(i+k)*j;
+                mx=max(mx,(i+k)*j);
             }
+            tempsum=sqsum[i-1]+temp-mx;
+            if(tempsum>sum) sum=tempsum;
+            else break;
         }
-        cout<<ans<<endl;
+        cout<<sum<<endl;
+        
     }
     return 0;
 }

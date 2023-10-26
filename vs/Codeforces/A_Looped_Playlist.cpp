@@ -41,6 +41,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // Const
 const ll mod=1000000007;
 const ll N=200005;
+const ll inf=2e18;
  
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
@@ -70,12 +71,9 @@ ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
- 
+
 // MyTask
-void print(vector<pll> v){
-    for(ll i=0;i<v.size();i++) cout<<v[i].first<<" "<<v[i].second<<endl;
-    cout<<endl;
-}
+
 
 int main()
 {
@@ -86,28 +84,30 @@ int main()
     while(T--){
         ll in,n,m,i,j,k,x,y;
         cin>>n>>k;
-        vector<pll>v(n);
-        msl s;
+        vll v(n);
+        ll sum=0;
         for(i=0;i<n;i++){
-            cin>>x>>y;
-            v[i]={y,x};
-            if(i<k) s.insert(0);
+            cin>>v[i];
+            sum+=v[i];
         }
-        // s.insert(LLONG_MAX);
-        sort(all(v));
-        // print(v);
-        ll ans=0;
-        for(i=0;i<n;i++){
-            auto it=s.ub(v[i].second);
-            // cout<<v[i].second<<" "<<*it<<endl;
-            if(it!=s.begin()){
-                it--;
-                s.erase(it);
-                s.insert(v[i].first);
-                ans++;
+
+        ll no_of_song=n*(k/sum);
+        k%=sum;
+        ll left=0,tempsum=0,ans=inf,start=1;
+        for(ll right=0;right<2*n;right++){
+            tempsum+=v[right%n];
+            while(tempsum>=k){
+                if(ans>right-left+1){
+                    ans=right-left+1;
+                    start=(left%n+1);
+                    // cout<<left<<" "<<right<<endl;
+                }
+                tempsum-=v[left%n];
+                left++;
             }
         }
-        cout<<ans<<endl;
+        cout<<start<<" "<<no_of_song+ans<<endl;
+        
     }
     return 0;
 }
