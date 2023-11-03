@@ -79,12 +79,26 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
-        
+        vector<int>v;
+        map<int,int>mp;
+        for(int i=0;i<n;i++){
+            int in;
+            cin>>in;
+            if(!mp[in]) v.pb(in);
+            mp[in]++;
+        }
+        if(mp.size()==1) YES;
+        else if(mp.size()==2){
+            if(abs(mp[v[0]]-mp[v[1]])<=1) YES;
+            else NO;
+        }
+        else NO;
     }
     return 0;
 }

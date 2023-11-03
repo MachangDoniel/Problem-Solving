@@ -79,12 +79,32 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
-        
+        int n,k;
+        cin>>n>>k;
+        vector<int>v(n);
+        map<int,int>mp;
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+            mp[v[i]]++;
+        }
+        int left=0,right=n-1;
+        for(int i=1;i<=k;i++){
+            if(!mp[i]) cout<<0<<" ";
+            else{
+                while(v[left]<i){
+                    left++;
+                }
+                while(v[right]<i){
+                    right--;
+                }
+                cout<<(right-left+1)*2<<" ";
+            }
+        }
+        cout<<endl;
     }
     return 0;
 }

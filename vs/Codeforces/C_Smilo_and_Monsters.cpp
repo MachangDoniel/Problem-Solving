@@ -20,6 +20,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define MP make_pair
 #define YES cout<<"YES\n"
 #define NO  cout<<"NO\n"
+#define OK  cout<<"OK\n"
 #define all(v) v.begin(),v.end()
 #define rall(v) v.rbegin(),v.rend()
 #define extra(n) fixed<<setprecision(n)
@@ -79,11 +80,27 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
+        vector<int>v(n);
+        ll sum=0;
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+            sum+=v[i];
+        }
+        sort(all(v));
+        ll ans=(sum+1)/2;
+        ll last=n-1;
+        sum/=2;
+        while(sum>0){
+            ans++;
+            sum-=v[last--];
+        }
+        cout<<ans<<endl;
         
     }
     return 0;

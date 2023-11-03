@@ -83,7 +83,31 @@ int main()
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
+        int n,q;
+        cin>>n>>q;
+        vector<int>v(n),dp(n);
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+        }
+        int prev=0,count=0;
+        bool flag=true;
+        for(int i=0;i<n;i++){
+            if(v[i]>prev) dp[i]=++count,flag=true;
+            else if(flag) dp[i]=++count,flag=false;
+            else dp[i]=dp[i-1];
+            prev=v[i];
+        }
+        for(int i=0;i<q;i++){
+            int l,r;
+            cin>>l>>r;
+            if(r-l<2) cout<<r-l+1<<endl;
+            else{
+                int ans=dp[r-1]-dp[l-1]+1;
+                if(dp[l]==dp[l-1]) ans++;
+                cout<<ans<<endl;
+            }
+
+        }
         
     }
     return 0;

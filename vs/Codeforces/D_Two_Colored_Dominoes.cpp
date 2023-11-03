@@ -79,11 +79,50 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
+        int n,m;
+        cin>>n>>m;
+        vector<string> s(n),res(n,string(m,'.'));
+        for(int i=0;i<n;i++){
+            cin>>s[i];
+        }
+        bool check=true;
+        for(int i=1;i<n;i++){
+            bool flag=true;
+            for(int j=0;j<m;j++){
+                if(s[i-1][j]=='U' && s[i][j]=='D'){
+                    if(flag) res[i-1][j]='B', res[i][j]='W';
+                    else res[i-1][j]='W', res[i][j]='B';
+                    // cout<<i<<" "<<j<<" "<<flag<<endl;
+                    flag=!flag;
+                }
+            }
+            if(!flag) check=false;
+        }
+        for(int j=1;j<m;j++){
+            bool flag=true;
+            for(int i=0;i<n;i++){
+                if(s[i][j-1]=='L' && s[i][j]=='R'){
+                    if(flag) res[i][j-1]='B', res[i][j]='W';
+                    else res[i][j-1]='W', res[i][j]='B';
+                    // cout<<i<<" "<<j<<" "<<flag<<endl;
+                    flag=!flag;
+                }
+            }
+            if(!flag) check=false;
+        }
+        if(!check) cout<<-1<<endl;
+        else{
+            for(int i=0;i<n;i++){
+                for(int j=0;j<m;j++){
+                    cout<<res[i][j];
+                }
+                cout<<endl;
+            }
+        }
         
     }
     return 0;

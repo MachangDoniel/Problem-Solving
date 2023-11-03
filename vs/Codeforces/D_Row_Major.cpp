@@ -79,12 +79,23 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
-        
+        int non_div=2;
+        for(int i=2;i<=26;i++){
+            if(n%i){
+                non_div=i;
+                break;
+            }
+        }
+        for(int i=0;i<n;i++){
+            cout<<(char('a'+i%(non_div)));
+        }
+        cout<<endl;
     }
     return 0;
 }

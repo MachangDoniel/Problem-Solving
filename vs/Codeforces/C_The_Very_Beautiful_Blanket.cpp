@@ -41,7 +41,8 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // Const
 const ll mod=1000000007;
 const ll N=200005;
-const ll inf=2e18;
+const ll inf=LLONG_MAX;
+const ll minf=LLONG_MIN;
 
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
@@ -79,12 +80,22 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
-        
+        int n,m;
+        cin>>n>>m;
+        cout<<n*m<<endl;
+        for(int i=0;i<n;i++){
+            int b=i;
+            cout<<b<<" ";
+            for(int j=1;j<m;j++){
+                b+=+1024;
+                cout<<b<<" ";
+            }
+            cout<<endl;
+        }        
     }
     return 0;
 }

@@ -79,11 +79,20 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
+        ll n,x,p;
+        cin>>n>>x>>p;
+        bool flag=false;
+        for(ll i=1;i<=min(2*n,p);i++){
+            if((i*(i+1)/2+x)%n==0){
+                flag=true;
+                break;
+            }
+        }
+        flag?YES:NO;
         
     }
     return 0;

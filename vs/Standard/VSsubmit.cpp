@@ -69,7 +69,7 @@ ll combination(ll n,ll r){
 
 ll n;
 vector<pair<pll,ll>>processes;
-vll gann_chart;
+vll gann_chart,turnaround,waiting;
 
 void fileIO(){
     freopen("input.txt","r", stdin);
@@ -97,18 +97,62 @@ void utilization(){
 void throughput(){
     cout<<"Throughput: "<<processes.size()<<"/"<<gann_chart.size()<<"= "<<double(processes.size())/double(gann_chart.size())<<endl;
 }
+vll turned_around_time() {
+    for (ll i = 0; i < n; i++) {
+        ll process_id = processes[i].second;
+        for (ll j = gann_chart.size() - 1; j >= 0; j--) {
+            if (gann_chart[j] == process_id) {
+                turnaround.pb(j + 1);
+                break;
+            }
+        }
+    }
+    cout<<"Turned Around Time:"<<endl;
+    for(int i=0;i<turnaround.size();i++){
+        cout<<turnaround[i]<<" ";
+    }
+    cout<<endl;
+    return turnaround;
+}
+void waiting_time() {
+    for (ll i = 0; i < n; i++) {
+        waiting.pb( turnaround[i] - processes[i].first.second);
+    }
+    cout<<"Waiting Time:"<<endl;
+    for(int i=0;i<waiting.size();i++){
+        cout<<waiting[i]<<" ";
+    }
+    cout<<endl;
+}
+void response_time() {
+    vll response(n, 0);
+    for (ll i = 0; i < n; i++) {
+        ll process_id = processes[i].second;
+        for (ll j = 0; j < gann_chart.size(); j++) {
+            if (gann_chart[j] == process_id) {
+                response[i] = j + 1;
+                break;
+            }
+        }
+    }
+    cout<<"Response Time:"<<endl;
+    for(int i=0;i<response.size();i++){
+        cout<<response[i]<<" ";
+    }
+    cout<<endl;
+}
 
 void print(){
     printV();
     utilization();
     throughput();
-    // turned_around_time();
-    // waiting_time();
-    // response_time();
+    turned_around_time();
+    waiting_time();
+    response_time();
 }
 
 int main() {
-    // fileIO();
+     fileIO();
 
     // printf("Enter the no of processes\n");
     cin>>n;

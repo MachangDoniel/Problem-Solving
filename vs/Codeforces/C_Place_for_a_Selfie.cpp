@@ -79,12 +79,36 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
-        
+        int n,m;
+        cin>>n>>m;
+        vector<ll>v(n);
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+        }
+        sort(all(v));
+        // for(int i=0;i<n;i++) cout<<v[i]<<" ";
+        // cout<<endl;
+        for(int i=0;i<m;i++){
+            ll a,b,c;
+            cin>>a>>b>>c;
+            int index=lower_bound(v.begin(),v.end(),b)-v.begin();
+            if(index<n && (v[index]-b)*(v[index]-b)<4*a*c){
+                YES;
+                cout<<v[index]<<endl; 
+                continue;
+            }
+            if(index>0 && (v[index-1]-b)*(v[index-1]-b)<4*a*c){
+                YES;
+                cout<<v[index-1]<<endl;
+                continue;
+            }
+            else NO;
+        }
+        cout<<endl;
     }
     return 0;
 }

@@ -74,27 +74,6 @@ ll combination(ll n,ll r){
 // MyTask
 
 
-// void bfs(int source){
-//     queue<int>q;
-//     q.push(source);
-//     first_access[source]=parent_of_source;
-//     ans[source]=1;
-//     vis[source]=true;
-//     while(!q.empty()){
-//         int parent=q.front();
-//         q.pop();
-//         for(int child:adj_list[parent]){
-//             if(!vis[child]){
-//                 q.push(child);
-//                 first_access[source]=pos[{min(parent,child),max(parent,child)}];
-//                 if(first_access[parent]<=first_access[child]) ans[child]=ans[parent];
-//                 else ans[child]=ans[parent]+1;
-//                 vis[child]=true;
-//             }
-//         }
-//     }
-// }
-
 int main()
 {
     Good_Luck;
@@ -116,7 +95,6 @@ int main()
             adj_list[x].pb(y);
             adj_list[y].pb(x);
             pos[{min(x,y),max(x,y)}]=i;
-            // cout<<min(x,y)<<" "<<max(x,y)<<": "<<pos[{min(x,y),max(x,y)}]<<endl;
         }
 
         //bfs part
@@ -139,19 +117,7 @@ int main()
                 }
             }
         }
-        // for(int i=1;i<=n;i++){
-        //     cout<<ans[i]<<" ";
-        // }
-        // cout<<endl;
-        // for(int i=1;i<=n;i++){
-        //     cout<<first_access[i]<<" ";
-        // }
-        // cout<<endl;
         sort(all(ans));
-        // for(int i=1;i<=n;i++){
-        //     cout<<ans[i]<<" ";
-        // }
-        // cout<<endl;
         cout<<ans[n]<<endl;
     }
     return 0;

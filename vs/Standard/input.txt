@@ -1,9 +1,5 @@
-Enter the no of processes
-Enter process details (name, arrival time, burst time):
-Gantt Chart:
-P2 P1 P1 P2 P4 P2 P2 P3 P3 P3 P3 P3 P3 
-CPU Utilization: 1
-Throughput: 0.307692 processes/ms
-Average Turnaround Time: 4.5
-Average Waiting Time: 1.25
-Average Response Time: 0.5
+4
+1 2
+0 4
+5 6
+4 1

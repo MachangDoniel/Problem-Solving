@@ -79,12 +79,26 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
+        string str;
+        cin>>str;
+        set<int>s;
+        vector<int>mp(26);
+        for(int i=0;i<n;i++){
+            s.insert(str[i]-'a');
+            mp[str[i]-'a']++;
+        }
         
+        // for(auto it:s){
+        //     cout<<char(it+'a')<<": "<<mp[it]<<endl; 
+        // }
+        sort(rall(v));
+        for(i=0)
     }
     return 0;
 }

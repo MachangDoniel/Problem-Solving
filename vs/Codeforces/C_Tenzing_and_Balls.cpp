@@ -74,16 +74,25 @@ ll combination(ll n,ll r){
 
 // MyTask
 
-
 int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
+        vector<int>v(n+1),dp(n+1),val(n+1,2e5+1);
+        dp[0]=0;
+        for(int i=1;i<=n;i++){
+            cin>>v[i];
+            dp[i]=min(dp[i-1]+1,val[v[i]]);
+            val[v[i]]=min(val[v[i]],dp[i-1]);
+            cout<<v[i]<<" "<<dp[i]<<" "<<val[v[i]]<<endl;
+        }
+        cout<<n-dp[n]<<endl;
         
     }
     return 0;

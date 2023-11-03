@@ -79,11 +79,27 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
+        int n,m;
+        cin>>n>>m;
+        string s,t;
+        cin>>s>>t;
+        bool flag=true,flag2=true;
+        if(t[0]!=t[m-1]) flag2=false;
+        for(int i=1;i<m;i++){
+            if(t[i]==t[i-1]) flag2=false;
+        }
+        for(int i=1;i<n;i++){
+            if(s[i]==s[i-1]){
+                if(s[i]==t[0]) flag=false;
+                else if(!flag2) flag=false;
+            }
+        }
+        flag?YES:NO;
+        // cout<<flag<<" "<<flag2<<endl;
         
     }
     return 0;

@@ -79,11 +79,42 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
+        string s;
+        cin>>s;
+        vector<int>ans,count(2);
+        for(int i=0;i<n;i++){
+            count[s[i]-'0']++;
+        }
+        int right=s.size()-1,left=0,counter=0;
+        if(count[0]==count[1]){
+            while(right>left){
+                if(s[left]!=s[right]) s.erase(right,1),s.erase(left,1),right-=2,counter++;
+                else{
+                    if(s[left]=='0'){
+                        s=s+"01";
+                        ans.pb(counter+right+1);
+                        right+=2;
+                    }
+                    else if(s[right]=='1'){
+                        s="01"+s;
+                        ans.pb(left+counter);
+                        right+=2;
+                    }
+                }
+            }
+            cout<<ans.size()<<endl;
+            for(int i=0;i<ans.size();i++){
+                cout<<ans[i]<<" ";
+            }
+            cout<<endl;
+        }
+        else cout<<-1<<endl;
         
     }
     return 0;

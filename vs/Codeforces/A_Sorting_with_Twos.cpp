@@ -73,18 +73,37 @@ ll combination(ll n,ll r){
 }
 
 // MyTask
-
+map<int,int>num;
+void pre(){
+    for(int i=0;i<=10;i++){
+        num[pow(2,i)]++;
+        // cout<<pow(2,i)<<endl;
+    }
+}
 
 int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    pre();
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
-        
+        vector<int>v(n);
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+        }
+        bool flag=true;
+        for(int i=1;i<n;i++){
+            if(v[i]<v[i-1] && !num[i]){
+                flag=false;
+                break;
+            }
+        }
+        flag?YES:NO;
     }
     return 0;
 }

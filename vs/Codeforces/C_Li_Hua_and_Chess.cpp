@@ -73,18 +73,50 @@ ll combination(ll n,ll r){
 }
 
 // MyTask
-
+int n,m;
+int ask(int r,int c){
+    cout<<"? "<<r<<" "<<c<<endl;
+    cout.flush();
+    int distance;
+    cin>>distance;
+    return distance;
+}
+bool valid(int r,int c){
+    if(r<=n && r>0 && c<=m && c>0) return 1;
+    return 0;
+}
+void give(int r,int c){
+    cout<<"! "<<r<<" "<<c<<endl;
+    cout.flush();
+}
 
 int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
-        
+        cin>>n>>m;
+
+        int distance=ask(1,1);
+        if(distance<n && distance<m){
+            int distance1=ask(1,1+distance);
+            int distance2=ask(1+distance1,1+distance);
+            if(distance2==0) give(1+distance1,1+distance);
+            else give(1+distance,1+distance1-distance2);
+        }
+        else{
+            if(distance>=n){
+                int distance1=ask(1,1+distance);
+                give(1+distance1,1+distance);
+            }
+            else{
+                int distance1=ask(1+distance,1);
+                give(1+distance,1+distance1);
+            }
+        }
     }
     return 0;
 }

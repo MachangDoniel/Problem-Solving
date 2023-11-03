@@ -79,12 +79,52 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
-        cin>>n;
-        
+        ll n,q;
+        cin>>n>>q;
+        vll v(n),x(q);
+        set<pll>s;
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+            int num=v[i],power=0;
+            while(!(num&1)){
+                power++;
+                num>>=1;
+                // cout<<v[i]<<" "<<power<<endl;
+            }
+            s.insert({power,i});
+        }
+        for(int i=0;i<q;i++){
+            cin>>x[i];
+            vector<pll> remove,add;
+            for(auto it=s.rbegin();it!=s.rend();it++){
+                if(x[i]>it->first) break;
+                else{
+                    remove.pb({it->first,it->second});
+                    add.pb({x[i]-1,it->second});
+                    // cout<<v[i]<<" ";
+                    v[it->second]+=pow(2,x[i]-1);
+                    // YES;
+                    // cout<<v[i]<<endl;
+                }
+            }
+            for(int j=0;j<remove.size();j++){
+                s.erase({remove[j].first,remove[j].second});
+            }
+            for(int j=0;j<add.size();j++){
+                s.insert({add[j].first,add[j].second});
+            }
+        }
+        for(int i=0;i<n;i++){
+            cout<<v[i]<<" ";
+        }
+        cout<<endl;
+        // for(auto it=s.rbegin();it!=s.rend();it++){
+        //     cout<<it->first<<" "<<it->second<<endl;
+        // }
     }
     return 0;
 }

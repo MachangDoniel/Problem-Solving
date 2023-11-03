@@ -79,12 +79,28 @@ int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
-        
+        vector<ll>v(n);
+        int sum=0;
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+            if(i%2) sum+=v[i];
+            else sum-=v[i];
+        }
+        if(n%2) YES;
+        else{
+            for(int i=1;i<n-1;i++){
+                ll temp=v[i-1]-v[i];
+                v[i]+=temp;
+                v[i+1]+=temp;
+            }
+            (v[n-1]>=v[n-2])?YES:NO;
+        }    
     }
     return 0;
 }

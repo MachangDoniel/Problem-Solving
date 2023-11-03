@@ -74,17 +74,66 @@ ll combination(ll n,ll r){
 
 // MyTask
 
+void printV(vector<int>&v){
+    for(int i=0;i<v.size();i++){
+        cout<<v[i]<<" ";
+    }
+    cout<<endl;
+}
+
+int findMex(vector<int>v,map<int,int>mp){
+    sort(all(v));
+    for(int i=0;i<v.size();i++){
+        if(!mp[i]) return i;
+    }
+    return v.size();
+}
 
 int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
-        
+        vector<int>v(n);
+        map<int,int>mp;
+        for(int i=0;i<n;i++){
+            cin>>v[i];
+            mp[v[i]]++;
+        }
+        int mex=findMex(v,mp);
+        if(mex==n) NO;
+        else{
+            // cout<<mex<<endl;
+            if(mp[mex+1]<=1) YES;
+            else{
+                int right=-2e9,left=2e9;
+                for(int i=0;i<n;i++){
+                    if(v[i]==mex+1){
+                        left=min(left,i);
+                        right=max(right,i);
+                    }
+                }
+                map<int,int>mp2;
+                vector<int>vv;
+                for(int i=left+1;i<right;i++){
+                    if(v[i]>=mex) continue;
+                    if(!mp2[v[i]]) vv.pb(v[i]);
+                    mp2[v[i]]++;
+                }
+                int count=0;
+                // printV(vv);
+                for(int i=0;i<vv.size();i++){
+                    if(mp[vv[i]]==mp2[vv[i]]) count++;
+                    // cout<<vv[i]<<" "<<mp[vv[i]]<<endl;
+                }
+                count<1?YES:NO;
+            }
+        }
     }
     return 0;
 }

@@ -73,17 +73,43 @@ ll combination(ll n,ll r){
 }
 
 // MyTask
-
+int totalBinaryDigit(int n){
+    int count=0;
+    while(n){
+        n/=2;
+        count++;
+    }
+    return count;
+}
 
 int main()
 {
     Good_Luck;
     int T=1;
-    // cin>>T;
+    cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
         // ll in,n,m,i,j,k,x,y;
+        int n;
         cin>>n;
+        vector<int>ans;
+        ans.pb(n);
+        int total_binary_digit=totalBinaryDigit(n),num=n;
+        // cout<<total_binary_digit<<endl;
+        for(int i=total_binary_digit;i>1;i--){
+            int _and=1&num;
+            if(_and) n-=(1<<total_binary_digit-i),ans.pb(n);
+            num>>=1;
+        }
+        while(n>1){
+            ans.pb(n/2);
+            n/=2;
+        }
+        cout<<ans.size()<<endl;
+        for(int i=0;i<ans.size();i++){
+            cout<<ans[i]<<" ";
+        }
+        cout<<endl;
         
     }
     return 0;
