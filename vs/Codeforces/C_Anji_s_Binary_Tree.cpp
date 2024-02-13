@@ -1,6 +1,13 @@
 #include<bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> 
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
-
+using namespace __gnu_pbds;
+template <typename T>
+using ordered_set= tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;  //ordered_set
+template <typename T>
+using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;  //multiple_ordered_set
+ 
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define ll long long
@@ -16,26 +23,26 @@ using namespace std;
 #define all(v) v.begin(),v.end()
 #define rall(v) v.rbegin(),v.rend()
 #define extra(n) fixed<<setprecision(n)
+#define For(n) for(ll i=0;i<n;i++)
+#define endl "\n"
 #define vll vector<ll>
 #define pll pair<ll,ll>
 #define mpl map<ll,ll>
 #define umpl unordered_map<ll,ll>
-#define sll set<ll>
 #define lll list<ll>
 #define stl stack<ll>
-#define msl multiset<ll>
 #define qll queue<ll>
 #define pql priority_queue<ll>
-#define For(n) for(ll i=0;i<n;i++)
-#define endl "\n"
-
+#define sll set<ll>
+#define msl multiset<ll>
+#define osl ordered_set<ll>
+#define mosl multi_ordered_set<ll>
+ 
 // Const
 const ll mod=1000000007;
-const ll inf=2e9;
-const ll minf=-1e17;
 const ll N=200005;
-const ld eps=1e-8;
-const ll ll_MAX=9223372036854775807;
+const ll inf=LLONG_MAX;
+const ll minf=LLONG_MIN;
 
 // Mathematical functions
 ll gcd(ll a, ll b) {if (b==0) return a; return gcd(b,a%b);} //__gcd
@@ -57,55 +64,67 @@ ll factorial(ll n){
     else if(n==0) return 1;
     else return n*factorial(n-1);
 }
-
+ll permutation(ll n, ll r) {
+    if (n < r) return -1;
+    return factorial(n)/factorial(n-r);
+}
 ll combination(ll n,ll r){
     if(n<r) return -1;
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
+void primeFactors(int n){ 
+    while(n%2==0){ 
+        cout<<2<<" ", n=n/2; 
+    } 
+    for(int i=3;i*i<=n;i=i+2){ 
+        while(n%i==0){ 
+            cout<<i<<" ", n=n/i; 
+        } 
+    }
+    if(n>2) cout<<n<<" "; 
+} 
 
 // MyTask
 
-vector<ld>v;
-int bin_size=20;
+vector<pair<int,int>>v;
+string s;
+int ans=INT_MAX;
 
-bool bestfit(int n){
-    multiset<ld>bin;
-    for(int i=0;i<n;i++){
-        bin.insert(bin_size);
+void call(int num,int count){
+    if(v[num].first==0 && v[num].second==0){
+        ans=min(ans,count);
+        return;
     }
-    // memset(&bin,bin_size,n);
-    // cout<<"BIN: "<<n<<endl;
-    for(int i=0;i<v.size();i++){
-        auto it=bin.lb(v[i]);
-        if(it==bin.end()) return false;
-        ld new_bin_size=*it-v[i];
-        bin.erase(it);
-        bin.insert(new_bin_size);
+    if(v[num].first){
+        if(s[num-1]!='L') call(v[num].first,count+1);
+        else call(v[num].first,count);
     }
-    return true;
+    if(v[num].second){
+        if(s[num-1]!='R') call(v[num].second,count+1);
+        else call(v[num].second,count);
+    }
+    return;
 }
 
 int main()
 {
     Good_Luck;
-    ll T=1;
-//    cin>>T;
+    int T=1; cin>>T;
     //for(ll t=1;t<=T;t++){
     while(T--){
-        int n;
-        cin>>n;
-        v.resize(n);
-        for(int i=0;i<n;i++){
-            cin>>v[i];
+        // ll in,n,m,i,j,k,x,y;
+        int n; cin>>n;
+        cin>>s;
+        v.resize(n+1);
+        ans=INT_MAX;
+        int x,y;
+        for(int i=1;i<=n;i++){
+            cin>>x>>y;
+            v[i]={x,y};
         }
-        int low=-1,high=min(n,int(1e9+5));
-        // cout<<"OK"<<endl;
-        while(high>low+1){
-            int mid=(high+low)/2;
-            if(bestfit(mid)) high=mid;
-            else low=mid;
-        }
-        cout<<high<<endl;
+        call(1,0);
+        cout<<ans<<endl;
+        
     }
     return 0;
 }
