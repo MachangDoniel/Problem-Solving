@@ -36,25 +36,20 @@ public:
             size[a] += size[b];
         }
     }
-
-    int count_connected_components(int n, int k) {
-        while (k--) {
-            int u, v;
-            cin >> u >> v;
-            union_sets(u, v);
-        }
-        int connected_component = 0;
-        for (int i = 1; i <= n; ++i) {
-            if (find_set(i) == i) connected_component++;
-        }
-        return connected_component;
-    }
 };
 
 int main() {
     int n, k;
     cin >> n >> k;
     DisjointSet ds;
-    cout << ds.count_connected_components(n, k) << endl;
+    while (k--) {
+            int u, v;
+            cin >> u >> v;
+            ds.union_sets(u, v);
+        }
+        int connected_component = 0;
+        for (int i = 1; i <= n; ++i) {
+            if (ds.find_set(i) == i) connected_component++;
+        }
     return 0;
 }

@@ -121,27 +121,6 @@ class DisjointSet {
 
 // MyTask
 
-int time_limit=0;
-bool checkTime(){
-    time_limit++;
-    if(time_limit>1e9){
-        cout<<"Time Limit (-_-)"<<endl;
-        return false;
-    }
-    return true;
-}
-
-int round(int n,int d){
-    return (n%d)?n/2:n/d+1;
-}
-bool allSame(set<pair<int,int>>&ms){
-    int count=0;
-    int start=(*ms.begin()).first;
-    for(auto it:ms){
-        if(start==it.first) count++;
-    }
-    return count==ms.size()?true:false;
-}
 
 main()
 {
@@ -150,33 +129,35 @@ main()
     cin>>T;
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
-        int n; cin>>n;
-        set<pair<int,int>>ms;
-        for(int i=0;i<n;i++){
-            int in; cin>>in;
-            ms.insert({in,i+1});
+        // int n; cin>>n;
+        string s,hour,min; cin>>s;
+        bool cut=false;
+        for(int i=0;i<s.size();i++){
+            if(s[i]==':'){
+                cut=true;
+                continue;
+            }
+            if(!cut) hour+=s[i];
+            else min+=s[i];
         }
-        if((*ms.begin()).first==1) ((*ms.rbegin()).first==1)? cout<<0<<endl:cout<<-1<<endl;
+        int first=stoi(hour);
+        int second=stoi(min);
+        if(first<12){
+            if(first==0) first+=12;
+            if(first<10) cout<<0;
+            cout<<first<<":";
+            if(second<10) cout<<0;
+            cout<<second<<" AM"<<endl;
+        }
         else{
-            vector<pair<int,int>>v;
-            while(checkTime()){ // all same
-
-                // auto it=ms.end(); it--;
-                // if(it->first==ms.begin()->first){
-                //     break;
-                // }
-                // int num=round(it->first,ms.begin()->first);
-                // int index=it->second;
-                // cout<<index<<" "<<num<<endl;
-                // v.pb({index,ms.begin()->second});
-                // cout<<it->first<<" "<<it->second<<endl;
-                // ms.erase(it);  // converting reverse iteerator to forward iterator (auto forward_it=next(reverse_it).base())
-                // ms.insert({num,index});
-            }
-            cout<<v.size()<<endl;
-            for(int i=0;i<v.size();i++){
-                cout<<v[i].first<<" "<<v[i].second<<endl;
-            }
+            first-=12;
+            if(first==0) first+=12;
+            if(first<10) cout<<0;
+            cout<<first<<":";
+            if(second<10) cout<<0;
+            cout<<second<<" PM"<<endl;
         }
+
+        
     }
 }

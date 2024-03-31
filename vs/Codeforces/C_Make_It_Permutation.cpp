@@ -11,6 +11,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define ll long long
+#define int long long
 #define ld long double
 #define pb push_back
 #define pp pop_back
@@ -121,27 +122,6 @@ class DisjointSet {
 
 // MyTask
 
-int time_limit=0;
-bool checkTime(){
-    time_limit++;
-    if(time_limit>1e9){
-        cout<<"Time Limit (-_-)"<<endl;
-        return false;
-    }
-    return true;
-}
-
-int round(int n,int d){
-    return (n%d)?n/2:n/d+1;
-}
-bool allSame(set<pair<int,int>>&ms){
-    int count=0;
-    int start=(*ms.begin()).first;
-    for(auto it:ms){
-        if(start==it.first) count++;
-    }
-    return count==ms.size()?true:false;
-}
 
 main()
 {
@@ -150,33 +130,24 @@ main()
     cin>>T;
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
-        int n; cin>>n;
-        set<pair<int,int>>ms;
+        int n,c,d; cin>>n>>c>>d;    // c to remove and d to insert
+        vector<int>v;
+        map<int,int>mp;
+        
         for(int i=0;i<n;i++){
             int in; cin>>in;
-            ms.insert({in,i+1});
+            if(!mp[in]) v.pb(in);   // insert each number once to skip duplicate elements
+            mp[in]++;
         }
-        if((*ms.begin()).first==1) ((*ms.rbegin()).first==1)? cout<<0<<endl:cout<<-1<<endl;
-        else{
-            vector<pair<int,int>>v;
-            while(checkTime()){ // all same
+        int precost=c*(n-v.size()),cost=inf;    // remove duplicates
+        if(!mp[1]) v.pb(1), precost+=d;
+        sort(all(v));
+        for(int i=0;i<v.size();i++){
+            int temp=d*(v[i]-(i+1))+c*(v.size()-(i+1));
+            cost=min(cost,temp);
+        }
+        cout<<cost+precost<<endl;
 
-                // auto it=ms.end(); it--;
-                // if(it->first==ms.begin()->first){
-                //     break;
-                // }
-                // int num=round(it->first,ms.begin()->first);
-                // int index=it->second;
-                // cout<<index<<" "<<num<<endl;
-                // v.pb({index,ms.begin()->second});
-                // cout<<it->first<<" "<<it->second<<endl;
-                // ms.erase(it);  // converting reverse iteerator to forward iterator (auto forward_it=next(reverse_it).base())
-                // ms.insert({num,index});
-            }
-            cout<<v.size()<<endl;
-            for(int i=0;i<v.size();i++){
-                cout<<v[i].first<<" "<<v[i].second<<endl;
-            }
-        }
+
     }
 }

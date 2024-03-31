@@ -11,6 +11,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define ll long long
+#define int long long
 #define ld long double
 #define pb push_back
 #define pp pop_back
@@ -121,62 +122,39 @@ class DisjointSet {
 
 // MyTask
 
-int time_limit=0;
-bool checkTime(){
-    time_limit++;
-    if(time_limit>1e9){
-        cout<<"Time Limit (-_-)"<<endl;
-        return false;
+bool checkSumEq(set<int>&ms,map<int,int>&mp,int num){
+    bool flag=false;
+    for(auto it=ms.rbegin();it!=ms.rend();it++){
+        if(num>=power(2,*it)){
+            // cout<<num<<" "<<*it<<endl;
+            int div=num/power(2,*it);
+            num-=power(2,*it)*min(mp[*it],div);
+        }
     }
-    return true;
+    return num?false:true;
 }
 
-int round(int n,int d){
-    return (n%d)?n/2:n/d+1;
-}
-bool allSame(set<pair<int,int>>&ms){
-    int count=0;
-    int start=(*ms.begin()).first;
-    for(auto it:ms){
-        if(start==it.first) count++;
-    }
-    return count==ms.size()?true:false;
-}
 
 main()
 {
     Good_Luck;
     int T=1; 
     cin>>T;
+    vector<int>v;
+    set<int>ms;
+    map<int,int>mp;
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
-        int n; cin>>n;
-        set<pair<int,int>>ms;
-        for(int i=0;i<n;i++){
-            int in; cin>>in;
-            ms.insert({in,i+1});
+        int q,num; cin>>q>>num;
+        
+        if(q==1){
+            ms.insert(num);
+            mp[num]++;
         }
-        if((*ms.begin()).first==1) ((*ms.rbegin()).first==1)? cout<<0<<endl:cout<<-1<<endl;
         else{
-            vector<pair<int,int>>v;
-            while(checkTime()){ // all same
-
-                // auto it=ms.end(); it--;
-                // if(it->first==ms.begin()->first){
-                //     break;
-                // }
-                // int num=round(it->first,ms.begin()->first);
-                // int index=it->second;
-                // cout<<index<<" "<<num<<endl;
-                // v.pb({index,ms.begin()->second});
-                // cout<<it->first<<" "<<it->second<<endl;
-                // ms.erase(it);  // converting reverse iteerator to forward iterator (auto forward_it=next(reverse_it).base())
-                // ms.insert({num,index});
-            }
-            cout<<v.size()<<endl;
-            for(int i=0;i<v.size();i++){
-                cout<<v[i].first<<" "<<v[i].second<<endl;
-            }
+            bool flag=checkSumEq(ms,mp,num);
+            flag?YES:NO;
         }
+        
     }
 }

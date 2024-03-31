@@ -121,27 +121,6 @@ class DisjointSet {
 
 // MyTask
 
-int time_limit=0;
-bool checkTime(){
-    time_limit++;
-    if(time_limit>1e9){
-        cout<<"Time Limit (-_-)"<<endl;
-        return false;
-    }
-    return true;
-}
-
-int round(int n,int d){
-    return (n%d)?n/2:n/d+1;
-}
-bool allSame(set<pair<int,int>>&ms){
-    int count=0;
-    int start=(*ms.begin()).first;
-    for(auto it:ms){
-        if(start==it.first) count++;
-    }
-    return count==ms.size()?true:false;
-}
 
 main()
 {
@@ -151,32 +130,46 @@ main()
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
         int n; cin>>n;
-        set<pair<int,int>>ms;
+        vector<string>v(n);
         for(int i=0;i<n;i++){
-            int in; cin>>in;
-            ms.insert({in,i+1});
+            cin>>v[i];
         }
-        if((*ms.begin()).first==1) ((*ms.rbegin()).first==1)? cout<<0<<endl:cout<<-1<<endl;
-        else{
-            vector<pair<int,int>>v;
-            while(checkTime()){ // all same
-
-                // auto it=ms.end(); it--;
-                // if(it->first==ms.begin()->first){
-                //     break;
-                // }
-                // int num=round(it->first,ms.begin()->first);
-                // int index=it->second;
-                // cout<<index<<" "<<num<<endl;
-                // v.pb({index,ms.begin()->second});
-                // cout<<it->first<<" "<<it->second<<endl;
-                // ms.erase(it);  // converting reverse iteerator to forward iterator (auto forward_it=next(reverse_it).base())
-                // ms.insert({num,index});
+        vector<int>left(n+1,0),right(n+1,0);
+        int ans=0;
+        for(int i=0;i<n;i++){
+            vector<int>count(n,0);
+            int s=0;
+            for(int j=0;j<n;j++){
+                s+=left[j]-right[j];
+                count[j]=s;
             }
-            cout<<v.size()<<endl;
-            for(int i=0;i<v.size();i++){
-                cout<<v[i].first<<" "<<v[i].second<<endl;
+            // shift the values got from parent
+            for(int j=1;j<n;j++){
+                if(left[j]>0){
+                    left[j-1]+=left[j];
+                    left[j]=0;
+                }
             }
+            for(int j=n-1;j>=0;j--){
+                if(right[j]>0){
+                    right[j+1]+=right[j];
+                    right[j]=0;
+                }
+            }
+            
+            // add values for new nodes
+            for(int j=0;j<n;j++){
+                int num=v[i][j]-'0';
+                num=((count[j]%2)==0)?num:(1-num);
+                if(num){
+                    ans++;
+                    left[max(0,j-1)]++;
+                    right[min(n,j+2)]++;
+                }
+            }
+            // cout<<ans<<" ";
         }
+        // cout<<endl;
+        cout<<ans<<endl;
     }
 }

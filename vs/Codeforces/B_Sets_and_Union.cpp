@@ -84,10 +84,6 @@ void primeFactors(int n){
     }
     if(n>2) cout<<n<<" "; 
 } 
-void printV(vector<int>v){
-    for(int i=0;i<v.size();i++) cout<<v[i]<<" ";
-    cout<<endl;
-}
 class DisjointSet {
     private:
         int parent[N];
@@ -118,30 +114,29 @@ class DisjointSet {
             }
         }
     };
-
-// MyTask
-
-int time_limit=0;
+void printV(vector<int>v){
+    for(int i=0;i<v.size();i++) cout<<v[i]<<" ";
+    cout<<endl;
+}
+void printS(set<int>s){
+    for(auto it:s) cout<<it<<" ";
+    cout<<endl;
+}
+void printM(map<int,int>mp){
+    for(auto it:mp) cout<<it.first<<" "<<it.second<<endl;
+}
+int time_limit=1e9,time_count=0;
 bool checkTime(){
-    time_limit++;
-    if(time_limit>1e9){
-        cout<<"Time Limit (-_-)"<<endl;
+    time_count++;
+    if(time_count>1e2){
+        cout<<"Time Limit Apprehension (-_-)"<<endl;
         return false;
     }
     return true;
 }
+    
+// MyTask
 
-int round(int n,int d){
-    return (n%d)?n/2:n/d+1;
-}
-bool allSame(set<pair<int,int>>&ms){
-    int count=0;
-    int start=(*ms.begin()).first;
-    for(auto it:ms){
-        if(start==it.first) count++;
-    }
-    return count==ms.size()?true:false;
-}
 
 main()
 {
@@ -151,32 +146,31 @@ main()
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
         int n; cin>>n;
-        set<pair<int,int>>ms;
+        vector<set<ll>>v(n+1),vv(55);
+        set<ll>sorted;
+        ll mx=0,ans=0;
         for(int i=0;i<n;i++){
-            int in; cin>>in;
-            ms.insert({in,i+1});
-        }
-        if((*ms.begin()).first==1) ((*ms.rbegin()).first==1)? cout<<0<<endl:cout<<-1<<endl;
-        else{
-            vector<pair<int,int>>v;
-            while(checkTime()){ // all same
-
-                // auto it=ms.end(); it--;
-                // if(it->first==ms.begin()->first){
-                //     break;
-                // }
-                // int num=round(it->first,ms.begin()->first);
-                // int index=it->second;
-                // cout<<index<<" "<<num<<endl;
-                // v.pb({index,ms.begin()->second});
-                // cout<<it->first<<" "<<it->second<<endl;
-                // ms.erase(it);  // converting reverse iteerator to forward iterator (auto forward_it=next(reverse_it).base())
-                // ms.insert({num,index});
-            }
-            cout<<v.size()<<endl;
-            for(int i=0;i<v.size();i++){
-                cout<<v[i].first<<" "<<v[i].second<<endl;
+            int m; cin>>m;
+            for(int j=0;j<m;j++){
+                int in; cin>>in;
+                sorted.insert(in);
+                v[i+1].insert(in);
+                vv[in].insert(i+1);
             }
         }
+        for(auto itt:sorted){
+            set<ll> temp;
+            mpl mp;
+            for(auto it:vv[itt]){
+                mp[it]++;
+            }
+            for(int i=1;i<=n;i++){
+                if(mp[i]) continue;
+                temp.insert(v[i].begin(),v[i].end());
+            }
+            ll sortedsz=sorted.size(),tempsz=temp.size();
+            if(tempsz!=sortedsz) mx=max(mx,tempsz);
+        }
+        cout<<mx<<endl;
     }
 }
