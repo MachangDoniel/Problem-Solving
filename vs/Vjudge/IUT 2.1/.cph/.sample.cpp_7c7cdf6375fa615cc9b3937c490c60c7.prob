@@ -1,0 +1,1 @@
+{"name":"Local: sample","url":"e:\\CP\\vs\\Vjudge\\IUT 2.1\\sample.cpp","tests":[{"id":1712567171166,"input":"3\n3\n11 23 2\n1\n222\n3\n97 98 99","output":"36\n0\n195"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\vs\\Vjudge\\IUT 2.1\\sample.cpp","group":"local","local":true}
