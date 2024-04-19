@@ -11,6 +11,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define ll long long
+#define int long long
 #define ld long double
 #define pb push_back
 #define pp pop_back
@@ -136,16 +137,7 @@ bool checkTime(){
 }
     
 // MyTask
-void check(vll &v,int x,int n){
-    int l=1,r=n+1;
-        while(r-1>l){
-            int m=(r+l)/2;
-            if(v[m]<=x) l=m;
-            else r=m;
-        }
-        if(v[l]==x) YES;
-        else NO;
-}
+
 
 main()
 {
@@ -154,25 +146,43 @@ main()
     cin>>T;
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
-        int n,x; cin>>n>>x;
-        vll v(n+1);
-        int pos=-1;
-        for(int i=1;i<=n;i++){
-            cin>>v[i];
-            if(v[i]==x) pos=i;
+        int n,k; cin>>n>>k;
+        string s; cin>>s;
+        vll a(k),b(k);
+        for(int i=0;i<k;i++){
+            cin>>a[i];
         }
-        int l=1,r=n+1;
-        while(r-1>l){
-            int m=(r+l)/2;
-            if(v[m]<=x) l=m;
-            else r=m;
+        for(int i=0;i<k;i++){
+            cin>>b[i];
         }
-        if(v[l]==x) cout<<0<<endl;
-        else{
-            cout<<1<<endl;
-            cout<<l<<" "<<pos<<endl;
-            // swap(v[l],v[pos]);
+        int q; cin>>q;
+        mpl mp;
+        vector<pll>v(q);
+        for(int i=0;i<q;i++){
+            int x; cin>>x;
+            int index=ub(all(a),x)-a.begin()-1;
+            // cout<<x<<": "<<index<<endl;
+            int mn=min(x,a[index]+b[index]-x);
+            mp[mn]++;
         }
-        // check(v,x,n);
+        for(int i=0;i<k;i++){
+            for(int j=a[i]+1;j<(a[i]+b[i]+1)/2;j++){
+                mp[j]+=mp[j-1];
+            }
+        }
+        for(int i=0;i<k;i++){
+            for(int j=a[i];j<(a[i]+b[i]+1)/2;j++){
+                int index=ub(all(a),j)-a.begin()-1;
+                int mn=j,mx=a[index]+b[index]-j;
+                // cout<<mn<<" "<<mx<<endl;
+                if(mp[mn]%2){
+                    mn--,mx--;
+                    char ch=s[mx];
+                    s[mx]=s[mn];
+                    s[mn]=ch;
+                }
+            }
+        }
+        cout<<s<<endl;
     }
 }

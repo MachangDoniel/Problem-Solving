@@ -11,6 +11,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define ll long long
+#define int long long
 #define ld long double
 #define pb push_back
 #define pp pop_back
@@ -114,15 +115,15 @@ class DisjointSet {
             }
         }
     };
-void printV(vector<int>v){
+void print(vector<int>v){
     for(int i=0;i<v.size();i++) cout<<v[i]<<" ";
     cout<<endl;
 }
-void printS(set<int>s){
+void print(set<int>s){
     for(auto it:s) cout<<it<<" ";
     cout<<endl;
 }
-void printM(map<int,int>mp){
+void print(map<int,int>mp){
     for(auto it:mp) cout<<it.first<<" "<<it.second<<endl;
 }
 int time_limit=1e9,time_count=0;
@@ -136,15 +137,26 @@ bool checkTime(){
 }
     
 // MyTask
-void check(vll &v,int x,int n){
-    int l=1,r=n+1;
-        while(r-1>l){
-            int m=(r+l)/2;
-            if(v[m]<=x) l=m;
-            else r=m;
+vll bin[N];
+vll intToBin(int n){
+    vll bin(32);
+    for(int i=0;i<32;i++) bin[31-i]=n&1, n>>=1;
+    // for(int i=0;i<32;i++) cout<<bin[i]<<" ";
+    // cout<<endl;
+    return bin;
+}
+bool good(int mid,int l,int k){
+    int res=0;
+    // cout<<"mid: "<<mid<<", low:"<<l<<endl;
+    for(int i=0;i<32;i++){
+        // cout<<i<<": "<<mid<<" "<<l<<" "<<bin[mid][i]<<" "<<bin[l][i]<<endl;
+        if(bin[l][i] && mid-l==bin[mid][i]-bin[l][i]){
+            res+=power(2,31-i);
+            // cout<<"found: "<<31-i<<endl;
         }
-        if(v[l]==x) YES;
-        else NO;
+    }
+    // cout<<"res: "<<res<<endl;
+    return res>=k;
 }
 
 main()
@@ -154,25 +166,38 @@ main()
     cin>>T;
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
-        int n,x; cin>>n>>x;
-        vll v(n+1);
-        int pos=-1;
-        for(int i=1;i<=n;i++){
+        int n; cin>>n;
+        vll v(n);
+        for(int i=0;i<n;i++){
             cin>>v[i];
-            if(v[i]==x) pos=i;
+            bin[i]=intToBin(v[i]);
         }
-        int l=1,r=n+1;
-        while(r-1>l){
-            int m=(r+l)/2;
-            if(v[m]<=x) l=m;
-            else r=m;
+        for(int i=0;i<32;i++){
+            for(int j=1;j<n;j++){
+                if(bin[j][i]) bin[j][i]+=bin[j-1][i];
+                // print(bin[j]);
+            }
         }
-        if(v[l]==x) cout<<0<<endl;
-        else{
-            cout<<1<<endl;
-            cout<<l<<" "<<pos<<endl;
-            // swap(v[l],v[pos]);
+        // for(int i=0;i<n;i++){
+        //     for(int j=0;j<32;j++) cout<<bin[i][j]<<" ";
+        //     cout<<endl;
+        // }
+        int q; cin>>q;
+        vll ans(q);
+        for(int i=0;i<q;i++){
+            int l,r,k; cin>>l>>k;
+            if(k>v[l-1]) ans[i]=-1;
+            else{
+                int high=n,low=l-1;
+                while(high>low+1){
+                    int mid=(low+high)/2;
+                    if(good(mid,l-1,k)) low=mid;
+                    else high=mid;
+                }
+                ans[i]=low+1;
+            }
+            // cout<<endl;
         }
-        // check(v,x,n);
+        print(ans);
     }
 }
