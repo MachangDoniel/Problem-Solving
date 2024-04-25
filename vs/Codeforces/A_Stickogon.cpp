@@ -154,59 +154,15 @@ main()
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
         int n; cin>>n;
-        char trump; cin>>trump;
-        vector<vector<string>>str(4);
-        vector<char>suits={'C','D','H','S'};
-        map<char,int>mp,convert;
-        convert['C']=0,convert['D']=1,convert['H']=2,convert['S']=3;
-        vector<pair<string,string>>v;
-        vector<string>extra;
-        for(int i=0;i<2*n;i++){
-            string s; cin>>s;
-            char rank=s[0],suit=s[1];
-            mp[suit]++;
-            str[convert[suit]].pb(s);
+        vll v(n), num(105);
+        for(int i=0;i<n;i++){
+            int in; cin>>in;
+            num[in]++;
         }
-        for(int i=0;i<4;i++){
-            sort(all(str[i]));
+        int count=0;
+        for(int i=1;i<105;i++){
+            if(num[i]>2) count+=(num[i]/3);
         }
-        bool flag=true;
-        int single=0;
-        for(int j=0;j<suits.size();j++){
-            if(suits[j]!=trump){
-                int index=0;
-                while(mp[suits[j]]>1){
-                    // cout<<str[convert[suits[j]]][index]<<" "<<str[convert[suits[j]]][index+1]<<endl;
-                    v.pb({str[j][index],str[j][index+1]});
-                    index+=2;
-                    mp[suits[j]]-=2;
-                }
-                if(mp[suits[j]]) single++,extra.pb(str[j][index]);
-            }
-        }
-        // cout<<"extra: ";
-        // for(int i=0;i<extra.size();i++){
-        //     cout<<extra[i]<<" ";
-        // }
-        // cout<<endl;
-        // cout<<t<<":"<<endl;
-        if(mp[trump]<single) cout<<"IMPOSSIBLE"<<endl;
-        else{
-            int index=0;
-            for(int i=0;i<extra.size();i++){
-                // cout<<extra[i]<<" "<<str[convert[trump]][index]<<endl;
-                v.pb({extra[i],str[convert[trump]][index]});
-                index++;
-            }
-            // cout<<index<<" "<<str[convert[trump]].size()<<endl;
-            for(;index<str[convert[trump]].size();index+=2){
-                v.pb({str[convert[trump]][index],str[convert[trump]][index+1]});
-            }
-            for(int i=0;i<v.size();i++){
-                cout<<v[i].first<<" "<<v[i].second<<endl;
-            }
-        }
-        
-        // YES;
+        cout<<count<<endl;
     }
 }

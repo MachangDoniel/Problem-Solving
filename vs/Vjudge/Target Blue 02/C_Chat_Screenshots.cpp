@@ -145,6 +145,47 @@ vll intToBin(int n){
     
 // MyTask
 
+void solve(){
+     int n,k; cin>>n>>k;
+    vector<vll>v(k,vll(n)),adjList(n+1);
+    for(int i=0;i<k;i++){
+        for(int j=0;j<n;j++){
+            cin>>v[i][j];
+            if(j>1) adjList[v[i][j]].pb(v[i][j-1]);
+        }
+    }
+
+    vector<int> inDegree(n+1,0);
+        for(int i=1;i<n+1;i++){
+            for(int j=0;j<adjList[i].size();j++){
+                inDegree[adjList[i][j]]++;
+            }                                                
+        }
+        queue<int>q;
+        for(int i=1;i<n+1;i++){
+            if(inDegree[i]==0){
+                q.push(i);
+            }
+        }
+        vector<int>topo;
+        while(!q.empty()){
+            int course=q.front(); // can be completable
+            q.pop();
+            topo.push_back(course);
+            // decrease inDegree of the courses that have this course as prerequisite
+            for(int i=0;i<adjList[course].size();i++){
+                inDegree[adjList[course][i]]--;
+                if(inDegree[adjList[course][i]]==0) q.push(adjList[course][i]);
+            }
+        }
+        // for(int i=0;i<topo.size();i++){
+        //     cout<<topo[i]<<" ";
+        // }
+        // cout<<endl;
+        if(topo.size()==n) YES;
+        else NO;
+    
+}
 
 main()
 {
@@ -153,60 +194,6 @@ main()
     cin>>T;
     for(int t=1;t<=T;t++){
         // ll in,n,m,i,j,k,x,y;
-        int n; cin>>n;
-        char trump; cin>>trump;
-        vector<vector<string>>str(4);
-        vector<char>suits={'C','D','H','S'};
-        map<char,int>mp,convert;
-        convert['C']=0,convert['D']=1,convert['H']=2,convert['S']=3;
-        vector<pair<string,string>>v;
-        vector<string>extra;
-        for(int i=0;i<2*n;i++){
-            string s; cin>>s;
-            char rank=s[0],suit=s[1];
-            mp[suit]++;
-            str[convert[suit]].pb(s);
-        }
-        for(int i=0;i<4;i++){
-            sort(all(str[i]));
-        }
-        bool flag=true;
-        int single=0;
-        for(int j=0;j<suits.size();j++){
-            if(suits[j]!=trump){
-                int index=0;
-                while(mp[suits[j]]>1){
-                    // cout<<str[convert[suits[j]]][index]<<" "<<str[convert[suits[j]]][index+1]<<endl;
-                    v.pb({str[j][index],str[j][index+1]});
-                    index+=2;
-                    mp[suits[j]]-=2;
-                }
-                if(mp[suits[j]]) single++,extra.pb(str[j][index]);
-            }
-        }
-        // cout<<"extra: ";
-        // for(int i=0;i<extra.size();i++){
-        //     cout<<extra[i]<<" ";
-        // }
-        // cout<<endl;
-        // cout<<t<<":"<<endl;
-        if(mp[trump]<single) cout<<"IMPOSSIBLE"<<endl;
-        else{
-            int index=0;
-            for(int i=0;i<extra.size();i++){
-                // cout<<extra[i]<<" "<<str[convert[trump]][index]<<endl;
-                v.pb({extra[i],str[convert[trump]][index]});
-                index++;
-            }
-            // cout<<index<<" "<<str[convert[trump]].size()<<endl;
-            for(;index<str[convert[trump]].size();index+=2){
-                v.pb({str[convert[trump]][index],str[convert[trump]][index+1]});
-            }
-            for(int i=0;i<v.size();i++){
-                cout<<v[i].first<<" "<<v[i].second<<endl;
-            }
-        }
-        
-        // YES;
+        solve();
     }
 }
