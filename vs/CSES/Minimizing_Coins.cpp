@@ -147,24 +147,30 @@ vll intToBin(int n){
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<string>s(n);
-    vector<vll>dp(n+1,vll(n+1,0));
-    for(int i=0;i<n;i++){
-        cin>>s[i];
-    }
+    int n,x; cin>>n>>x;
+    vll v(n),dp(x+1,inf);
+    // print(dp);
     // base case
-    if(s[0][0]=='.') dp[1][1]=1;
-    for(int i=1;i<=n;i++){
-        for(int j=1;j<=n;j++){
-            if(s[i-1][j-1]=='.'){
-                dp[i][j]+=dp[i-1][j]+dp[i][j-1];
-                dp[i][j]%=mod;
+    dp[0]=0;
+    for(int i=0;i<n;i++){
+        cin>>v[i];
+        if(x<v[i]) continue;
+        dp[v[i]]=1;
+    }
+    sort(all(v));
+    for(int i=1;i<=x;i++){
+        if(dp[i]==inf){
+            for(int j=0;j<v.size();j++){
+                if(i<v[j]) break;
+                if(dp[i-v[j]]!=inf){
+                    dp[i]=min(dp[i],dp[i-v[j]]+1);
+                }
             }
         }
     }
-    // for(int i=1;i<=n;i++) print(dp[i]);
-    cout<<dp[n][n]<<endl;
+    // print(dp);
+    if(dp[x]==inf) dp[x]=-1;
+    cout<<dp[x]<<endl;
 }
 
 main()

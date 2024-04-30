@@ -144,27 +144,30 @@ vll intToBin(int n){
 }
     
 // MyTask
+vll findDigit(int n){
+    vll v;
+    while(n>0){
+        if(n%10!=0) v.pb(n%10);
+        n/=10;
+    }
+    return v;
+}
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<string>s(n);
-    vector<vll>dp(n+1,vll(n+1,0));
-    for(int i=0;i<n;i++){
-        cin>>s[i];
-    }
-    // base case
-    if(s[0][0]=='.') dp[1][1]=1;
+    vll dp(n+1,inf);
+    // base case 
+    dp[0]=0;
     for(int i=1;i<=n;i++){
-        for(int j=1;j<=n;j++){
-            if(s[i-1][j-1]=='.'){
-                dp[i][j]+=dp[i-1][j]+dp[i][j-1];
-                dp[i][j]%=mod;
-            }
+        vll numbers=findDigit(i);
+        // print(numbers);
+        for(int j=0;j<numbers.size();j++){
+            if(i>=numbers[j]) dp[i]=min(dp[i],dp[i-numbers[j]]+1);
         }
     }
-    // for(int i=1;i<=n;i++) print(dp[i]);
-    cout<<dp[n][n]<<endl;
+    // print(dp);
+    cout<<dp[n]<<endl;
 }
 
 main()

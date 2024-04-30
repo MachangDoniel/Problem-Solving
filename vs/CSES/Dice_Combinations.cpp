@@ -148,23 +148,17 @@ vll intToBin(int n){
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<string>s(n);
-    vector<vll>dp(n+1,vll(n+1,0));
-    for(int i=0;i<n;i++){
-        cin>>s[i];
-    }
+    vll dp(n+1);
+
+    // dp[n] can be obtained from dp[n-1],dp[n-2],dp[n-3],dp[n-4],dp[n-5],dp[n-6] for outcome 1,2,3,4,5,6 of dice
     // base case
-    if(s[0][0]=='.') dp[1][1]=1;
+    dp[0]=1;
     for(int i=1;i<=n;i++){
-        for(int j=1;j<=n;j++){
-            if(s[i-1][j-1]=='.'){
-                dp[i][j]+=dp[i-1][j]+dp[i][j-1];
-                dp[i][j]%=mod;
-            }
+        for(int j=1;j<=min(i,6ll);j++){
+            if(i>=j) dp[i]+=dp[i-j],dp[i]%=mod;
         }
     }
-    // for(int i=1;i<=n;i++) print(dp[i]);
-    cout<<dp[n][n]<<endl;
+    cout<<dp[n]<<endl;
 }
 
 main()
@@ -175,4 +169,4 @@ main()
     for(int t=1;t<=T;t++){
         solve();
     }
-}
+} 
