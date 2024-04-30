@@ -145,28 +145,36 @@ vll intToBin(int n){
     
 // MyTask
 
-bool good(int index,int num){
-    return num>=(index+1)?true:false;
+bool checkAlter(int row,int col,vector<string>&v){
+    bool foundInRow=false,foundInCol=false;
+    for(int i=1;i<v[row].size();i++){
+        if(v[row][0]!=v[row][i]){
+            foundInRow=true;
+            break;
+        }
+    }
+    for(int i=1;i<v.size();i++){
+        if(v[0][col]!=v[i][col]){
+            foundInCol=true;
+            break;
+        }
+    }
+    return (foundInRow && foundInCol)?true:false;
 }
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vll v(n),res;
+    int n,m; cin>>n>>m;
+    vector<string>v(n);
     for(int i=0;i<n;i++){
         cin>>v[i];
     }
-
-    for(int i=0;i<n;i++){
-        int high=i+1,low=-1;
-        while(high>low+1){
-            int mid=(high+low)/2;
-            if(good(i-mid,v[mid])) high=mid;
-            else low=mid;
-        }
-        cout<<i-high+1<<" ";
+    // if we can somehow make v[0][0]==v[n-1][m-1] or v[n-1][0]==v[0][m-1], ans will YES else NO
+    if(v[0][0]==v[n-1][m-1] || v[n-1][0]==v[0][m-1]) YES;
+    else{
+        // check if the points can be altered or not, if can be altered, then ans will be YES
+        (checkAlter(0,0,v) || checkAlter(0,m-1,v) || checkAlter(n-1,0,v) || checkAlter(n-1,m-1,v))?YES:NO;
     }
-    cout<<endl;
 }
 
 main()

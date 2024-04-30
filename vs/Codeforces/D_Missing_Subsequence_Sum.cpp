@@ -145,28 +145,41 @@ vll intToBin(int n){
     
 // MyTask
 
-bool good(int index,int num){
-    return num>=(index+1)?true:false;
+int bit(int n){
+    int count=0;
+    while(n>0){
+        n>>=1;
+        count++;
+    }
+    return count;
 }
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vll v(n),res;
-    for(int i=0;i<n;i++){
-        cin>>v[i];
-    }
-
-    for(int i=0;i<n;i++){
-        int high=i+1,low=-1;
-        while(high>low+1){
-            int mid=(high+low)/2;
-            if(good(i-mid,v[mid])) high=mid;
-            else low=mid;
+    int n,k; cin>>n>>k;
+    vll v;
+    int b=bit(k);
+    if(k==1){
+        v.pb(3);
+        for(int i=1;i<25;i++){
+            v.pb(power(2,i));
         }
-        cout<<i-high+1<<" ";
     }
-    cout<<endl;
+    else if(k==2){
+        v.pb(1),v.pb(3),v.pb(6);
+        for(int i=2;i<24;i++){
+            v.pb(power(2,i));
+        }
+    }
+    else{
+        for(int i=0;i<23;i++){
+            if(b==i+1) v.pb(k-power(2,i)),v.pb(k+1),v.pb(power(2,i+1)+1);
+            else v.pb(power(2,i));
+        }
+    }
+    cout<<v.size()<<endl;
+    print(v);
+    
 }
 
 main()

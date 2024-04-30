@@ -145,28 +145,43 @@ vll intToBin(int n){
     
 // MyTask
 
-bool good(int index,int num){
-    return num>=(index+1)?true:false;
-}
-
-void solve(){
+void solve(int t,int T){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vll v(n),res;
-    for(int i=0;i<n;i++){
-        cin>>v[i];
-    }
-
-    for(int i=0;i<n;i++){
-        int high=i+1,low=-1;
-        while(high>low+1){
-            int mid=(high+low)/2;
-            if(good(i-mid,v[mid])) high=mid;
-            else low=mid;
+    // cout<<"Case "<<t<<": ";
+    int n,k; cin>>n>>k;
+    // cout<<n<<" "<<k<<endl;
+    vll v;
+    int nInc=(n+1)/2,restInc=k/2,pointInc=1;
+    int nDec=n-(n+1)/2,restDec=k/2,pointDec=n;
+    for(int i=0;i<k/2;i++){
+        {
+            v.pb(pointInc);
+            int cut=pointInc-1;
+            int no_of_space=nInc-cut-restInc;
+            int extra=no_of_space%restInc;
+            int space=no_of_space/restInc;
+            extra?space=space+1:space=space;
+            pointInc+=(space+1);
+            restInc--;
         }
-        cout<<i-high+1<<" ";
+            
+        {
+            v.pb(pointDec);
+            int cut=n-pointDec;
+            int no_of_space=nDec-cut-restDec;
+            int extra=no_of_space%restDec;
+            int space=no_of_space/restDec;
+            extra?space=space+1:space=space;
+            pointDec-=(space+1);
+            restDec--;
+        }
     }
-    cout<<endl;
+    // print(v);
+    for(int i=k;i<n;i++){
+        if(i%2) v.pb(v[i-k]-1);
+        else v.pb(v[i-k]+1);
+    }
+    print(v);
 }
 
 main()
@@ -175,6 +190,6 @@ main()
     int T=1; 
     cin>>T;
     for(int t=1;t<=T;t++){
-        solve();
+        solve(t,T);
     }
 }

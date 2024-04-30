@@ -145,28 +145,32 @@ vll intToBin(int n){
     
 // MyTask
 
-bool good(int index,int num){
-    return num>=(index+1)?true:false;
-}
-
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vll v(n),res;
-    for(int i=0;i<n;i++){
-        cin>>v[i];
+    int n,k; cin>>n>>k;
+    vector<vll>dp(n+1,(vll(k+1,inf)));
+    vll a(n+1);
+    for(int i=1;i<=n;i++){
+        cin>>a[i];
     }
-
-    for(int i=0;i<n;i++){
-        int high=i+1,low=-1;
-        while(high>low+1){
-            int mid=(high+low)/2;
-            if(good(i-mid,v[mid])) high=mid;
-            else low=mid;
+    for(int i=0;i<=k;i++){
+        dp[0][i]=0;
+    }
+    for(int endpos=1;endpos<=n;endpos++){
+        for(int c=0;c<=k;c++){
+            int mn=inf;
+            for(int startpos=endpos;startpos>=endpos-c && startpos>0;startpos--){
+                // cout<<a[startpos]<<" ";
+                mn=min(mn,a[startpos]);
+                int tempsum=mn*(endpos-startpos+1);
+                tempsum+=dp[startpos-1][c-(endpos-startpos)];
+                // cout<<startpos<<" "<<endpos<<" "<<tempsum<<endl;
+                dp[endpos][c]=min(dp[endpos][c],tempsum);
+            }
         }
-        cout<<i-high+1<<" ";
+        print(dp[endpos]);
     }
-    cout<<endl;
+    cout<<dp[n][k]<<endl;
 }
 
 main()

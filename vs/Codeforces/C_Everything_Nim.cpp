@@ -145,28 +145,28 @@ vll intToBin(int n){
     
 // MyTask
 
-bool good(int index,int num){
-    return num>=(index+1)?true:false;
-}
-
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vll v(n),res;
+    vll v;
+    mpl mp;
     for(int i=0;i<n;i++){
-        cin>>v[i];
+        int in; cin>>in;
+        if(!mp[in]) v.pb(in);
+        mp[in]++;
     }
-
-    for(int i=0;i<n;i++){
-        int high=i+1,low=-1;
-        while(high>low+1){
-            int mid=(high+low)/2;
-            if(good(i-mid,v[mid])) high=mid;
-            else low=mid;
+    sort(all(v));
+    // print(v);
+    bool flag=false;
+    int prev=0,control=!(v.size()%2);  // 0-> ALice, 1->Bob
+    for(int i=0;i<v.size();i++){
+        if(v[i]-prev>1){
+            control=i%2;
+            break;
         }
-        cout<<i-high+1<<" ";
+        prev=v[i];
     }
-    cout<<endl;
+    (!control)?cout<<"Alice"<<endl:cout<<"Bob"<<endl;
 }
 
 main()
