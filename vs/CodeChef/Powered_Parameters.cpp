@@ -21,7 +21,6 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define MP make_pair
 #define YES cout<<"YES\n"
 #define NO  cout<<"NO\n"
-#define emo cout<<"('_')\n"
 #define all(v) v.begin(),v.end()
 #define rall(v) v.rbegin(),v.rend()
 #define extra(n) fixed<<setprecision(n)
@@ -146,25 +145,24 @@ vll intToBin(int n){
     
 // MyTask
 
-
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n,k; cin>>n>>k;
-    vll v;
-    while(n){
-        v.pb((n+1)/2);
-        n/=2;
+    int n; cin>>n;
+    vll v(n);
+    vector<double>vp(n);
+    for(int i=0;i<n;i++){
+        cin>>v[i];
     }
-    int total=0,height=1;
-    for(int in:v){
-        if(total<k && k<=total+in){
-            cout<<height*(2*(k-total)-1)<<endl;
-            return;
+    int count=0;
+    for(int i=0;i<n;i++){
+        if(v[i]==1) count+=n;
+        else{
+            for(int j=0;j<min((int)32,n);j++){
+                if(pow(v[i],j+1)<=v[j]) count++;
+            }
         }
-        total+=in;
-        height*=2;
     }
-    
+    cout<<count<<endl;
 }
 
 main()

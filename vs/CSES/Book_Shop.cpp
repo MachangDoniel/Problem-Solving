@@ -142,36 +142,61 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
+
+struct SimpleHash {
+    long long len, base, mod;
+    vector<long long> P, H, R;
+    SimpleHash() {}
+    SimpleHash(string str, long long b, long long m) {
+        base = b, mod = m, len = str.size();
+        P.resize(len + 4, 1), H.resize(len + 3, 0), R.resize(len + 3, 0);
+        for (long long i = 1; i <= len + 3; i++)
+            P[i] = (P[i - 1] * base) % mod;
+        for (long long i = 1; i <= len; i++)
+            H[i] = (H[i - 1] * base + str[i - 1]+1007) % mod;
+        for (long long i = len; i >= 1; i--)
+            R[i] = (R[i + 1] * base + str[i - 1]+1007) % mod;
+    }
+    inline long long range_hash(long long l, long long r) {
+        long long hashval = (H[r + 1] - (P[r - l + 1] * H[l] % mod))%mod;
+        return (hashval < 0 ? hashval + mod : hashval);
+    }
+    inline long long reverse_hash(long long l, long long r) {
+        long long hashval = R[l + 1] - (P[r - l + 1] * R[r + 2] % mod);
+        return (hashval < 0 ? hashval + mod : hashval);
+    }
+};
+struct DoubleHash {
+    SimpleHash sh1, sh2;
+    DoubleHash() {}
+    DoubleHash(string str) {
+        sh1 = SimpleHash(str, 1949313259, 2091573227);
+        sh2 = SimpleHash(str, 1997293877, 2117566807);
+    }
+    long long concate(DoubleHash& B, long long l1 , long long r1 , long long l2 , long long r2) {
+        long long len1 = r1 - l1+1 , len2 = r2 - l2+1;
+        long long x1 = sh1.range_hash(l1, r1) ,
+        x2 = B.sh1.range_hash(l2, r2);
+        x1 = (x1 * B.sh1.P[len2]) % 2091573227;
+        long long newx1 = (x1 + x2) % 2091573227;
+        x1 = sh2.range_hash(l1, r1);
+        x2 = B.sh2.range_hash(l2, r2);
+        x1 = (x1 * B.sh2.P[len2]) % 2117566807;
+        long long newx2 = (x1 + x2) % 2117566807;
+        return (newx1 << 32) ^ newx2;
+    }
+    inline long long range_hash(long long l, long long r) {
+        return (sh1.range_hash(l, r) << 32) ^ sh2.range_hash(l, r);
+    }
+    inline long long reverse_hash(long long l, long long r) {
+        return (sh1.reverse_hash(l, r) << 32) ^ sh2.reverse_hash(l, r);
+    }
+};
     
 // MyTask
 
-void solve(){
-    // ll in,n,m,i,j,k,x,y;
-    int n,x; cin>>n>>x;
-    // cout<<n<<" "<<x<<endl;
-    vll dp(x+1,0),price(n),page(n);
-    for(int i=0;i<n;i++){
-        cin>>price[i];
-    }
-    for(int i=0;i<n;i++){
-        cin>>page[i];
-        // cout<<x<<" "<<price[i]<<" "<<page[i]<<endl;
-        if(x>=price[i]) dp[price[i]]=page[i];
-    }
-    sort(all(price));
-    for(int i=1;i<=x;i++){
-        for(int j=0;j<price.size();j++){
-            dp[i]=max(dp[i],dp[i-1]);
-            if(i<price[j]) break;
-            else{
-                if(price[j]==i-price[j]) dp[i]=max(dp[i],dp[price[j]]+dp[i-price[j]-1]);
-                else dp[i]=max(dp[i],dp[price[j]]+dp[i-price[j]]);
-            }
-        }
-    }
-    print(dp);
-    cout<<dp[x]<<endl;
-}
+void solve();
+void solve2();
 
 main()
 {
@@ -179,6 +204,64 @@ main()
     int T=1; 
     // cin>>T;
     for(int t=1;t<=T;t++){
-        solve();
+        solve2();
     }
 }
+
+
+
+// general approach of knapsack problem
+// time & space efficiency both O(n*x)
+void solve(){
+    // ll in,n,m,i,j,k,x,y;
+    int n,x; cin>>n>>x;
+    vector<vll>dp(n+1,vll(x+1,0));
+    vll price(n+1),page(n+1);
+    for(int i=1;i<=n;i++){
+        cin>>price[i];
+    }
+    for(int i=1;i<=n;i++){
+        cin>>page[i];
+    }
+    for(int i=1;i<=n;i++){
+        for(int p=1;p<=x;p++){
+            int skip=dp[i-1][p];
+            int pick=p>=price[i]?dp[i-1][p-price[i]]+page[i]:skip;
+            dp[i][p]=max(skip,pick);
+        }
+    }
+    // for(int i=0;i<=n;i++){
+    //     print(dp[i]);
+    // }
+    cout<<dp[n][x]<<endl;
+}
+
+// optimal space efficient approach of knapsack problem
+// space efficiency O(2*n)=O(n)
+void solve2(){
+    // ll in,n,m,i,j,k,x,y;
+    int n,x; cin>>n>>x;
+
+    vll price(n+1),page(n+1);
+    for(int i=1;i<=n;i++){
+        cin>>price[i];
+    }
+    for(int i=1;i<=n;i++){
+        cin>>page[i];
+    }
+    vll dp(x+1,0);    // prev
+    for(int i=1;i<=n;i++){
+        vll newdp(x+1); 
+        for(int p=1;p<=x;p++){
+            int skip=dp[p];
+            int pick=p>=price[i]?dp[p-price[i]]+page[i]:skip;
+            newdp[p]=max(skip,pick);
+        }
+        dp=newdp;
+    }
+    // for(int i=0;i<=n;i++){
+    //     print(dp[i]);
+    // }
+    cout<<dp[x]<<endl;
+}
+
