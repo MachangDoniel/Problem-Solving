@@ -90,7 +90,56 @@ void primeFactors(int n){
         } 
     }
     if(n>2) cout<<n<<" "; 
-} 
+}
+struct SimpleHash {
+    long long len, base, mod;
+    vector<long long> P, H, R;
+    SimpleHash() {}
+    SimpleHash(string str, long long b, long long m) {
+        base = b, mod = m, len = str.size();
+        P.resize(len + 4, 1), H.resize(len + 3, 0), R.resize(len + 3, 0);
+        for (long long i = 1; i <= len + 3; i++)
+            P[i] = (P[i - 1] * base) % mod;
+        for (long long i = 1; i <= len; i++)
+            H[i] = (H[i - 1] * base + str[i - 1]+1007) % mod;
+        for (long long i = len; i >= 1; i--)
+            R[i] = (R[i + 1] * base + str[i - 1]+1007) % mod;
+    }
+    inline long long range_hash(long long l, long long r) {
+        long long hashval = (H[r + 1] - (P[r - l + 1] * H[l] % mod))%mod;
+        return (hashval < 0 ? hashval + mod : hashval);
+    }
+    inline long long reverse_hash(long long l, long long r) {
+        long long hashval = R[l + 1] - (P[r - l + 1] * R[r + 2] % mod);
+        return (hashval < 0 ? hashval + mod : hashval);
+    }
+};
+struct DoubleHash {
+    SimpleHash sh1, sh2;
+    DoubleHash() {}
+    DoubleHash(string str) {
+        sh1 = SimpleHash(str, 1949313259, 2091573227);
+        sh2 = SimpleHash(str, 1997293877, 2117566807);
+    }
+    long long concate(DoubleHash& B, long long l1 , long long r1 , long long l2 , long long r2) {
+        long long len1 = r1 - l1+1 , len2 = r2 - l2+1;
+        long long x1 = sh1.range_hash(l1, r1) ,
+        x2 = B.sh1.range_hash(l2, r2);
+        x1 = (x1 * B.sh1.P[len2]) % 2091573227;
+        long long newx1 = (x1 + x2) % 2091573227;
+        x1 = sh2.range_hash(l1, r1);
+        x2 = B.sh2.range_hash(l2, r2);
+        x1 = (x1 * B.sh2.P[len2]) % 2117566807;
+        long long newx2 = (x1 + x2) % 2117566807;
+        return (newx1 << 32) ^ newx2;
+    }
+    inline long long range_hash(long long l, long long r) {
+        return (sh1.range_hash(l, r) << 32) ^ sh2.range_hash(l, r);
+    }
+    inline long long reverse_hash(long long l, long long r) {
+        return (sh1.reverse_hash(l, r) << 32) ^ sh2.reverse_hash(l, r);
+    }
+};
 class DisjointSet {
     private:
         int parent[N];
@@ -149,118 +198,81 @@ vll intToBin(int n){
     return bin;
 }
 
-struct SimpleHash {
-    long long len, base, mod;
-    vector<long long> P, H, R;
-    SimpleHash() {}
-    SimpleHash(string str, long long b, long long m) {
-        base = b, mod = m, len = str.size();
-        P.resize(len + 4, 1), H.resize(len + 3, 0), R.resize(len + 3, 0);
-        for (long long i = 1; i <= len + 3; i++)
-            P[i] = (P[i - 1] * base) % mod;
-        for (long long i = 1; i <= len; i++)
-            H[i] = (H[i - 1] * base + str[i - 1]+1007) % mod;
-        for (long long i = len; i >= 1; i--)
-            R[i] = (R[i + 1] * base + str[i - 1]+1007) % mod;
-    }
-    inline long long range_hash(long long l, long long r) {
-        long long hashval = (H[r + 1] - (P[r - l + 1] * H[l] % mod))%mod;
-        return (hashval < 0 ? hashval + mod : hashval);
-    }
-    inline long long reverse_hash(long long l, long long r) {
-        long long hashval = R[l + 1] - (P[r - l + 1] * R[r + 2] % mod);
-        return (hashval < 0 ? hashval + mod : hashval);
-    }
-};
-struct DoubleHash {
-    SimpleHash sh1, sh2;
-    DoubleHash() {}
-    DoubleHash(string str) {
-        sh1 = SimpleHash(str, 1949313259, 2091573227);
-        sh2 = SimpleHash(str, 1997293877, 2117566807);
-    }
-    long long concate(DoubleHash& B, long long l1 , long long r1 , long long l2 , long long r2) {
-        long long len1 = r1 - l1+1 , len2 = r2 - l2+1;
-        long long x1 = sh1.range_hash(l1, r1) ,
-        x2 = B.sh1.range_hash(l2, r2);
-        x1 = (x1 * B.sh1.P[len2]) % 2091573227;
-        long long newx1 = (x1 + x2) % 2091573227;
-        x1 = sh2.range_hash(l1, r1);
-        x2 = B.sh2.range_hash(l2, r2);
-        x1 = (x1 * B.sh2.P[len2]) % 2117566807;
-        long long newx2 = (x1 + x2) % 2117566807;
-        return (newx1 << 32) ^ newx2;
-    }
-    inline long long range_hash(long long l, long long r) {
-        return (sh1.range_hash(l, r) << 32) ^ sh2.range_hash(l, r);
-    }
-    inline long long reverse_hash(long long l, long long r) {
-        return (sh1.reverse_hash(l, r) << 32) ^ sh2.reverse_hash(l, r);
-    }
-};
+
     
 // MyTask
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n,k,q; cin>>n>>k>>q;
-    vll a(k+1),b(k+1);
-    a[0]=b[0]=0;
-    for(int i=1;i<=k;i++){
-        cin>>a[i];
-    }
-    for(int i=1;i<=k;i++){
-        cin>>b[i];
-    }
-    for(int i=0;i<q;i++){
-        int d; cin>>d;
-        int index=ub(all(a),d)-a.begin();
-        // cout<<index-1<<endl;
-        if(d==a[index-1]) cout<<b[index-1]<<" ";
-        else{
-            int time=((d-a[index-1])*(b[index]-b[index-1]))/((a[index]-a[index-1]));
-            cout<<b[index-1]+time<<" ";
+    int n; cin>>n;
+    vector<int>v(n);
+    vector<pair<int,int>>vp;
+    for(int i=0;i<n;i++){
+        cin>>v[i];
+        if(i && v[i] && v[i-1]){
+            // cout<<v[i]<<" "<<v[i-1]<<endl;
+            vp.pb({v[i]+v[i-1],i-1});
         }
     }
-    cout<<endl;
-}
-
-void solve2() {
-    int n, k, q;
-    cin >> n >> k >> q;
-    vll a(k + 1), b(k + 1);
-    a[0] = b[0] = 0;
-    for (int i = 1; i <= k; i++) {
-        cin >> a[i];
-    }
-    for (int i = 1; i <= k; i++) {
-        cin >> b[i];
-    }
-    for (int i = 0; i < q; i++) {
-        int d;
-        cin >> d;
-        auto good = [&](int mid) -> bool {
-            return a[mid] <= d;
-        };
-        int high = k + 1, low = -1;
-        while (high > low + 1) {
-            int mid = (high + low) / 2;
-            if (good(mid)) low = mid; // get the largest value that is smaller than d
-            else high = mid;
+    sort(vp.begin(),vp.end());
+    vector<int>taken(n,0);
+    int ans=0;
+    for(int i=0;i<vp.size();i++){
+        int first=vp[i].first,second=vp[i].second;
+        // cout<<vp[i].first<<" "<<vp[i].second<<endl;
+        if(!taken[second] && !taken[second+1]){
+            ans+=first*2;
+            taken[second]++;
+            taken[second+1]++;
         }
-        int distance = d - a[low];
-        int time = distance * (b[low + 1] -b[low]) / (a[low + 1] - a[low]);
-        cout << b[low] + time <<" ";
     }
-    cout << endl;
+    for(int i=0;i<n;i++){
+        if(!taken[i]) ans+=v[i];
+    }
+    cout<<ans<<endl;
 }
 
-main() {
+main()
+{
     Good_Luck;
-    int T = 1;
-    cin >> T;
-    for (int t = 1; t <= T; t++) {
-        solve2();
+    int T=1; 
+    cin>>T;
+    for(int t=1;t<=T;t++){
+        solve();
     }
-    return 0;
 }
+
+
+// fun solve() {
+//     val n = readLine()!!.toInt()
+//     val v = readLine()!!.split(" ").map { it.toInt() }
+//     val vp = mutableListOf<Pair<Int, Int>>()
+//     for (i in 1 until n) {
+//         if (v[i] > 0 && v[i - 1] > 0) {
+//             vp.add(v[i] + v[i - 1] to i - 1)
+//         }
+//     }
+//     vp.sortBy { it.first }
+//     val taken = BooleanArray(n)
+//     var ans = 0
+//     for (pair in vp) {
+//         val first = pair.first
+//         val second = pair.second
+//         if (!taken[second] && !taken[second + 1]) {
+//             ans += first * 2
+//             taken[second] = true
+//             taken[second + 1] = true
+//         }
+//     }
+//     for (i in v.indices) {
+//         if (!taken[i]) ans += v[i]
+//     }
+//     println(ans)
+// }
+
+// fun main() {
+//     var T = readLine()!!.toInt()
+//     repeat(T) {
+//         solve()
+//     }
+// }
