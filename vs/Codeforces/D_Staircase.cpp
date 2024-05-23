@@ -206,30 +206,77 @@ void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
     vector<int>v(n);
-    vector<pair<int,int>>vp;
+    map<int,int>single;
+    int localmax=0,count=0;
+    priority_queue<pair<int,int>>pqodd,pqeven;
+    int first=INT_MAX,firstindex=-1;
     for(int i=0;i<n;i++){
         cin>>v[i];
-        if(i && v[i] && v[i-1]){
-            // cout<<v[i]<<" "<<v[i-1]<<endl;
-            vp.pb({v[i]+v[i-1],i-1});
+        if(v[i]){
+            if(count==0) firstindex=i;
+            if(i%2) pqodd.push({v[i],i});
+            else pqeven.push({v[i],i});
+            count++;
+        }
+        else{
+            if(count%2){
+                if(firstindex%2){
+                    while(!pqodd.empty()){
+                        if((pqodd.top().second-firstindex)%2==0){
+                            single[pqodd.top().second]++;
+                            break;
+                        }
+                        pqodd.pop();
+                    }
+                }
+                else{
+                    while(!pqeven.empty()){
+                        if((pqeven.top().second-firstindex)%2==0){
+                            single[pqeven.top().second]++;
+                            break;
+                        }
+                        pqeven.pop();
+                    }
+                }
+            }
+            pqodd=pqeven=priority_queue<pair<int,int>>();
+            count=0;
         }
     }
-    sort(vp.begin(),vp.end());
-    vector<int>taken(n,0);
-    int ans=0;
-    for(int i=0;i<vp.size();i++){
-        int first=vp[i].first,second=vp[i].second;
-        // cout<<vp[i].first<<" "<<vp[i].second<<endl;
-        if(!taken[second] && !taken[second+1]){
-            ans+=first*2;
-            taken[second]++;
-            taken[second+1]++;
+    // cout<<"count: "<<count<<" "<<firstindex<<endl;
+    if(count%2){
+        if(firstindex%2){
+            while(!pqodd.empty()){
+                if((pqodd.top().second-firstindex)%2==0){
+                    single[pqodd.top().second]++;
+                    break;
+                }
+                pqodd.pop();
+            }
+        }
+        else{
+            while(!pqeven.empty()){
+                if((pqeven.top().second-firstindex)%2==0){
+                    single[pqeven.top().second]++;
+                    break;
+                }
+                pqeven.pop();
+            }
         }
     }
+    
+    // print(v);
+    // print(single);
+    int sum=0;
+    bool ready=false;
     for(int i=0;i<n;i++){
-        if(!taken[i]) ans+=v[i];
+        if(single[i]) sum+=v[i];
+        // else if(v[i] && !ready) ready=true;
+        // else if(v[i] && ready) sum+=2*(v[i]+v[i-1]),ready=false;
+        // else ready=false;
+        else sum+=2*v[i];
     }
-    cout<<ans<<endl;
+    cout<<sum<<endl;
 }
 
 main()
@@ -243,36 +290,86 @@ main()
 }
 
 
-// fun solve() {
-//     val n = readLine()!!.toInt()
-//     val v = readLine()!!.split(" ").map { it.toInt() }
-//     val vp = mutableListOf<Pair<Int, Int>>()
-//     for (i in 1 until n) {
-//         if (v[i] > 0 && v[i - 1] > 0) {
-//             vp.add(v[i] + v[i - 1] to i - 1)
+
+
+// import java.util.*
+
+// fun solve(sc: Scanner) {
+//     val n = sc.nextInt()
+//     val v = MutableList(n) { sc.nextLong() }
+//     val single = mutableMapOf<Int, Int>()
+//     var count = 0
+//     val pqodd = PriorityQueue<Pair<Long, Int>>(compareByDescending { it.first })
+//     val pqeven = PriorityQueue<Pair<Long, Int>>(compareByDescending { it.first })
+//     var firstIndex = -1
+
+//     for (i in 0 until n) {
+//         if (v[i] != 0L) {
+//             if (count == 0) firstIndex = i
+//             if (i % 2 != 0) pqodd.add(Pair(v[i], i)) else pqeven.add(Pair(v[i], i))
+//             count++
+//         } else {
+//             if (count % 2 != 0) {
+//                 if (firstIndex % 2 != 0) {
+//                     while (pqodd.isNotEmpty()) {
+//                         if ((pqodd.peek().second - firstIndex) % 2 == 0) {
+//                             single[pqodd.peek().second] = single.getOrDefault(pqodd.peek().second, 0) + 1
+//                             break
+//                         }
+//                         pqodd.poll()
+//                     }
+//                 } else {
+//                     while (pqeven.isNotEmpty()) {
+//                         if ((pqeven.peek().second - firstIndex) % 2 == 0) {
+//                             single[pqeven.peek().second] = single.getOrDefault(pqeven.peek().second, 0) + 1
+//                             break
+//                         }
+//                         pqeven.poll()
+//                     }
+//                 }
+//             }
+//             pqodd.clear()
+//             pqeven.clear()
+//             count = 0
 //         }
 //     }
-//     vp.sortBy { it.first }
-//     val taken = BooleanArray(n)
-//     var ans = 0
-//     for (pair in vp) {
-//         val first = pair.first
-//         val second = pair.second
-//         if (!taken[second] && !taken[second + 1]) {
-//             ans += first * 2
-//             taken[second] = true
-//             taken[second + 1] = true
+
+//     if (count % 2 != 0) {
+//         if (firstIndex % 2 != 0) {
+//             while (pqodd.isNotEmpty()) {
+//                 if ((pqodd.peek().second - firstIndex) % 2 == 0) {
+//                     single[pqodd.peek().second] = single.getOrDefault(pqodd.peek().second, 0) + 1
+//                     break
+//                 }
+//                 pqodd.poll()
+//             }
+//         } else {
+//             while (pqeven.isNotEmpty()) {
+//                 if ((pqeven.peek().second - firstIndex) % 2 == 0) {
+//                     single[pqeven.peek().second] = single.getOrDefault(pqeven.peek().second, 0) + 1
+//                     break
+//                 }
+//                 pqeven.poll()
+//             }
 //         }
 //     }
-//     for (i in v.indices) {
-//         if (!taken[i]) ans += v[i]
+
+//     var sum = 0L
+//     for (i in 0 until n) {
+//         sum += if (single.containsKey(i)) {
+//             v[i]
+//         } else {
+//             2 * v[i]
+//         }
 //     }
-//     println(ans)
+//     println(sum)
 // }
 
 // fun main() {
-//     var T = readLine()!!.toInt()
-//     repeat(T) {
-//         solve()
+//     val sc = Scanner(System.`in`)
+//     val T = sc.nextInt()
+//     sc.nextLine() // consume the newline
+//     for (t in 1..T) {
+//         solve(sc)
 //     }
 // }

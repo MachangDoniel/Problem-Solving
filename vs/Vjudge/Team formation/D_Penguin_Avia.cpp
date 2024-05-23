@@ -227,6 +227,7 @@ void solve(){
         for(int j=0;j<n;j++){
             if(s[i][j]=='1'){
                 adj[i].pb(j);
+                adj[j].pb(i);
             }
         }
     }
