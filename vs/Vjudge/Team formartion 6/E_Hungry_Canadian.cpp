@@ -214,31 +214,69 @@ vll intToBin(int n){
     
 // MyTask
 
+// int n,alph=30,M=10005;
+// vector<vector<int>>dp(M,vll(alph,-1)),v(alph,vll(alph));
+
+// int go(int len,int node){
+//     if(len>=n) return 0;
+//     if(dp[len][node]!=-1) return dp[len][node];
+//     dp[len][node]=inf;
+//     for(int i=0;i<26;i++){
+//         dp[len][node]=min(dp[len][node],go(len+1,i)+v[node][i]);
+//     }
+//     return dp[len][node];
+// }
+
+// void solve(){
+//     // ll in,n,m,i,j,k,x,y;
+//     cin>>n;
+//     for(int i=0;i<26;i++){
+//         for(int j=0;j<26;j++){
+//             cin>>v[i][j];
+//         }
+//     }
+//     int ans=inf;
+//     for(int i=0;i<26;i++){
+//         ans=min(ans,go(1,i));
+//     }
+//     cout<<ans<<endl;
+// }
+
+int n,alph=30,M=10005;
+vector<vector<int>>dp(M,vll(alph,inf)),v(alph,vll(alph));
+
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+    cin>>n;
+    for(int i=0;i<26;i++){
+        for(int j=0;j<26;j++){
+            cin>>v[i][j];
+        }
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+    int ans=inf;
+    for(int i=0;i<26;i++){
+        dp[0][i]=0;
     }
-    cout<<count<<endl;
-    
+    for(int i=1;i<n;i++){   // at i lenght
+        for(int j=0;j<26;j++){  // from j
+            for(int k=0;k<26;k++){  // to k
+                dp[i][k]=min(dp[i][k],dp[i-1][j]+v[j][k]);  // calculate dp at i lenght=min(dp at i length,dp at i-1 length+cost from j to k)
+            }
+        }
+        if(i==n-1){
+            for(int j=0;j<26;j++){
+                ans=min(ans,dp[i][j]);
+            }
+        }
+    }
+    cout<<ans<<endl;
 }
 
 main()
 {
     Good_Luck;
     int T=1; 
-    cin>>T;
+    // cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }

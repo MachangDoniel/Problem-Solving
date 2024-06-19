@@ -214,24 +214,62 @@ vll intToBin(int n){
     
 // MyTask
 
+bool good(int h,int t,vector<int>&a,vector<int>&c){
+    int sum=0;
+    for(int i=0;i<a.size();i++){
+        sum+=a[i];
+    }
+    int count=sum;
+    for(int i=0;i<a.size();i++){
+        count+=(a[i]*((t-1)/c[i]));
+        if(count>=h) return count>=h;
+    }
+    // cout<<t<<" "<<count<<endl;
+    return count>=h;
+}
+
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
+    int h,n; cin>>h>>n;
+    vector<int> a(n),c(n);
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        cin>>a[i];
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
     for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+        cin>>c[i];
     }
-    cout<<count<<endl;
-    
+    int high=1e13,low=0;
+    while(high>low+1){
+        int mid=(high+low)/2;
+        if(good(h,mid,a,c)) high=mid;
+        else low=mid;
+    }
+    cout<<high<<endl;
+}
+
+void solve2(){
+    // ll in,n,m,i,j,k,x,y;
+    int h,n; cin>>h>>n;
+    vector<int> a(n),c(n);
+    int sum=0;
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+        sum+=a[i];
+    }
+    multiset<pair<int,int>>ms;
+    for(int i=0;i<n;i++){
+        cin>>c[i];
+        ms.insert({1,i});
+    }
+    int last_turn=0;
+    while(h>0){
+        int first=ms.begin()->first,second=ms.begin()->second;
+        h-=a[second];
+        ms.erase(ms.find({first,second}));
+        ms.insert({first+c[second],second});
+        last_turn=first;
+    }
+    cout<<last_turn<<endl;
 }
 
 main()

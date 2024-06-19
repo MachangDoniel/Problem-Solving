@@ -209,7 +209,12 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
@@ -217,20 +222,21 @@ vll intToBin(int n){
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<pair<int,int>>v;
+    vector<int>v(n),mnnn,mxxx;
+    int mn,mx;
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        cin>>v[i];
+        if(!i) mn=v[i],mx=abs(v[i]);
+        else{
+            int mnn=mn,mxx=mx;
+            mn=min(mnn+v[i],mxx+v[i]);
+            mx=max(abs(mxx+v[i]),abs(mnn+v[i]));
+        }
+        mnnn.pb(mn);
+        mxxx.pb(mx);
+        // cout<<mn<<" "<<mx<<endl;
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
+    int k=max(abs(mn),mx);
     
 }
 

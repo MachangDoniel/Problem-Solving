@@ -209,7 +209,12 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
@@ -217,21 +222,33 @@ vll intToBin(int n){
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<pair<int,int>>v;
+    vector<int>a(n),b(n);
+    multiset<int>ms;            // need to replace must
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        cin>>a[i];
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
     for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+        cin>>b[i];
+        if(a[i]!=b[i]) ms.insert(b[i]);
     }
-    cout<<count<<endl;
-    
+    int m; cin>>m;
+    vector<int>d(m);
+    for(int i=0;i<m;i++){
+        cin>>d[i];
+    }
+    reverse(d.begin(),d.end());
+    if(count(all(b),d[0])==0){   // if d[0] not exists in b
+        NO;
+        return;
+    }
+    // if d[0] exists in b, as it can replace any element in b
+    for(int i=0;i<m;i++){
+        if(ms.find(d[i])!=ms.end()){
+            ms.erase(ms.find(d[i]));
+        }
+    }
+    if(ms.empty()) YES;
+    else NO;
 }
 
 main()

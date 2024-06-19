@@ -11,7 +11,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 // #Define
 #define Good_Luck ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 #define ll long long
-#define int long long
+// #define int long long
 #define ld long double
 #define pb push_back
 #define pp pop_back
@@ -214,23 +214,71 @@ vll intToBin(int n){
     
 // MyTask
 
+void getrank(vector<pair<int,int>>update){
+    cout<<"Rank:"<<endl;
+    for(int i=0;i<update.size();i++){
+        cout<<update[i].first<<" "<<update[i].second<<endl;
+    }
+    cout<<endl;
+}
+
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
-    }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
+    int n,m,p; cin>>n>>m>>p;
+    map<string,int>mp;
     int count=0;
     for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+        string s; cin>>s;
+        mp[s]=count++;
     }
-    cout<<count<<endl;
+    vector<vector<pair<int,pair<int,int>>>>v(301);   // time->{team(problem_solved,penalty)}
+    vector<pair<int,int>>update(n,{0,0});  // team(problem_solved,penalty)
+    // for(int i=0;i<m;i++){
+    //     cout<<update[i].first<<" "<<update[i].second<<endl;
+    // }
+    set<int>timer;
+    vector<vector<int>>penalty(n,vector<int>(m,0));
+    for(int i=0;i<m;i++){
+        int time;
+        char problem;
+        string team,status;
+        cin>>team>>problem>>time>>status;
+        // cout<<team<<" "<<mp[team]<<" "<<problem<<" "<<time<<" "<<status<<endl;
+        timer.insert(time);
+        if(status=="NO"){
+            penalty[mp[team]][problem-'A']+=20;
+        }
+        else{
+            update[mp[team]]={update[mp[team]].first+1,update[mp[team]].second+penalty[mp[team]][problem-'A']+time};
+            // cout<<team<<" "<<mp[team]<<" "<<update[mp[team]].first<<" "<<update[mp[team]].second<<endl;
+            v[time].pb({mp[team],{update[mp[team]].first,update[mp[team]].second}});
+        }
+    }
+    // timer.insert(0);
+    timer.insert(300);
+    int ans=0,prev=0;
+    int myproblem=0,mypenaly=0,topproblem=0,toppenalty=0;
+    bool my=true;
+    for(int t: timer){
+        // cout<<"At: "<<t<<endl;
+        if(my) ans+=(t-prev);
+        my=false;
+        // if(flag) ans+=(t-prev);
+        for(int j=0;j<v[t].size();j++){
+            int team=v[t][j].first;
+            int problem=v[t][j].second.first;
+            int penalty=v[t][j].second.second;
+            if(topproblem<problem) topproblem=problem,toppenalty=penalty;
+            if(topproblem==problem && toppenalty>penalty) topproblem=problem,toppenalty=penalty;
+            if(team==0) myproblem=problem,mypenaly=penalty;
+            // cout<<"Team "<<team<<": "<<problem<<" "<<penalty<<" "<<endl;
+        }
+        if(topproblem==myproblem && toppenalty==mypenaly) my=true;
+        prev=t;
+        // cout<<"TopTeam: "<<topproblem<<" "<<toppenalty<<endl;
+        // cout<<"MyTeam: "<<myproblem<<" "<<mypenaly<<" "<<ans<<endl<<endl;
+    }
+    cout<<ans<<endl;
     
 }
 
@@ -238,7 +286,7 @@ main()
 {
     Good_Luck;
     int T=1; 
-    cin>>T;
+    // cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }

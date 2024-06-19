@@ -209,37 +209,36 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
 
-void solve(){
-    // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+
+void solve() {
+    // ll in, n, m, i, j, k, x, y;
+    int n,a,b; cin>>n>>a>>b;
+    if(b<=a) cout<<n*a<<endl;
+    else{
+        int numofbunatcostb=min(n,(b-a));
+        int start=b-numofbunatcostb;
+        int costbyb=b*(b+1)/2-start*(start+1)/2;
+        int costbya=(n-numofbunatcostb)*a;
+        cout<<costbya+costbyb<<endl;
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
     
 }
 
-main()
-{
+main() {
     Good_Luck;
-    int T=1; 
-    cin>>T;
-    for(int t=1;t<=T;t++){
+    int T = 1;
+    cin >> T;
+    for (int t = 1; t <= T; t++) {
         solve();
     }
 }

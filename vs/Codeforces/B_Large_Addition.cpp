@@ -209,29 +209,50 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
+vector<int> getDigit(int n){
+    vector<int>v;
+    while(n>0){
+        v.pb(n%10);
+        n/=10;
+    }
+    return v;
+}
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+    vector<int>v=getDigit(n),num1,num2;
+    bool flag= true;
+    for(int i=0;i<v.size();i++){
+        if(!i){
+            if(v[i]==9){
+                flag=false;
+                break;
+            }
+        }
+        else if(i!=v.size()-1){
+            if(v[i]==0){
+                flag=false;
+                break;
+            }
+        }
+        else{
+            if(v[i]!=1){
+                flag=false;
+                break;
+            }
+        }
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
-    
+    (flag)?YES:NO;
 }
 
 main()

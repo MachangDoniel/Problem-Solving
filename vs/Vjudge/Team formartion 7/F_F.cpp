@@ -217,20 +217,33 @@ vll intToBin(int n){
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<pair<int,int>>v;
+    vector<int>v(n),ans;
+    int findgreat=0;
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        cin>>v[i];
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+    int flag=2;
+    ans.pb(v[0]);
+    for(int i=1;i<n;i++){
+        if(v[i]==v[i-1]) continue;
+        if(flag==0){
+            if(ans.back()>v[i]) ans.pb(v[i]),flag=1;
+            else if(ans.back()<v[i]) ans.back()=v[i];
+        }
+        else if(flag==1){
+            if(ans.back()<v[i]) ans.pb(v[i]),flag=0;
+            else if(ans.back()>v[i]) ans.back()=v[i];
+        }
+        else{
+            if(ans.back()<v[i]) ans.pb(v[i]),flag=0;
+            else if(ans.back()>v[i]) ans.pb(v[i]),flag=1;
+        }
     }
-    cout<<count<<endl;
+    cout<<ans.size()<<endl;
+    for(int it: ans){
+        cout<<it<<" ";
+    }
+    cout<<endl;
     
 }
 
@@ -238,7 +251,7 @@ main()
 {
     Good_Luck;
     int T=1; 
-    cin>>T;
+    // cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }

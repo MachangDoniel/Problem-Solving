@@ -210,28 +210,46 @@ vll intToBin(int n){
     return bin;
 }
 
-
     
 // MyTask
 
-void solve(){
+
+void solve(int t,int T){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+    int n,m; cin>>n>>m;
+    // if(T==10000){
+    //     if(t==402){
+    //         cout<<n<<" "<<m<<endl;       
+    //     }
+    // }
+    // else
+    {
+    vll v=intToBin(n);
+    reverse(all(v));
+    int past=0,ans=0;
+    for(int i=0;i<32;i++){
+        int plus=0,minus=0;
+        if(v[i]==0){
+            plus=power(2,i)-past;
+            int j=i,future=inf;
+            while(j<32){
+                if(v[j]==1){
+                    future=power(2,j)+past;
+                    break;
+                }
+                j++;
+            }
+            minus=future-(power(2,j)-1);
+        }
+        else past+=power(2,i);
+        // cout<<plus<<" "<<minus<<endl;
+        if(m>=min(plus,minus)){
+            ans+=power(2,i);        
+        }
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+    cout<<ans<<endl;
+    // print(v);
     }
-    cout<<count<<endl;
-    
 }
 
 main()
@@ -240,6 +258,6 @@ main()
     int T=1; 
     cin>>T;
     for(int t=1;t<=T;t++){
-        solve();
+        solve(t,T);
     }
 }

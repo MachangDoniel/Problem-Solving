@@ -210,28 +210,32 @@ vll intToBin(int n){
     return bin;
 }
 
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
     
 // MyTask
+int getAns(int l,int r,int k){
+    int ans=0;
+
+    if(k>=10) return 0;
+    else{
+        // cout<<(10/k)<<" "<<r<<" "<<l<<endl;
+        int b=(10%k)?10/k+1:10/k;
+        ans+=bigmod(b,r,mod)-bigmod(b,l,mod);
+    }
+    return (ans+mod)%mod;
+}
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
-    }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
-    
+    // int n; cin>>n;
+    int l,r,k; cin>>l>>r>>k;
+    int ans=getAns(l,r,k);
+    cout<<ans<<endl;
 }
 
 main()

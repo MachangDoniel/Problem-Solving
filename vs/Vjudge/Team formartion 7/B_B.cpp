@@ -217,28 +217,20 @@ vll intToBin(int n){
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<pair<int,int>>v;
+    mpl mp;
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        int in; cin>>in;
+        mp[in]=i+1;
+        // cout<<in<<" "<<mp[in]<<endl;
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
-    
+    int x; cin>>x; cout<<mp[x]<<endl;
 }
 
 main()
 {
     Good_Luck;
     int T=1; 
-    cin>>T;
+    // cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }

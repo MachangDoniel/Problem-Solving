@@ -214,31 +214,86 @@ vll intToBin(int n){
     
 // MyTask
 
+void print(vector<pair<string,int>>v){
+    for(int i=0;i<v.size();i++){
+        cout<<v[i].first<<" "<<v[i].second<<endl;
+    }
+}
+
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
-    }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
+    // int n; cin>>n;
     int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+    vector<pair<string,string>>play(16);
+    for(int  i=0;i<16;i++){
+        string s,p; cin>>s>>p;
+        play[count]={p,s};
+        count++;
     }
-    cout<<count<<endl;
-    
+    vector<pair<string,string>>w8,w4,w2,f,l8a,l8b,l4a,l4b,l2a,l2b;
+    vector<pair<string,string>>ans;
+    for(int i=0;i<play.size();i++){
+        if(play[i].first[0]=='0') play[i].first.erase(play[i].first.begin()),l8a.pb(play[i]);
+        else play[i].first.erase(play[i].first.begin()), w8.pb(play[i]);
+    }
+    for(int i=0;i<w8.size();i++){
+        if(w8[i].first[0]=='0') w8[i].first.erase(w8[i].first.begin()),l8b.pb(w8[i]);
+        else w8[i].first.erase(w8[i].first.begin()), w4.pb(w8[i]);
+    }
+    for(int i=0;i<w4.size();i++){
+        if(w4[i].first[0]=='0') w4[i].first.erase(w4[i].first.begin()),l4b.pb(w4[i]);
+        else w4[i].first.erase(w4[i].first.begin()), w2.pb(w4[i]);
+    }
+    for(int i=0;i<w2.size();i++){
+        if(w2[i].first[0]=='0') w2[i].first.erase(w2[i].first.begin()),l2b.pb(w2[i]);
+        else w2[i].first.erase(w2[i].first.begin()), f.pb(w2[i]);
+    }
+    for(int i=0;i<l8a.size();i++){
+        if(l8a[i].first[0]=='0') ans.pb({l8a[i].second,"13-16"});
+        else l8a[i].first.erase(l8a[i].first.begin()), l8b.pb(l8a[i]);
+    }
+    for(int i=0;i<l8b.size();i++){
+        if(l8b[i].first[0]=='0') ans.pb({l8b[i].second,"9-12"});
+        else l8b[i].first.erase(l8b[i].first.begin()), l4a.pb(l8b[i]);
+    }
+    for(int i=0;i<l4a.size();i++){
+        if(l4a[i].first[0]=='0') ans.pb({l4a[i].second,"7-8"});
+        else l4a[i].first.erase(l4a[i].first.begin()), l4b.pb(l4a[i]);
+    }
+    for(int i=0;i<l4b.size();i++){
+        if(l4b[i].first[0]=='0') ans.pb({l4b[i].second,"5-6"});
+        else l4b[i].first.erase(l4b[i].first.begin()), l2a.pb(l4b[i]);
+    }
+    for(int i=0;i<l2a.size();i++){
+        if(l2a[i].first[0]=='0') ans.pb({l2a[i].second,"4"});
+        else l2a[i].first.erase(l2a[i].first.begin()), l2b.pb(l2a[i]);
+    }
+    for(int i=0;i<l2b.size();i++){
+        if(l2b[i].first[0]=='0') ans.pb({l2b[i].second,"3"});
+        else l2b[i].first.erase(l2b[i].first.begin()), f.pb(l2b[i]);
+    }
+    for(int i=0;i<f.size();i++){
+        if(f[i].first[0]=='0') ans.pb({f[i].second,"2"});
+        else ans.pb({f[i].second,"1"});
+    }
+    sort(all(ans));
+    bool printed[ans.size()]={false};
+    string way[]={"1","2","3","4","5-6","7-8","9-12","13-16"};
+    for(int i=0;i<8;i++){
+        for(int j=0;j<ans.size();j++){
+            if(way[i]==ans[j].second){
+                cout<<ans[j].second<<" "<<ans[j].first<<endl;
+                printed[j]=true;
+            }
+        }
+    }
 }
 
 main()
 {
     Good_Luck;
     int T=1; 
-    cin>>T;
+    // cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }

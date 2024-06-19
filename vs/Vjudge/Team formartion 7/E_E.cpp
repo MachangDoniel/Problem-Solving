@@ -217,28 +217,32 @@ vll intToBin(int n){
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<pair<int,int>>v;
+    vector<int>r(n),g(n),w(n);
+    int sumr=0,sumg=0,sumw=0;
+    for(int i=0;i<n;i++) cin>>r[i],sumr+=r[i];
+    // for(int i=0;i<n;i++) cin>>g[i];
+    bool flag=true;
+    int noteq=0;
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        cin>>w[i];
+        sumw+=w[i];
+        if(w[i]>r[i] && noteq<2){
+            if(noteq==0) noteq=1, g[i]=w[i]-1,sumg+=g[i]; // greatify the g
+            else noteq=2, g[i]=w[i],sumg+=g[i]; // greatify the g
+        } 
+        else g[i]=r[i],sumg+=g[i];  // lessify the g
+        if(r[i]>w[i]) flag=false;
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
-    
+    // cout<<flag<<" "<<sumr<<" "<<sumg<<" "<<sumw<<endl;
+    if(flag && sumr<sumg && sumg<sumw) print(g);
+    else cout<<-1<<endl;
 }
 
 main()
 {
     Good_Luck;
     int T=1; 
-    cin>>T;
+    // cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }

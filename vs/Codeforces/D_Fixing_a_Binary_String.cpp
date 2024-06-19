@@ -209,29 +209,79 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
 
+string convert(string s,int point){
+    // cout<<": "<<point<<endl;
+    string part1=s.substr(point);
+    string part2=s.substr(0,point);
+    reverse(all(part2));
+    return part1+part2;
+}
+
+bool checkKproper(string s,int point,int k){
+    int n=s.size();
+    s=convert(s,point);
+    vector<int>v;
+    int count=1;
+    for(int i=1;i<n;i++){
+        if(s[i]==s[i-1]){
+            count++;
+        }
+        else{
+            v.pb(count);
+            count=1;
+        }
+        if(i==n-1) v.pb(count);
+    }
+    // print(v);
+    for(int i=0;i<v.size();i++){
+        if(v[i]!=k) return false;
+    }
+    return true;
+}
+
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+    int n,k; cin>>n>>k;
+    string s; cin>>s;
+    int count=1;
+    vector<int>v;
+    for(int i=1;i<n;i++){
+        if(s[i]==s[i-1]){
+            count++;
+        }
+        else{
+            v.pb(count);
+            count=1;
+        }
+        if(i==n-1) v.pb(count);
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+    // print(v);
+    int point=n,sum=0;
+    for(int i=0;i<v.size();i++){
+        sum+=v[i];
+        if(v[i]<k){
+            point=sum;
+            break;
+        }
+        else if(v[i]>k){
+            point=sum-k;
+            break;
+        }
     }
-    cout<<count<<endl;
-    
+    if(checkKproper(s,point,k)){
+        cout<<point<<endl;
+    }
+    else cout<<-1<<endl;
 }
 
 main()

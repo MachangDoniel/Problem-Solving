@@ -217,21 +217,23 @@ vll intToBin(int n){
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<pair<int,int>>v;
+    vll v(n);
+    int count=0,mx=0;
+    bool flag=true;
+    vll first,second,third;
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        cin>>v[i];
+        if(i && v[i]<v[i-1]) flag=false;
+        if(flag) first.pb(v[i]);
+        else second.pb(v[i]);
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+    second.insert(second.end(),all(first));
+    // print(second);
+    bool yes=true;
+    for(int i=1;i<n;i++){
+        if(second[i]<second[i-1]) yes=false;
     }
-    cout<<count<<endl;
-    
+    yes?YES:NO;
 }
 
 main()

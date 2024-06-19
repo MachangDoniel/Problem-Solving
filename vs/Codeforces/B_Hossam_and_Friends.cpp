@@ -214,24 +214,33 @@ vll intToBin(int n){
     
 // MyTask
 
+
+
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
+    int n,m; cin>>n>>m;
+    vector<vector<int>>adj(n+1);
+    for(int i=0;i<m;i++){
         int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        adj[x].pb(y);
+        adj[y].pb(x);
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+    for(int i=1;i<=n;i++){
+        adj[i].pb(0);
+        sort(all(adj[i]));
+        // cout<<i<<": ";print(adj[i]);
     }
-    cout<<count<<endl;
-    
+    int sum=0,prev=0;
+    for(int i=1;i<=n;i++){
+        int index=lb(all(adj[i]),i)-adj[i].begin();
+        index--;
+        // cout<<index<<" ";
+        int mn=i-adj[i][index];
+        prev=min(mn,prev+1);
+        // cout<<prev<<" ";
+        sum+=prev;
+    }
+    cout<<sum<<endl;
 }
 
 main()

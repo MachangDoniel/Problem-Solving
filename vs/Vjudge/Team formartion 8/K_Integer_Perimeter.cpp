@@ -213,32 +213,36 @@ vll intToBin(int n){
 
     
 // MyTask
+// ld findmax(ld a,ld b,ld c){
+//     if(a>=b && a>=c) return a;
+//     if(b>=a && b>=c) return b;
+//     if(c>=a && c>=b) return c;
+// }
+int minddiv(int n){
+    for(int i=3;i*i<=n;i++){
+
+    }
+}
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+    // int n; cin>>n;
+    int a,b,c,d,e,f; cin>>a>>b>>c>>d>>e>>f;
+    double sum=(a*1.0)/b+(c*1.0)/d+(e*1.0)/f;
+    ld mx=max(max((a*1.0)/b,(c*1.0)/d),(e*1.0)/f);
+    ld mn=min(min((a*1.0)/b,(c*1.0)/d),(e*1.0)/f);
+    // cout<<abs(sum-3)<<endl;
+    if(mx<(a*1.0)/b+(c*1.0)/d+(e*1.0)/f-mx && abs(sum-3)<=0.00001){
+        cout<<1<<endl;
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
-    
+    else cout<<-1<<endl;
 }
 
 main()
 {
     Good_Luck;
     int T=1; 
-    cin>>T;
+    // cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }

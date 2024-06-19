@@ -216,22 +216,48 @@ vll intToBin(int n){
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+    int n,ans=0; cin>>n;
+    vll v;
+    while(n>0){
+        v.pb(n&1);
+        n>>=1;
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+    // cout<<"v: ";print(v);
+    bool one=false,multiple=false;
+    int index=0;
+    for(int i=0;i<v.size();i++){
+        if(v[i]==1){
+            if(one){
+                multiple=true;
+                v[i]=0;
+            }
+            else{
+                one=true,index=i;
+                v[i]=0;
+            }
+        }
+        else{
+            if(one){
+                if(multiple){
+                    v[index]=-1;
+                    if(i) v[i]=1;
+                    one=true;
+                    index=i;
+                } 
+                else v[index]=1,one=false;;
+                multiple=false;
+            }
+        }
     }
-    cout<<count<<endl;
-    
+    if(one){
+        if(multiple){
+            v[index]=-1;
+            v.pb(1);
+        } 
+        else v[index]=1;
+    }
+    cout<<v.size()<<endl;
+    print(v);
 }
 
 main()

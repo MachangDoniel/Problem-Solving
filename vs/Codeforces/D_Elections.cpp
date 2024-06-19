@@ -209,29 +209,38 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
 
-void solve(){
+void solve(int t,int T){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
+    int n,c; cin>>n>>c;
+    vector<int>v(n);
+    for(int i=0;i<n;i++) cin>>v[i];
+    v[0]+=c;
+    int mx=*max_element(all(v));
+    // cout<<max_element(all(v))-v.begin()<<" "<<*max_element(all(v))<<endl;
+    bool foundmax=false,flag=false;
+    int sum=0;
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        sum+=v[i];
+        if(v[i]==mx && !foundmax){  // 1st time max
+            foundmax=true;
+            cout<<0<<" ";
+        }
+        else{
+            if(sum>=mx) cout<<i<<" ";
+            else cout<<i+1<<" ";
+        }
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
-    
+    cout<<endl;
 }
 
 main()
@@ -240,6 +249,6 @@ main()
     int T=1; 
     cin>>T;
     for(int t=1;t<=T;t++){
-        solve();
+        solve(t,T);
     }
 }

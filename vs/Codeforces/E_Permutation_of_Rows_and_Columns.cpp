@@ -209,29 +209,58 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
+    int n,m; cin>>n>>m;
+    vector<vector<int>>v(n,vector<int>(m)),w(n,vector<int>(m));
+    vector<vector<pair<int,int>>>changed(n,vector<pair<int,int>>(m));
+    vector<pair<int,int>>mp(n*m+1);
     for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        for(int j=0;j<m;j++){
+            cin>>v[i][j];
+            mp[v[i][j]]={i,j};
+        }
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
     for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
+        for(int j=0;j<m;j++){
+            cin>>w[i][j];
+            changed[mp[w[i][j]].first][mp[w[i][j]].second]={i,j};
+        }
     }
-    cout<<count<<endl;
-    
+    // for(int i=0;i<n;i++){
+    //     for(int j=0;j<m;j++){
+    //         cout<<changed[i][j].first<<","<<changed[i][j].second<<"  ";
+    //     }
+    //     cout<<endl;
+    // }
+    // cout<<endl;
+    for(int i=0;i<n;i++){
+        for(int j=1;j<m;j++){
+            if(changed[i][j-1].first!=changed[i][j].first) {
+                cout<<"NO"<<endl;
+                return;
+            }
+        }
+    }
+    for(int j=0;j<m;j++){
+        for(int i=1;i<n;i++){
+            if(changed[i-1][j].second!=changed[i][j].second) {
+                cout<<"NO"<<endl;
+                return;
+            }
+        }
+    }
+    YES;
 }
 
 main()

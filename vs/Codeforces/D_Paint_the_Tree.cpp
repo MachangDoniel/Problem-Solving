@@ -213,24 +213,102 @@ vll intToBin(int n){
 
     
 // MyTask
+int n,a,b;
+vector<vector<int>>adj(N);
+vector<int>rankbyA(N,0),rankbyB(N,0);
+vector<bool>visA(N,false),visB(N,false),vis(N,false);
+void bfsA(int a){
+    queue<int>q;
+    visA[a]=true;
+    q.push(a);
+    rankbyA[a]=0;
+    while(!q.empty()){
+        int front=q.front();
+        // cout<<endl<<front<<": ";
+        q.pop();
+        for(int i=0;i<adj[front].size();i++){
+            if(!visA[adj[front][i]]){
+                // cout<<adj[front][i]<<" ";
+                visA[adj[front][i]]=true;
+                q.push(adj[front][i]);
+                rankbyA[adj[front][i]]=rankbyA[front]+1;
+            }
+        }
+    }
+}
+int bfsB(int b){
+    queue<int>q;
+    visB[b]=true;
+    q.push(b);
+    rankbyB[b]=0;
+    while(!q.empty()){
+        int front=q.front();
+        if(rankbyB[front]>=rankbyA[front]){
+            return front;
+        }
+        q.pop();
+        for(int i=0;i<adj[front].size();i++){
+            if(!visB[adj[front][i]]){
+                visB[adj[front][i]]=true;
+                q.push(adj[front][i]);
+                rankbyB[adj[front][i]]=rankbyB[front]+1;
+            }
+        }
+    }
+    return 0;
+}
+void bfs(int node){
+    queue<int>q;
+    vis[node]=true;
+    q.push(node);
+    rankbyB[node]=0;
+    while(!q.empty()){
+        int front=q.front();
+        q.pop();
+        for(int i=0;i<adj[front].size();i++){
+            if(!vis[adj[front][i]]){
+                vis[adj[front][i]]=true;
+                q.push(adj[front][i]);
+                rankbyB[adj[front][i]]=rankbyB[front]+1;
+            }
+        }
+    }
+}
+int ans=0,sub=0;
+void dfs(int node,int cost){
+    vector<pll>vv;
+    for(int i=0;i<adj[node].size();i++){
+        vv.pb({rankbyB[node],node});
+    }
+    sort(all(vv));
+    for(int i=0;i<vv.size();i++){
+        dfs(vv[i].second);
+        sub=rankbyB[node];
+    }
+}
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
+    cin>>n>>a>>b;
+    for(int i=0;i<n-1;i++){
         int x,y; cin>>x>>y;
-        v.pb({-x,y});
+        adj[x].pb(y);
+        adj[y].pb(x);
     }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
+    // for(int i=1;i<=n;i++){
+    //     cout<<i<<": ";print(adj[i]);
+    // }
+    bfsA(a);
+    // print(rankbyA);
+    int node=bfsB(b);
+    int rank=rankbyB[node];
+    // print(rankbyB);
+    cout<<node<<" "<<rank<<endl;
+    bfs(node);
+    fill(all(vis),false);
+    // print(rankbyB);
+    dfs(node,0);
+    cout<<ans+rank-sub<<endl;
     
 }
 

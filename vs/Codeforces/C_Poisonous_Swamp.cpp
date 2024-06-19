@@ -193,10 +193,10 @@ void print(queue<int>q){
     while(!q.empty()) cout<<q.front()<<" ",q.pop();
     cout<<endl;
 }
-int time_limit=1e9,time_count=0;
+int time_limit=1e9,time_num_of_star=0;
 bool checkTime(){
-    time_count++;
-    if(time_count>time_limit){
+    time_num_of_star++;
+    if(time_num_of_star>time_limit){
         cout<<"Time Limit Apprehension (-_-)"<<endl;
         return false;
     }
@@ -214,24 +214,51 @@ vll intToBin(int n){
     
 // MyTask
 
+vector<string>s(2);
+bool vis[N]={false};
+int num_of_star=0;
+bool square=true;
+void see(int x,bool z,bool o){
+    // vis[x]=true;
+    if(s[0][x]=='*' && s[1][x]=='*'){
+        num_of_star+=2;
+        s[0][x]=s[1][x]='v';
+        see(x+1,true,true);
+    }
+    else if(z && s[0][x]=='*'){
+        square=false;
+        num_of_star++;
+        s[0][x]='v';
+        see(x+1,true,false);
+    }
+    else if(o && s[1][x]=='*'){
+        square=false;
+        num_of_star++;
+        s[1][x]='v';
+        see(x+1,false,true);
+    }
+    square=false;
+}
+
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y; cin>>x>>y;
-        v.pb({-x,y});
-    }
-    sort(all(v));
-    ordered_set<int>s;  // put the destination here
-    int count=0;
-    for(int i=0;i<n;i++){
-        int num=s.order_of_key(v[i].second);
-        count+=num;
-        s.insert(v[i].second);
-    }
-    cout<<count<<endl;
+    fill(vis,vis+n,false);
     
+    cin>>s[0]>>s[1];
+    int ans=0;
+    for(int i=0;i<n;i++){
+        if(!vis[i]){
+            square=true;
+            num_of_star=0;
+            see(i,true,true);
+            // cout<<i<<": "<<num_of_star<<endl;
+            if(!square) num_of_star=max(0ll,num_of_star-1);
+            // cout<<i<<": "<<num_of_star<<endl;
+            ans+=num_of_star;
+        }
+    }
+    cout<<ans<<endl;
 }
 
 main()
@@ -243,3 +270,69 @@ main()
         solve();
     }
 }
+
+
+
+
+
+
+// import java.util.Scanner
+
+// fun main() {
+//     val scanner = Scanner(System.`in`)
+//     val T = scanner.nextInt()
+//     scanner.nextLine() // consume the newline character after the number of test cases
+
+//     for (t in 1..T) {
+//         solve(scanner)
+//     }
+// }
+
+// fun solve(scanner: Scanner) {
+//     val n = scanner.nextInt()
+//     scanner.nextLine() // consume the newline character after the integer
+//     val s1 = scanner.nextLine().replace(" ", "").trim()
+//     val s2 = scanner.nextLine().replace(" ", "").trim()
+//     val s = arrayOf(s1.toCharArray(), s2.toCharArray())
+
+//     var ans = 0
+//     val vis = BooleanArray(n)
+
+//     for (i in 0 until n) {
+//         if (!vis[i]) {
+//             val result = see(s, vis, i, true, true, 0, true)
+//             var num_of_star = result.first
+//             val square = result.second
+//             if (!square) num_of_star = maxOf(0, num_of_star - 1)
+//             ans += num_of_star
+//         }
+//     }
+
+//     println(ans)
+// }
+
+// fun see(s: Array<CharArray>, vis: BooleanArray, x: Int, z: Boolean, o: Boolean, num_of_star: Int, square: Boolean): Pair<Int, Boolean> {
+//     var currentStars = num_of_star
+//     var currentSquare = square
+
+//     if (x >= s[0].size || x >= s[1].size) return Pair(currentStars, currentSquare)
+
+//     if (s[0][x] == '*' && s[1][x] == '*') {
+//         currentStars += 2
+//         s[0][x] = 'v'
+//         s[1][x] = 'v'
+//         return see(s, vis, x + 1, true, true, currentStars, currentSquare)
+//     } else if (z && s[0][x] == '*') {
+//         currentSquare = false
+//         currentStars++
+//         s[0][x] = 'v'
+//         return see(s, vis, x + 1, true, false, currentStars, currentSquare)
+//     } else if (o && s[1][x] == '*') {
+//         currentSquare = false
+//         currentStars++
+//         s[1][x] = 'v'
+//         return see(s, vis, x + 1, false, true, currentStars, currentSquare)
+//     }
+//     currentSquare = false
+//     return Pair(currentStars, currentSquare)
+// }
