@@ -1,50 +1,206 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// #Define
 
-
-void fileIO(){
-    freopen("input.txt","r", stdin);
-//    freopen("output.txt","w", stdout);
+bool isValid(int y,int x,int n,int m){
+    return y>=0 && y<n && x>=0 && x<m;
+}
+void print(queue<pair<int,int>>q){
+    cout<<"q: ";
+    while(!q.empty()){
+        cout<<q.front().first<<","<<q.front().second<<" ";
+        q.pop();
+    }
+    cout<<endl;
 }
 
-
-int main() {
-     fileIO();
-
-    // printf("Enter the no of processes\n");
-    cin>>n;
-    // printf("Enter arrival time & burst time\n");
-    // process[].first.first->arrival_time,process[].first.second->burst_time,process[].second->process_id
-    vector<pair<pll,ll>>process;
-    for(ll i=0;i<n;i++){
-        ll x,y;
-        cin>>x>>y;
-        process.pb({{x,y},i+1});
+string bfs(vector<vector<string>>&vv,int start_y,int start_x,int n,int m){
+    string res="";
+    queue<pair<int,int>>q;
+    vector<vector<bool>>visited(n,vector<bool>(m,false));
+    // q.push({start_y,start_x});
+    visited[start_y][start_x]=true;
+    if(isValid(start_y,start_x+1,n,m)){ // right
+        q.push({start_y,start_x+1});
     }
-    processes=process;
-    sort(all(process));
-    ll completed=0,shortest_remaining_time,target_process_index;
-    // for(ll i=0;i<n;i++){
-    //     cout<<process[i].first.first<<" "<<process[i].first.second<<" "<<process[i].second<<endl;
-    // }
-    for(ll time=0;completed<n;time++){
-        shortest_remaining_time=INT_MAX;
-        target_process_index=-1;
-        for(ll p=0;p<n;p++){
-            if(process[p].first.first<=time && process[p].first.second>0 && process[p].first.second<shortest_remaining_time){
-                target_process_index=p;
-                shortest_remaining_time=process[p].first.second;
+    if(isValid(start_y+1,start_x,n,m)){ // down
+        q.push({start_y+1,start_x});
+    }
+    if(isValid(start_y,start_x-1,n,m)){ // left
+        q.push({start_y,start_x-1});
+    }
+    if(isValid(start_y-1,start_x,n,m)){ // up
+        q.push({start_y-1,start_x});
+    }
+    while(!q.empty()){
+        // print(q);
+        int y=q.front().first,x=q.front().second;
+        q.pop();
+        if(visited[y][x]) continue;
+        visited[y][x]=true;
+        
+        // cout<<":"<<vv[y][x]<<" "<<y<<" "<<x<<endl;
+        
+        if(vv[y][x][0]>='A' && vv[y][x][0]<='Z'){
+            res+=vv[y][x];
+        }
+        if(vv[y][x]=="═"){
+            if(isValid(y,x+1,n,m) && !visited[y][x+1]){
+                q.push({y,x+1});
+                // visited[y][x+1]=true;
+            }
+            if(isValid(y,x-1,n,m) && !visited[y][x-1]){
+                q.push({y,x-1});
+                // visited[y][x-1]=true;
             }
         }
-        if(target_process_index==-1) gann_chart.pb(-1);
-        else{
-            gann_chart.pb(process[target_process_index].second);
-            process[target_process_index].first.second--;
-            process[target_process_index].first.second?completed+=0:completed++;
+        else if(vv[y][x]=="║"){
+            if(isValid(y+1,x,n,m) && !visited[y+1][x]){
+                q.push({y+1,x});
+                // visited[y+1][x]=true;
+            }
+            if(isValid(y-1,x,n,m) && !visited[y-1][x]){
+                q.push({y-1,x});
+                // visited[y-1][x]=true;
+            }
+        }
+        else if(vv[y][x]=="╔"){
+            if(isValid(y,x+1,n,m) && !visited[y][x+1]){
+                q.push({y,x+1});
+                // visited[y][x+1]=true;
+            }
+            if(isValid(y+1,x,n,m) && !visited[y+1][x]){
+                q.push({y+1,x});
+                // visited[y+1][x]=true;
+            }
+        }
+        else if(vv[y][x]=="╗"){
+            if(isValid(y,x-1,n,m) && !visited[y][x-1]){
+                q.push({y,x-1});
+                // visited[y][x-1]=true;
+            }
+            if(isValid(y+1,x,n,m) && !visited[y+1][x]){
+                q.push({y+1,x});
+                // visited[y+1][x]=true;
+            }
+        }
+        else if(vv[y][x]=="╚"){
+            if(isValid(y,x+1,n,m) && !visited[y][x+1]){
+                q.push({y,x+1});
+                // visited[y][x+1]=true;
+            }
+            if(isValid(y-1,x,n,m) && !visited[y-1][x]){
+                q.push({y-1,x});
+                // visited[y-1][x]=true;
+            }
+        }
+        else if(vv[y][x]=="╝"){
+            if(isValid(y,x-1,n,m) && !visited[y][x-1]){
+                q.push({y,x-1});
+                // visited[y][x-1]=true;
+            }
+            if(isValid(y-1,x,n,m) && !visited[y-1][x]){
+                q.push({y-1,x});
+                // visited[y-1][x]=true;
+            }
+        }
+        else if(vv[y][x]=="╠"){
+            if(isValid(y,x+1,n,m) && !visited[y][x+1]){
+                q.push({y,x+1});
+                // visited[y][x+1]=true;
+            }
+            if(isValid(y+1,x,n,m) && !visited[y+1][x]){
+                q.push({y+1,x});
+                // visited[y+1][x]=true;
+            }
+            if(isValid(y-1,x,n,m) && !visited[y-1][x]){
+                q.push({y-1,x});
+                // visited[y-1][x]=true;
+            }
+        }
+        else if(vv[y][x]=="╣"){
+            if(isValid(y,x-1,n,m) && !visited[y][x-1]){
+                q.push({y,x-1});
+                // visited[y][x-1]=true;
+            }
+            if(isValid(y+1,x,n,m) && !visited[y+1][x]){
+                q.push({y+1,x});
+                // visited[y+1][x]=true;
+            }
+            if(isValid(y-1,x,n,m) && !visited[y-1][x]){
+                q.push({y-1,x});
+                // visited[y-1][x]=true;
+            }
+        }
+        else if(vv[y][x]=="╦"){
+            if(isValid(y,x+1,n,m) && !visited[y][x+1]){
+                q.push({y,x+1});
+                // visited[y][x+1]=true;
+            }
+            if(isValid(y,x-1,n,m) && !visited[y][x-1]){
+                q.push({y,x-1});
+                // visited[y][x-1]=true;
+            }
+            if(isValid(y+1,x,n,m) && !visited[y+1][x]){
+                q.push({y+1,x});
+                // visited[y+1][x]=true;
+            }
+        }
+        else if(vv[y][x]=="╩"){
+            if(isValid(y,x+1,n,m) && !visited[y][x+1]){
+                q.push({y,x+1});
+                // visited[y][x+1]=true;
+            }
+            if(isValid(y,x-1,n,m) && !visited[y][x-1]){
+                q.push({y,x-1});
+                // visited[y][x-1]=true;
+            }
+            if(isValid(y-1,x,n,m) && !visited[y-1][x]){
+                q.push({y-1,x});
+                // visited[y-1][x]=true;
+            }
         }
     }
-    print();
+    return res;
+}
+
+string submit(const string& input_file) {
+    ifstream file(input_file);
+    string ch;
+    int x,y,n=0,m=0;
+    vector<pair<string,pair<int,int>>>v;
+    while (file>>ch>>x>>y) {
+        // cout<<ch<<" "<<x<<" "<<y<<endl;
+        m=max(m,x);
+        n=max(n,y);
+        v.push_back({ch,{x,y}});
+    }
+    // cout<<n<<" "<<m<<endl;
+    vector<vector<string>>vv(n+1,vector<string>(m+1,"_"));
+    int start_x,start_y;
+    for(int i=0;i<v.size();i++){
+        int index_x=v[i].second.first,index_y=n-v[i].second.second;
+        vv[index_y][index_x]=v[i].first;
+        if(v[i].first=="*"){
+            start_x=index_x;
+            start_y=index_y;
+        }
+        // cout<<v[i].first<<" "<<index_x<<" "<<index_y<<endl;
+    }
+    // for(int i=0;i<=n;i++){
+    //     for(int j=0;j<=m;j++){
+    //         cout<<vv[i][j]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
+    string res=bfs(vv,start_y,start_x,n+1,m+1);
+    // cout<<res<<endl;
+    file.close();
+    return res;
+}
+
+int main() {
+    string res=submit("io.txt");
+    cout<<res<<endl;
     return 0;
 }

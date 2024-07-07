@@ -4,16 +4,27 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**"
+                // "C:/path/to/your/compiler/include",
+                // "C:/path/to/your/compiler/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++", // Adjust based on your setup
+                // "C:/path/to/your/compiler/lib/gcc/x86_64-w64-mingw32/8.1.0/include",
+                // "C:/path/to/your/compiler/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed",
+                // "C:/path/to/your/compiler/x86_64-w64-mingw32/include",
+                // "C:/path/to/your/compiler/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext" // For ext/pb_ds
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "cl.exe",
-            "cStandard": "c17",
+            "windowsSdkVersion": "10.0.17763.0",
+            "compilerPath": "C:/MinGW/bin.g++.exe",
+            "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-msvc-x64"
+            "intelliSenseMode": "gcc-x64"
+            // "compilerPath": "cl.exe",
+            // "cStandard": "c17",
+            // "cppStandard": "c++17",
+            // "intelliSenseMode": "windows-msvc-x64"
         }
     ],
     "version": 4

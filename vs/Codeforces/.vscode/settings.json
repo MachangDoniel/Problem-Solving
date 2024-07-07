@@ -24,8 +24,9 @@
         "xhash": "cpp",
         "xstring": "cpp",
         "xutility": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "*.tcc": "cpp"
     },
-    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.errorSquiggles": "enabled",
     "cmake.configureOnOpen": true
 }
