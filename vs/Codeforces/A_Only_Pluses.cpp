@@ -14,6 +14,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define int long long
 #define ld long double
 #define pb push_back
+#define eb emplace_back
 #define pp pop_back
 #define pf push_front
 #define ub upper_bound
@@ -178,6 +179,10 @@ void print(set<int>s){
     for(auto it:s) cout<<it<<" ";
     cout<<endl;
 }
+void print(multiset<int>s){
+    for(auto it:s) cout<<it<<" ";
+    cout<<endl;
+}
 void print(map<int,int>mp){
     for(auto it:mp) cout<<it.first<<" "<<it.second<<endl;
 }
@@ -205,91 +210,44 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
-int maxnode=505;
-vector<vector<pair<int,int>>>adj(maxnode);
-vector<bool>vis(maxnode,false);
-vector<int>parent(maxnode,-1);
-vector<vector<int>> costs(maxnode, vector<int>(maxnode, inf));
-
-void clear(){
-    // Reinitialize vis, costs, and parent
-    fill(vis.begin(),vis.end(),false);
-    fill(parent.begin(),parent.end(),-1);
-}
-
-int pathfind(int source,int dest)
-{
-    if(dest!=source && parent[dest]==-1)
-    {
-        cout<<"Path Not Found"<<endl;
-        return 0;
-    }
-    if(dest==source)
-    {
-        cout<<source;
-        return 0;
-    }
-    pathfind(source,parent[dest]);
-    cout<<"->"<<dest;
-}
-
-
-// dijakstra
-void dijkstra(int source,int initial_cost){
-    priority_queue<pair<int,int>>pq;
-    pq.push({-initial_cost,source}); // -cost,node
-    costs[source][source]=initial_cost;
-    while(!pq.empty()){
-        pll frontpair=pq.top();
-        pq.pop();
-        int cost=-frontpair.first,front=frontpair.second;
-        if(cost>costs[source][front]) continue;
-        for(int i=0;i<adj[front].size();i++){
-            pll child=adj[front][i];
-            if(costs[source][front]+child.second<costs[source][child.first]){
-                costs[source][child.first]=costs[source][front]+child.second;
-                parent[child.first]=front;
-                pq.push({-costs[source][child.first],child.first});
-            }
-        }
-    }
-}
-
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n,m,q; cin>>n>>m>>q;
-    for(int i=0;i<m;i++){
-        int x,y,cost; cin>>x>>y>>cost;
-        adj[x].pb({y,cost});
-        adj[y].pb({x,cost});
+    // int n; cin>>n;
+    multiset<int>ms;
+    for(int i=0;i<3;i++){
+        int x; cin>>x;
+        ms.insert(x);
     }
-    // for(int i=1;i<=n;i++){
-    //     dijkstra(i,0);
-    // }
-    map<int,int>mp;
-    for(int i=0;i<q;i++){
-        int source,destination; cin>>source>>destination;
-        if(!mp[source]){
-            mp[source]=1;
-            dijkstra(source,0);
-        }
-        if(costs[source][destination]==inf) cout<<-1<<endl;
-        else cout<<costs[source][destination]<<endl;
+    for(int i=0;i<5;i++){
+        int x=*ms.begin();
+        ms.erase(ms.begin());
+        ms.insert(x+1);
     }
+    int mul=1;
+    for(int i=0;i<3;i++){
+        int x=*ms.begin();
+        ms.erase(ms.begin());
+        mul*=x;
+    }
+    cout<<mul<<endl;
 }
 
 main()
 {
     Good_Luck;
     int T=1; 
-    // cin>>T;
+    cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }
 }
-

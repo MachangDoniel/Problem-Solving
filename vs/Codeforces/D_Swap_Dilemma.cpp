@@ -178,6 +178,10 @@ void print(set<int>s){
     for(auto it:s) cout<<it<<" ";
     cout<<endl;
 }
+void print(multiset<int>s){
+    for(auto it:s) cout<<it<<" ";
+    cout<<endl;
+}
 void print(map<int,int>mp){
     for(auto it:mp) cout<<it.first<<" "<<it.second<<endl;
 }
@@ -205,81 +209,48 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
-int maxnode=505;
-vector<vector<pair<int,int>>>adj(maxnode);
-vector<bool>vis(maxnode,false);
-vector<int>parent(maxnode,-1);
-vector<vector<int>> costs(maxnode, vector<int>(maxnode, inf));
 
-void clear(){
-    // Reinitialize vis, costs, and parent
-    fill(vis.begin(),vis.end(),false);
-    fill(parent.begin(),parent.end(),-1);
-}
-
-int pathfind(int source,int dest)
-{
-    if(dest!=source && parent[dest]==-1)
-    {
-        cout<<"Path Not Found"<<endl;
-        return 0;
+void solve(int t,int T){
+    // ll in,n,m,i,j,k,x,y;
+    int n; cin>>n;
+    vector<int> a(n), b(n);
+    unordered_map<int,int> mp_a, mp_b;
+    multiset<int> s1, s2;
+    for(int i=0; i<n; i++){
+        cin>>a[i];
+        s1.insert(a[i]);
+        mp_a[a[i]]=i;
     }
-    if(dest==source)
-    {
-        cout<<source;
-        return 0;
+    for(int i=0;i<n;i++){
+        cin>>b[i];
+        s2.insert(b[i]);
+        mp_b[b[i]]=i;
     }
-    pathfind(source,parent[dest]);
-    cout<<"->"<<dest;
-}
-
-
-// dijakstra
-void dijkstra(int source,int initial_cost){
-    priority_queue<pair<int,int>>pq;
-    pq.push({-initial_cost,source}); // -cost,node
-    costs[source][source]=initial_cost;
-    while(!pq.empty()){
-        pll frontpair=pq.top();
-        pq.pop();
-        int cost=-frontpair.first,front=frontpair.second;
-        if(cost>costs[source][front]) continue;
-        for(int i=0;i<adj[front].size();i++){
-            pll child=adj[front][i];
-            if(costs[source][front]+child.second<costs[source][child.first]){
-                costs[source][child.first]=costs[source][front]+child.second;
-                parent[child.first]=front;
-                pq.push({-costs[source][child.first],child.first});
+    if(s1!=s2) NO;
+    else{
+        // strategy: find the elements that is not equal to the corresponding element in b
+        // note for swap: 1 swap in b = any number of adjacent swap = 1 swap in a = 1 adjacent swap in a
+        // then bring the a[i] element in the current index at b by swapping adjacent indexes
+        // update the position of b[i] at b
+        for(int i=0;i<n-2;i++){
+            if(a[i]!=b[i]){
+                swap(a[i+1],a[i+2]);
+                mp_b[b[i]]=mp_b[a[i]];
+                swap(b[i],b[mp_b[a[i]]]);
             }
         }
-    }
-}
-
-
-void solve(){
-    // ll in,n,m,i,j,k,x,y;
-    int n,m,q; cin>>n>>m>>q;
-    for(int i=0;i<m;i++){
-        int x,y,cost; cin>>x>>y>>cost;
-        adj[x].pb({y,cost});
-        adj[y].pb({x,cost});
-    }
-    // for(int i=1;i<=n;i++){
-    //     dijkstra(i,0);
-    // }
-    map<int,int>mp;
-    for(int i=0;i<q;i++){
-        int source,destination; cin>>source>>destination;
-        if(!mp[source]){
-            mp[source]=1;
-            dijkstra(source,0);
-        }
-        if(costs[source][destination]==inf) cout<<-1<<endl;
-        else cout<<costs[source][destination]<<endl;
+        // print(a);
+        // print(b);
+        (a==b)?YES:NO;
     }
 }
 
@@ -287,9 +258,8 @@ main()
 {
     Good_Luck;
     int T=1; 
-    // cin>>T;
+    cin>>T;
     for(int t=1;t<=T;t++){
-        solve();
+        solve(t,T);
     }
 }
-

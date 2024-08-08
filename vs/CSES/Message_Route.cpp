@@ -213,6 +213,7 @@ vector<vector<int>>adj(N);
 bool vis[N]={false};
 vector<int>parent(N,-1);
 stack<int>st;
+
 void bfs(int x,int n){
     queue<int>q;
     q.push(x);
@@ -260,7 +261,50 @@ void solve(){
         print(st);
         cout<<endl;
     }
-   
+}
+
+int bfs2(int source,int destination){
+    queue<pair<int,int>>q;
+    q.push({source,1});
+    parent[source]=-1;
+    vis[source]=true;
+    while(!q.empty()){
+        int front=q.front().first;
+        int dist=q.front().second;
+        q.pop();
+        for(int i=0;i<adj[front].size();i++){
+            if(vis[adj[front][i]]==false){
+                q.push({adj[front][i],dist+1});
+                parent[adj[front][i]]=front;
+                vis[adj[front][i]]=true;
+                if(adj[front][i]==destination) return dist+1;
+            }
+        }
+    }
+    return -1;
+}
+
+void printPath(int n){
+    if(n==-1) return;
+    printPath(parent[n]);
+    cout<<n<<" ";
+}
+
+void solve2(){
+    // ll in,n,m,i,j,k,x,y;
+    int n,m; cin>>n>>m;
+    for(int i=0;i<m;i++){
+        int x,y; cin>>x>>y;
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+    int ans=bfs2(1,n);
+    if(ans==-1) cout<<"IMPOSSIBLE"<<endl;
+    else{
+        cout<<ans<<endl;
+        printPath(n);
+        cout<<endl;
+    }
 }
 
 main()
@@ -269,6 +313,6 @@ main()
     int T=1; 
     // cin>>T;
     for(int t=1;t<=T;t++){
-        solve();
+        solve2();
     }
 }

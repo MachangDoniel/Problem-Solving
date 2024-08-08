@@ -178,6 +178,10 @@ void print(set<int>s){
     for(auto it:s) cout<<it<<" ";
     cout<<endl;
 }
+void print(multiset<int>s){
+    for(auto it:s) cout<<it<<" ";
+    cout<<endl;
+}
 void print(map<int,int>mp){
     for(auto it:mp) cout<<it.first<<" "<<it.second<<endl;
 }
@@ -205,91 +209,45 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
 
-    
 // MyTask
-int maxnode=505;
-vector<vector<pair<int,int>>>adj(maxnode);
-vector<bool>vis(maxnode,false);
-vector<int>parent(maxnode,-1);
-vector<vector<int>> costs(maxnode, vector<int>(maxnode, inf));
-
-void clear(){
-    // Reinitialize vis, costs, and parent
-    fill(vis.begin(),vis.end(),false);
-    fill(parent.begin(),parent.end(),-1);
+int counter(int x,int y,int z,int a,int b,int c){
+    return (x+1-a)*(y+1-b)*(z+1-c);
 }
-
-int pathfind(int source,int dest)
-{
-    if(dest!=source && parent[dest]==-1)
-    {
-        cout<<"Path Not Found"<<endl;
-        return 0;
-    }
-    if(dest==source)
-    {
-        cout<<source;
-        return 0;
-    }
-    pathfind(source,parent[dest]);
-    cout<<"->"<<dest;
-}
-
-
-// dijakstra
-void dijkstra(int source,int initial_cost){
-    priority_queue<pair<int,int>>pq;
-    pq.push({-initial_cost,source}); // -cost,node
-    costs[source][source]=initial_cost;
-    while(!pq.empty()){
-        pll frontpair=pq.top();
-        pq.pop();
-        int cost=-frontpair.first,front=frontpair.second;
-        if(cost>costs[source][front]) continue;
-        for(int i=0;i<adj[front].size();i++){
-            pll child=adj[front][i];
-            if(costs[source][front]+child.second<costs[source][child.first]){
-                costs[source][child.first]=costs[source][front]+child.second;
-                parent[child.first]=front;
-                pq.push({-costs[source][child.first],child.first});
-            }
-        }
-    }
-}
-
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n,m,q; cin>>n>>m>>q;
-    for(int i=0;i<m;i++){
-        int x,y,cost; cin>>x>>y>>cost;
-        adj[x].pb({y,cost});
-        adj[y].pb({x,cost});
-    }
-    // for(int i=1;i<=n;i++){
-    //     dijkstra(i,0);
-    // }
-    map<int,int>mp;
-    for(int i=0;i<q;i++){
-        int source,destination; cin>>source>>destination;
-        if(!mp[source]){
-            mp[source]=1;
-            dijkstra(source,0);
+    // int n; cin>>n;
+    int x,y,z,k; cin>>x>>y>>z>>k;
+    int ans=0;
+    for(int i=1;i<=x;i++){
+        for(int j=1;j<=y;j++){
+            int a=i,b=j,c=-1;
+            if(k%(a*b)==0) c=k/(a*b);
+            if(0<c && c<=z){
+                // cout<<a<<" "<<b<<" "<<c<<": ";
+                int temp=counter(x,y,z,a,b,c);
+                ans=max(ans,temp);
+                // cout<<temp<<endl;
+            }
         }
-        if(costs[source][destination]==inf) cout<<-1<<endl;
-        else cout<<costs[source][destination]<<endl;
     }
+    cout<<ans<<endl;
 }
 
 main()
 {
     Good_Luck;
     int T=1; 
-    // cin>>T;
+    cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }
 }
-

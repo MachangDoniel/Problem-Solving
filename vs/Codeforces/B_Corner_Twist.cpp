@@ -178,6 +178,10 @@ void print(set<int>s){
     for(auto it:s) cout<<it<<" ";
     cout<<endl;
 }
+void print(multiset<int>s){
+    for(auto it:s) cout<<it<<" ";
+    cout<<endl;
+}
 void print(map<int,int>mp){
     for(auto it:mp) cout<<it.first<<" "<<it.second<<endl;
 }
@@ -205,91 +209,94 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
-int maxnode=505;
-vector<vector<pair<int,int>>>adj(maxnode);
-vector<bool>vis(maxnode,false);
-vector<int>parent(maxnode,-1);
-vector<vector<int>> costs(maxnode, vector<int>(maxnode, inf));
-
-void clear(){
-    // Reinitialize vis, costs, and parent
-    fill(vis.begin(),vis.end(),false);
-    fill(parent.begin(),parent.end(),-1);
-}
-
-int pathfind(int source,int dest)
-{
-    if(dest!=source && parent[dest]==-1)
-    {
-        cout<<"Path Not Found"<<endl;
-        return 0;
-    }
-    if(dest==source)
-    {
-        cout<<source;
-        return 0;
-    }
-    pathfind(source,parent[dest]);
-    cout<<"->"<<dest;
-}
-
-
-// dijakstra
-void dijkstra(int source,int initial_cost){
-    priority_queue<pair<int,int>>pq;
-    pq.push({-initial_cost,source}); // -cost,node
-    costs[source][source]=initial_cost;
-    while(!pq.empty()){
-        pll frontpair=pq.top();
-        pq.pop();
-        int cost=-frontpair.first,front=frontpair.second;
-        if(cost>costs[source][front]) continue;
-        for(int i=0;i<adj[front].size();i++){
-            pll child=adj[front][i];
-            if(costs[source][front]+child.second<costs[source][child.first]){
-                costs[source][child.first]=costs[source][front]+child.second;
-                parent[child.first]=front;
-                pq.push({-costs[source][child.first],child.first});
-            }
-        }
-    }
-}
-
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n,m,q; cin>>n>>m>>q;
-    for(int i=0;i<m;i++){
-        int x,y,cost; cin>>x>>y>>cost;
-        adj[x].pb({y,cost});
-        adj[y].pb({x,cost});
-    }
-    // for(int i=1;i<=n;i++){
-    //     dijkstra(i,0);
-    // }
-    map<int,int>mp;
-    for(int i=0;i<q;i++){
-        int source,destination; cin>>source>>destination;
-        if(!mp[source]){
-            mp[source]=1;
-            dijkstra(source,0);
+    int n,m; cin>>n>>m;
+    vector<vector<int>>a(n,vector<int>(m)),b(n,vector<int>(m));
+    for(int i=0;i<n;i++){
+        string s; cin>>s;
+        for(int j=0;j<m;j++){
+            a[i][j]=s[j]-'0';
         }
-        if(costs[source][destination]==inf) cout<<-1<<endl;
-        else cout<<costs[source][destination]<<endl;
     }
+    for(int i=0;i<n;i++){
+        string s; cin>>s;
+        for(int j=0;j<m;j++){
+            b[i][j]=s[j]-'0';
+        }
+    }
+    // cout<<n<<" "<<m<<endl;
+    for(int i=0;i<n-1;i++){
+        for(int j=0;j<m-1;j++){
+            if(a[i][j]!=b[i][j]){
+                int diff=b[i][j]-a[i][j];
+                if(diff<0) diff+=3;
+                // cout<<diff<<" ";
+                if(diff==1){
+                    a[i][j]+=1;
+                    a[i+1][j+1]+=1;
+                    a[i][j+1]+=2;
+                    a[i+1][j]+=2;
+                }
+                else if(diff==2){
+                    a[i][j]+=2;
+                    a[i+1][j+1]+=2;
+                    a[i][j+1]+=1;
+                    a[i+1][j]+=1;
+                }
+                a[i][j]%=3;
+                a[i+1][j+1]%=3;
+                a[i][j+1]%=3;
+                a[i+1][j]%=3;
+            }
+        }
+    }
+    (a==b)?YES:NO;
+}
+void solve2(){
+    // ll in,n,m,i,j,k,x,y;
+    int n,m; cin>>n>>m;
+    vector<int>hor_a(n,0),hor_b(n,0),ver_a(m,0),ver_b(m,0);
+    for(int i=0;i<n;i++){
+        string s; cin>>s;
+        for(int j=0;j<m;j++){
+            int num=s[j]-'0';
+            hor_a[i]+=num;
+            ver_a[j]+=num;
+            hor_a[i]%=3;
+            ver_a[j]%=3;
+        }
+    }
+    for(int i=0;i<n;i++){
+        string s; cin>>s;
+        for(int j=0;j<m;j++){
+            int num=s[j]-'0';
+            hor_b[i]+=num;
+            ver_b[j]+=num;
+            hor_b[i]%=3;
+            ver_b[j]%=3;
+        }
+    }
+    if(hor_a==hor_b && ver_a==ver_b) YES;
+    else NO;
 }
 
 main()
 {
     Good_Luck;
     int T=1; 
-    // cin>>T;
+    cin>>T;
     for(int t=1;t<=T;t++){
         solve();
     }
 }
-

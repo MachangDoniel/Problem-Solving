@@ -14,6 +14,7 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define int long long
 #define ld long double
 #define pb push_back
+#define eb emplace_back
 #define pp pop_back
 #define pf push_front
 #define ub upper_bound
@@ -178,6 +179,10 @@ void print(set<int>s){
     for(auto it:s) cout<<it<<" ";
     cout<<endl;
 }
+void print(multiset<int>s){
+    for(auto it:s) cout<<it<<" ";
+    cout<<endl;
+}
 void print(map<int,int>mp){
     for(auto it:mp) cout<<it.first<<" "<<it.second<<endl;
 }
@@ -205,82 +210,60 @@ vll intToBin(int n){
     // cout<<endl;
     return bin;
 }
-
+ll bigmod(ll a,ll p,ll m){
+    if(p == 0) return 1;
+    ll q = bigmod(a, p/2, m);
+    if(p % 2 == 0) return (q*q) % m;
+    return (q*((q*a) % m)) % m;
+}
 
     
 // MyTask
-int maxnode=505;
-vector<vector<pair<int,int>>>adj(maxnode);
-vector<bool>vis(maxnode,false);
-vector<int>parent(maxnode,-1);
-vector<vector<int>> costs(maxnode, vector<int>(maxnode, inf));
+vector<int>parent(100005),sz(100005,1);
 
-void clear(){
-    // Reinitialize vis, costs, and parent
-    fill(vis.begin(),vis.end(),false);
-    fill(parent.begin(),parent.end(),-1);
+int findparents(int a){
+    if(a==parent[a]) return a;
+    return parent[a]=findparents(parent[a]);
 }
-
-int pathfind(int source,int dest)
-{
-    if(dest!=source && parent[dest]==-1)
-    {
-        cout<<"Path Not Found"<<endl;
-        return 0;
-    }
-    if(dest==source)
-    {
-        cout<<source;
-        return 0;
-    }
-    pathfind(source,parent[dest]);
-    cout<<"->"<<dest;
-}
-
-
-// dijakstra
-void dijkstra(int source,int initial_cost){
-    priority_queue<pair<int,int>>pq;
-    pq.push({-initial_cost,source}); // -cost,node
-    costs[source][source]=initial_cost;
-    while(!pq.empty()){
-        pll frontpair=pq.top();
-        pq.pop();
-        int cost=-frontpair.first,front=frontpair.second;
-        if(cost>costs[source][front]) continue;
-        for(int i=0;i<adj[front].size();i++){
-            pll child=adj[front][i];
-            if(costs[source][front]+child.second<costs[source][child.first]){
-                costs[source][child.first]=costs[source][front]+child.second;
-                parent[child.first]=front;
-                pq.push({-costs[source][child.first],child.first});
-            }
-        }
-    }
-}
-
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n,m,q; cin>>n>>m>>q;
+    int n,m; cin>>n>>m;
+    for(int i=1;i<=n;i++) parent[i]=i;
+    int mx=1,comp=n;
     for(int i=0;i<m;i++){
-        int x,y,cost; cin>>x>>y>>cost;
-        adj[x].pb({y,cost});
-        adj[y].pb({x,cost});
-    }
-    // for(int i=1;i<=n;i++){
-    //     dijkstra(i,0);
-    // }
-    map<int,int>mp;
-    for(int i=0;i<q;i++){
-        int source,destination; cin>>source>>destination;
-        if(!mp[source]){
-            mp[source]=1;
-            dijkstra(source,0);
+        int a,b; cin>>a>>b;
+        int par_a=findparents(a);
+        int par_b=findparents(b);
+        // cout<<a<<" "<<b<<"->"<<par_a<<" "<<par_b<<"=>";
+        if(par_a==par_b){
+            // 
+        } 
+        else if(par_a<par_b){
+            // cout<<par_a<<" "<<par_b<<" "<<sz[par_a]<<" "<<sz[par_b]<<endl;
+            sz[par_a]+=sz[par_b];
+            // sz[par_b]=0;
+            // par_b=par_a;
+            parent[par_b]=par_a;
+            mx=max(mx,sz[par_a]);
+            comp--;
         }
-        if(costs[source][destination]==inf) cout<<-1<<endl;
-        else cout<<costs[source][destination]<<endl;
+        else if(par_a>par_b){
+            // cout<<par_a<<" "<<par_b<<" "<<sz[par_a]<<" "<<sz[par_b]<<endl;
+            sz[par_b]+=sz[par_a];
+            // sz[par_a]=0;
+            // par_a=par_b;
+            parent[par_a]=par_b;
+            mx=max(mx,sz[par_b]);
+            comp--;
+        }
+        par_a=findparents(a);
+        par_b=findparents(b);
+        // cout<<par_a<<" "<<par_b<<endl;
+        // print(sz);
+        cout<<comp<<" "<<mx<<endl;
     }
+    
 }
 
 main()
@@ -292,4 +275,3 @@ main()
         solve();
     }
 }
-
