@@ -223,35 +223,31 @@ ll bigmod(ll a,ll p,ll m){
 void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    string s; cin>>s;
-    stack<char>st;
-    stack<int>stt;
-    st.push('*');
+    multiset<int>even,odd;
     for(int i=0;i<n;i++){
-        if(s[i]=='_'){
-            if(st.top()=='('){
-                st.push(')');
-                s[i]=')';
-            }
-            else{
-                st.push('(');
-                s[i]='(';
-            }
-        }
-        else st.push(s[i]);
+        int in; cin>>in;
+        if(in%2==0) even.insert(in);
+        else odd.insert(in);
     }
-    // cout<<s<<endl;
-    int ans=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            stt.push(i);
-        }
-        else{
-            ans+=i-stt.top();
-            stt.pop();
-        }
+    if(even.empty() || odd.empty()){
+        cout<<0<<endl;
     }
-    cout<<ans<<endl;
+    else{
+        int ans=0;
+        // print(even); print(odd);
+        for(int it:even){
+            int bigodd=*odd.rbegin();
+            // cout<<bigodd<<": ";
+            if(it>bigodd){
+                ans++;
+                bigodd+=*even.rbegin();
+            }
+            ans++;
+            odd.insert(bigodd+it);
+            // cout<<it<<"- "; print(odd);
+        }
+        cout<<ans<<endl;
+    }
 }
 
 main()

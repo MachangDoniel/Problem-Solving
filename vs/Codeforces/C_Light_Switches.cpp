@@ -222,36 +222,57 @@ ll bigmod(ll a,ll p,ll m){
 
 void solve(){
     // ll in,n,m,i,j,k,x,y;
-    int n; cin>>n;
-    string s; cin>>s;
-    stack<char>st;
-    stack<int>stt;
-    st.push('*');
+    int n,k; cin>>n>>k;
+    vector<int>v(n);
     for(int i=0;i<n;i++){
-        if(s[i]=='_'){
-            if(st.top()=='('){
-                st.push(')');
-                s[i]=')';
-            }
-            else{
-                st.push('(');
-                s[i]='(';
-            }
-        }
-        else st.push(s[i]);
+        cin>>v[i];
     }
-    // cout<<s<<endl;
-    int ans=0;
+    sort(all(v));
+    int start=v[n-1];
+    int end=start+k-1;
+    // cout<<start<<" "<<end<<endl;
+    vector<int>starts(n);
     for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            stt.push(i);
+        int d=start-v[i];
+        int m=d%(2*k);
+        if(m==0){
+            starts[i]=start;
         }
-        else{
-            ans+=i-stt.top();
-            stt.pop();
+        else if(m>k){
+            starts[i]=start+k-m%k;
+        }
+        else if(m<k){
+            starts[i]=start-m;
+        }
+        else if(m==k){
+            cout<<-1<<endl;
+            return;
         }
     }
-    cout<<ans<<endl;
+    sort(all(starts));
+    // print(starts);
+    int count=0,l=0,r=0;
+    for(int i=start-k+1;i<=end;i++){
+        while(i>=starts[l]){
+            if(l<n){
+                l++;
+                count++;
+            }
+            else break;
+        }
+        if(count==n){
+            cout<<i<<endl;
+            return;
+        }
+        while(i>=starts[r]+k-1){
+            if(r<n){
+                r++;
+                count--;
+            }
+            else break;
+        }
+    }
+    cout<<-1<<endl;
 }
 
 main()

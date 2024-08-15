@@ -224,34 +224,11 @@ void solve(){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
     string s; cin>>s;
-    stack<char>st;
-    stack<int>stt;
-    st.push('*');
-    for(int i=0;i<n;i++){
-        if(s[i]=='_'){
-            if(st.top()=='('){
-                st.push(')');
-                s[i]=')';
-            }
-            else{
-                st.push('(');
-                s[i]='(';
-            }
-        }
-        else st.push(s[i]);
+    map<char,int>mp;
+    for(int i=0;i<4*n;i++){
+        mp[s[i]]++;
     }
-    // cout<<s<<endl;
-    int ans=0;
-    for(int i=0;i<n;i++){
-        if(s[i]=='('){
-            stt.push(i);
-        }
-        else{
-            ans+=i-stt.top();
-            stt.pop();
-        }
-    }
-    cout<<ans<<endl;
+    cout<<min(mp['A'],n)+min(mp['B'],n)+min(mp['C'],n)+min(mp['D'],n)<<endl;
 }
 
 main()
