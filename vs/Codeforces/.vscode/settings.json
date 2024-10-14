@@ -25,7 +25,8 @@
         "xstring": "cpp",
         "xutility": "cpp",
         "algorithm": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "functional": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "cmake.configureOnOpen": true
