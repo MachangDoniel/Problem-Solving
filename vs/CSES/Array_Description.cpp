@@ -219,62 +219,37 @@ ll bigmod(ll a,ll p,ll m){
 
 
 // MyTask
+int n,m; 
 
-// void solve(int &t,int &T){
-//     // ll in,n,m,i,j,k,x,y;
-//     int n,x; cin>>n>>x;
-//     vector<int>c(n);
-//     for(int i=0;i<=n;i++){
-//         cin>>c[i];
-//     }
-//     sort(all(c));
-//     vector<vector<int>>dp(n+1,vector<int>(x+1,0));
-//     // dp[i][j] = number of ways to make sum j skippng coins before i and using i -> n coins
-//     // base case
-//     for(int i=0;i<n;i++){
-//         dp[i][0]=1;
-//     }
-//     // dp[i][k] = dp[i+1][k] + dp[i][k-c[i]]
-//     for(int i=n-1;i>=0;i--){
-//         for(int sum=1;sum<=x;sum++){
-//             int skip = dp[i+1][sum];
-//             int use = 0;
-//             if(c[i] <= sum){
-//                 use = dp[i][sum-c[i]];
-//             }
-//             dp[i][sum] = (skip + use)%mod;
-//         }
-//     }
-//     cout<<dp[0][x]<<endl;
-// }
+bool valid(int x){
+    return 1<=x && x<=m;
+}
 
-void solve(int &t, int &T) {
-    int n, x; 
-    cin >> n >> x;
-    
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
+void solve(int &t,int &T){
+    // ll in,n,m,i,j,k,x,y;
+    cin>>n>>m;
+    vector<int>v(n+1,0);
+    for(int i=1;i<=n;i++){
+        cin>>v[i];
     }
-    sort(all(c));
-    // Using only 2 rows to reduce space
-    vector<int> prev(x + 1, 0), curr(x + 1, 0);
-    
-    // Base case: There's one way to make sum 0 (by picking no coins)
-    prev[0] = 1;
-
-    // Process coins in reverse order (from n-1 to 0)
-    for (int i = n - 1; i >= 0; i--) {
-        curr[0] = 1;  // There's always one way to make sum 0
-        
-        for (int sum = 1; sum <= x; sum++) {
-            int skip = prev[sum];  // Skip current coin
-            int use = (c[i] <= sum) ? curr[sum - c[i]] : 0;  // Use current coin
-            curr[sum] = (skip + use) % mod;
+    vector<int>prev(m+1);
+    int ans=1;
+    int left=0,right=100;
+    for(int i=0;i<n;i++){
+        vector<int>now(m+1,0);
+        if(v[i]==0){
+            for(int j=1;j<=m;j++){
+                if(valid(prev[v[i]-1])){
+                    now[v[i]]+=prev[v[i]-1];
+                }
+            }
         }
-        prev = curr;
+        else{
+            now[v[i]]=1;
+        }
     }
-    cout << prev[x] << endl;
+    
+    
 }
 
 main()
