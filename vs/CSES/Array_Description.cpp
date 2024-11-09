@@ -233,23 +233,55 @@ void solve(int &t,int &T){
         cin>>v[i];
     }
     vector<int>prev(m+1);
-    int ans=1;
-    int left=0,right=100;
-    for(int i=0;i<n;i++){
+    for(int i=1;i<=n;i++){
         vector<int>now(m+1,0);
         if(v[i]==0){
-            for(int j=1;j<=m;j++){
-                if(valid(prev[v[i]-1])){
-                    now[v[i]]+=prev[v[i]-1];
+            if(i==1){
+                for(int j=1;j<=m;j++){
+                    now[j]=1;
+                }
+            }
+            else{
+                for(int j=1;j<=m;j++){
+                    if(valid(j-1)){
+                        now[j]+=(prev[j-1]);
+                        now[j]%=mod;
+                    }
+                    if(valid(j)){
+                        now[j]+=(prev[j]);
+                        now[j]%=mod;
+                    }
+                    if(valid(j+1)){
+                        now[j]+=(prev[j+1]);
+                        now[j]%=mod;
+                    }
                 }
             }
         }
         else{
-            now[v[i]]=1;
+            if(valid(v[i]-1)){
+                now[v[i]]+=(prev[v[i]-1]);
+                now[v[i]]%=mod;
+            }
+            if(valid(v[i])){
+                now[v[i]]+=(prev[v[i]]);
+                now[v[i]]%=mod;
+            }
+            if(valid(v[i]+1)){
+                now[v[i]]+=(prev[v[i]+1]);
+                now[v[i]]%=mod;
+            }
+            if(i==1) now[v[i]]=1;
         }
+        // print(now);
+        prev=now;
     }
-    
-    
+    int ans=0;
+    for(int i=1;i<=m;i++){
+        ans+=prev[i];
+        ans%=mod;
+    }
+    cout<<ans<<endl;
 }
 
 main()

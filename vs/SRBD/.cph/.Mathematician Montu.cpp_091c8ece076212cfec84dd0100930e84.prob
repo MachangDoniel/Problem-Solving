@@ -1,0 +1,1 @@
+{"name":"Local: Mathematician Montu","url":"e:\\CP\\vs\\SRBD\\Mathematician Montu.cpp","tests":[{"id":1727350291323,"input":"2\n20 5\n1 2 3 4 5\n30 6\n1 2 3 4 5 6","output":"Case 1: 8 4 0 4 2 \nCase 2: 8 8 4 0 2 4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\vs\\SRBD\\Mathematician Montu.cpp","group":"local","local":true}

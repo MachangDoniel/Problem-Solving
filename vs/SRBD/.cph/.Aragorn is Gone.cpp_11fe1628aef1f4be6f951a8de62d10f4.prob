@@ -1,0 +1,1 @@
+{"name":"Local: Aragorn is Gone","url":"e:\\CP\\vs\\SRBD\\Aragorn is Gone.cpp","tests":[{"id":1727350946980,"input":"2\n5\n1 2 3 4 5\n7\n1 2 2 1 0 1 1","output":"Case 1: 15\nCase 2: 51"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\vs\\SRBD\\Aragorn is Gone.cpp","group":"local","local":true}

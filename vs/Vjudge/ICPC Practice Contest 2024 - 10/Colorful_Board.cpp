@@ -40,7 +40,8 @@ int main() {
 
         if (n == 1 && m == 1) {
             ans = k;
-        } else {
+        } else 
+        {
             int sum1 = 0, sum2 = 0;
             sum1 = ((n+1)/2) * ((m+1)/2) + (n/2) * (m/2);
             sum2 = n * m - sum1;

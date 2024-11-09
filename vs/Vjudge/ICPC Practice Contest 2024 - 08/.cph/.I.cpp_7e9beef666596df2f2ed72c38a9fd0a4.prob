@@ -1,0 +1,1 @@
+{"name":"Local: I","url":"e:\\CP\\vs\\ICPC Practice Contest 2024 - 08\\I.cpp","tests":[{"id":1730129048086,"input":"3\n3 bit\n25 25 50\n7 nat\n1 2 4 8 16 32 37\n10 dit\n10 10 10 10 10 10 10 10 10 10\n\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\vs\\ICPC Practice Contest 2024 - 08\\I.cpp","group":"local","local":true}

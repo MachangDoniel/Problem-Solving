@@ -1,22 +1,27 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
 using namespace std;
 
-// int fact[]
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
 
-int fact(int n,int p){
-    if(n==0 || n==1) return 1;
-    return (n*fact(n-1,p))%p;
-}
+        // Sort the array in increasing order
+        sort(a.begin(), a.end());
 
-int boringFactorials(int n, int p)
-{
-    return fact(n,p);
-}
-int main(){
-    int t; cin>>t;
-    while(t--){
-        int n,p; cin>>n>>p;
-        cout<<": "<<endl;
-        cout<<boringFactorials(n,p)<<endl;
+        // Calculate the maximum score
+        long long score = 0;
+        for (int i = 1; i < n; i++) {
+            score += a[i] - a[0];
+        }
+
+        cout << score << '\n';
     }
+    return 0;
 }

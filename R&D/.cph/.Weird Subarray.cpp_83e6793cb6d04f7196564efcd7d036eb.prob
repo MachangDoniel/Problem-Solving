@@ -1,0 +1,1 @@
+{"name":"Local: Weird Subarray","url":"e:\\CP\\R&D\\Weird Subarray.cpp","tests":[{"id":1729776338337,"input":"7\n2 4 6 24 15 3 3","output":"4 4 5 5 5 5 5 "}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\R&D\\Weird Subarray.cpp","group":"local","local":true}

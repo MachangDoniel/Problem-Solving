@@ -30,7 +30,9 @@
         "format": "cpp",
         "forward_list": "cpp",
         "ranges": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "xlocinfo": "cpp",
+        "limits": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "cmake.configureOnOpen": true

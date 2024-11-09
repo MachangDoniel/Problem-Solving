@@ -1,0 +1,1 @@
+{"name":"Local: 1st","url":"e:\\CP\\vs\\SRBD\\1st.cpp","tests":[{"id":1727345771860,"input":"1\n1\n2 3 10\n2 3 10\n2 3 10\n1 3 10\n3 3 9","output":"Inconsistent"},{"id":1727346444196,"input":"1\n1\n2 3 10\n2 3 10\n2 3 10\n1 3 10\n3 3 10","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\vs\\SRBD\\1st.cpp","group":"local","local":true}
