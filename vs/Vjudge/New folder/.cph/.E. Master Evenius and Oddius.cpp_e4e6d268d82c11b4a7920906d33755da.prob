@@ -1,0 +1,1 @@
+{"name":"Local: E","url":"e:\\CP\\vs\\Vjudge\\New folder\\E. Master Evenius and Oddius.cpp","tests":[{"id":1731149467320,"input":"3\n1 1\n2 2 \n10 2\n","output":"Case 1: Evenius\nCase 2: Oddius\nCase 3: Oddius\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\vs\\Vjudge\\New folder\\E. Master Evenius and Oddius.cpp","group":"local","local":true}

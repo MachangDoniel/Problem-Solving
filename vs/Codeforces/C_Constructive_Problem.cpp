@@ -24,7 +24,6 @@ using multi_ordered_set= tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order
 #define rall(v) v.rbegin(),v.rend()
 #define extra(n) fixed<<setprecision(n)
 #define For(n) for(ll i=0;i<n;i++)
-#define endl "\n"
 #define vll vector<ll>
 #define pll pair<ll,ll>
 #define mpl map<ll,ll>
@@ -72,6 +71,10 @@ ll combination(ll n,ll r){
     else return factorial(n)/factorial(n-r)/factorial(r);
 }
 
+#define LOCAL
+#include "debug.h"
+// #define dbg(x)
+
 // MyTask
 
 void printV(vector<int>&v){
@@ -105,6 +108,9 @@ int main()
             cin>>v[i];
             mp[v[i]]++;
         }
+
+        dbg(mp);
+
         int mex=findMex(v,mp);
         if(mex==n) NO;
         else{

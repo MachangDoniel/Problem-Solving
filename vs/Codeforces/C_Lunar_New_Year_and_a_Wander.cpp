@@ -217,9 +217,9 @@ ll bigmod(ll a,ll p,ll m){
 }
 
 // Debugging
-// #define LOCAL
-// #include "debug.h"
-#define dbg(x)
+#define LOCAL
+#include "debug.h"
+// #define dbg(x)
 
 
 // MyTask
@@ -238,6 +238,7 @@ void solve(int &t,int &T){
         adj[x].pb(y);
         adj[y].pb(x);
     }
+
     for(int i=1;i<=n;i++) sort(all(adj[i]));
     traverse(1,1);
 }
