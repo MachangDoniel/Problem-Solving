@@ -105,9 +105,9 @@ main()
 {
     string s,ss; cin>>s>>ss;
     // cout<<"Using General Approach: ";
-    cout<<countSubstringWrong(s,ss)<<endl;  // common mistake
+    // cout<<countSubstringWrong(s,ss)<<endl;  // common mistake
     // cout<<"Using General Approach: ";
     // cout<<countSubstringRight(s,ss)<<endl;  // may face time limit
-    // cout<<"Using DoubleHash Approach: ";
-    // cout<<countSubstringDH(s,ss)<<endl;     // using double hash user defined data type
+    cout<<"Using DoubleHash Approach: ";
+    cout<<countSubstringDH(s,ss)<<endl;     // using double hash user defined data type
 }

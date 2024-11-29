@@ -142,11 +142,14 @@ struct DoubleHash {
 };
 class DisjointSet {
     private:
-        int parent[N];
-        int size[N];
+        vector<int> parent,size;
     public:
-        DisjointSet() {
-            for(int i=0;i<N;i++) {
+        DisjointSet() {}
+        DisjointSet(int n) { resize(n);}
+        void resize(int n) {
+            parent.resize(n);
+            size.resize(n);
+            for(int i=0;i<n;i++) {
                 parent[i]=i;
                 size[i]=1;
             }
@@ -169,7 +172,56 @@ class DisjointSet {
                 size[a]+=size[b];
             }
         }
-    };
+};
+class SegmentTree{
+    private:
+        int n;
+        vector<int>segmentTree,lazyTree;
+    public:
+        SegmentTree(){}
+        SegmentTree(int n){ resize(n);}
+        void resize(int n){
+            this->n=n;
+            segmentTree.resize(4*n,0);
+            lazyTree.resize(4*n,0);
+        }
+        void push(int start,int ending,int node){
+            if(lazyTree[node]){
+                segmentTree[node]=max(lazyTree[node],segmentTree[node]);
+                if (start!=ending){
+                    lazyTree[2*node+1]=max(lazyTree[2*node+1],lazyTree[node]);
+                    lazyTree[2*node+2]=max(lazyTree[2*node+2],lazyTree[node]);;
+                }
+                lazyTree[node]=0;
+            }
+        }
+        int query(int start,int ending,int l,int r,int node){
+            push(start,ending,node);
+            if (start>r || ending<l) return 0;
+            if (start>=l && ending<=r) return segmentTree[node];
+            int mid=(start+ending)/2;
+            int q1=query(start,mid,l,r,2*node+1);
+            int q2=query(mid+1,ending,l,r,2*node+2);
+            return max(q1,q2);
+        }
+        void update(int start,int ending,int node,int l,int r,int value){
+            push(start,ending,node);
+            if (start>r || ending<l) return;
+            if (start>=l && ending<=r){
+                lazyTree[node]=value;
+                push(start,ending,node);   
+                return;
+            }
+            // partial case
+            int mid=(start+ending)/2;
+            update(start,mid,2*node+1,l,r,value);
+            update(mid+1,ending,2*node+2,l,r,value);
+            segmentTree[node]=max(segmentTree[node*2+1],segmentTree[node*2+2]);
+            return;
+        }
+        int query(int l,int r){ return query(0,n-1,l,r,0);}
+        void update(int l,int r,int x){ update(0,n-1,0,l,r,x);}
+};
 void print(vector<int>v){
     for(int i=0;i<v.size();i++) cout<<v[i]<<" ";
     cout<<endl;
@@ -215,6 +267,17 @@ ll bigmod(ll a,ll p,ll m){
     if(p % 2 == 0) return (q*q) % m;
     return (q*((q*a) % m)) % m;
 }
+int modInverse(int a, int m){
+    int m0=m,y=0,x=1;
+    if(m==1) return 0;
+    while(a>1){
+        int q=a/m,t=m; // q is quotient
+        m=a%m,a=t,t=y; // m is remainder now, process same as Euclid's algo
+        y=x-q*y,x=t; // Update y and x
+    }
+    if(x<0) x+=m0;  // Make x positive
+    return x;
+}
 
 // Debugging
 // #define LOCAL
@@ -224,64 +287,42 @@ ll bigmod(ll a,ll p,ll m){
 
 // MyTask
 
-
 void solve(int &t,int &T){
-    int n, k, q;
-    cin >> n >> k >> q;
-
-    vector<vector<int>> a(n, vector<int>(k));
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < k; ++j) {
-            cin >> a[i][j];
+    // ll in,n,m,i,j,k,x,y;
+    int n,k,q; cin>>n>>k>>q;
+    vector<vector<int>>river(k+1,vector<int>(n+1,0));
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=k;j++){
+            cin>>river[j][i];
+            river[j][i]|=river[j][i-1];
         }
     }
-
-    vector<vector<int>> b(n, vector<int>(k));
-    for (int j = 0; j < k; ++j) {
-        b[0][j] = a[0][j];
-        for (int i = 1; i < n; ++i) {
-            b[i][j] = b[i - 1][j] | a[i][j];
-        }
-    }
-
-    for (int qi = 0; qi < q; ++qi) {
-        int m;
-        cin >> m;
-
-        vector<pair<int, pair<char, int>>> conditions(m);
-        for (int i = 0; i < m; ++i) {
-            int r, c;
-            char o;
-            cin >> r >> o >> c;
-            --r;  // Convert to 0-based index
-            conditions[i] = {r, {o, c}};
-        }
-
-        int answer = -1;
-        for (int i = 0; i < n; ++i) {
-            bool valid = true;
-            for (const auto& condition : conditions) {
-                int r = condition.first;
-                char o = condition.second.first;
-                int c = condition.second.second;
-                
-                if ((o == '<' && !(b[i][r] < c)) || (o == '>' && !(b[i][r] > c))) {
-                    valid = false;
-                    break;
-                }
+    // for(int i=1;i<=k;i++){
+    //     for(int j=1;j<=n;j++){
+    //         cout<<river[i][j]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
+    for(int i=0;i<q;i++){
+        int m;  cin>>m;
+        int mn=1,mx=n;
+        for(int j=0;j<m;j++){
+            int r; cin>>r;
+            char o; cin>>o;
+            int c; cin>>c;
+            if(o=='>'){
+                mn=max(mn,ub(all(river[r]),c)-river[r].begin());
             }
-
-            if (valid) {
-                answer = i + 1;  
-                break;  
+            else{
+                mx=min(mx,lb(all(river[r]),c)-river[r].begin()-1);
             }
+            // cout<<"river: "; print(river[r]);
+            // cout<<"->"<<mn<<" "<<mx<<" "<<c<<endl;
         }
-
-        // Print the answer for this query
-        cout << answer << endl;
+        if(mn<=mx && mn>=1 && mn<=n) cout<<mn<<endl;
+        else cout<<-1<<endl;
     }
 }
-
 
 main()
 {

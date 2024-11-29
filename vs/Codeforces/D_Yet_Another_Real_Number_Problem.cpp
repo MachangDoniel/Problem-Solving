@@ -227,25 +227,36 @@ ll bigmod(ll a,ll p,ll m){
 void solve(int &t,int &T){
     // ll in,n,m,i,j,k,x,y;
     int n; cin>>n;
-    vector<int>v(n),ans(n);
-    int mx=0;
-    for(int i=0;i<n;i++){
-        cin>>v[i];
+    vector<int>a(n+1);
+    int mx=0,count=0,sum=0;
+    for(int i=1;i<=n;i++){
+        cin>>a[i];
+        
     }
-    auto numAndDiv(int num){
-        int div=0;
-        while(n>>1){
-            div++;
-            n>>=1;
+    stack<pair<int,int>>st;
+    vector<int>ans(n+1,0);
+    for(int i=1;i<=n;i++){
+        int count=0;
+        while(a[i]%2==0){
+            a[i]/=2;
+            count++;
         }
-        return {n,div};
+        ans[i]=ans[i-1];
+        while(!st.empty()){
+            if(count>32 || st.top().first<a[i]*(1ll<<count)){
+                int val=st.top().first,p=st.top().second;
+                ans[i]=(ans[i]-val*bigmod(2,p,mod)%mod+mod)%mod;
+                ans[i]=(ans[i]+val);
+                count+=p;
+                st.pop();
+            }
+            else break;
+        }
+        st.push({a[i],count});
+        ans[i]=(ans[i]+a[i]*bigmod(2,count,mod)%mod)%mod;
     }
-    for(int i=n-1;i>=0;i--){
-        mx=max(mx,v[i]);
-        pair<int,int>p=numAndDiv(v[i]);
-        int num=p.first,mul=p.second;
-        ;
-    }
+    for(int i=1;i<=n;i++) cout<<ans[i]<<" ";
+    cout<<endl;
 }
 
 main()
