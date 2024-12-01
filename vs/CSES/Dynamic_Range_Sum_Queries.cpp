@@ -286,27 +286,39 @@ int modInverse(int a, int m){
 
 
 // MyTask
-int n,q;
-vector<int> segmentTree;
-void buildSegmentTree(int index,vector<int>& x,int l,int r){
+
+int n,q; 
+vector<int>x,st;
+
+void build(int index,int l,int r){
     if(l==r){
-        segmentTree[index]=x[l];
+        st[index]=x[l];
         return;
     }
     int mid=(l+r)/2;
-    buildSegmentTree(2*index+1,x,l,mid);
-    buildSegmentTree(2*index+2,x,mid+1,r);
-    segmentTree[index]=min(segmentTree[2*index+1],segmentTree[2*index+2]);
+    build(2*index+1,l,mid);
+    build(2*index+2,mid+1,r);
+    st[index]=st[2*index+1]+st[2*index+2];
 }
-
+void update(int index,int left,int right,int pos,int value){
+    if(left==right) st[index]=value;
+    else{
+        int mid=(left+right)/2;
+        if(pos<=mid) update(2*index+1,left,mid,pos,value);
+        else update(2*index+2,mid+1,right,pos,value);
+        st[index]=st[2*index+1]+st[2*index+2];
+    }
+}
+void update(int pos,int value){
+    update(0,0,n-1,pos,value);
+}
 int query(int index,int left,int right,int l,int r){
-    if(l>r) return INT_MAX;
-    if(l==left && r==right) return segmentTree[index];
+    if(l>r) return 0;
+    if(l==left && r==right) return st[index];
     int mid=(right+left)/2;
     int q1=query(2*index+1,left,mid,l,min(r,mid));
     int q2=query(2*index+2,mid+1,right,max(l,mid+1),r);
-    return min(q1,q2);
-
+    return q1+q2;
 }
 
 int query(int l,int r){
@@ -316,14 +328,23 @@ int query(int l,int r){
 void solve(int &t,int &T){
     // ll in,n,m,i,j,k,x,y;
     cin>>n>>q;
-    vector<int>x(n);
-    for(int i=0;i<n;i++) cin>>x[i];
-    segmentTree.resize(4*n);
-    buildSegmentTree(0,x,0,n-1);
-    // print(segmentTree);
+    x.resize(n);
+    st.resize(4*n);
+    for(int i=0;i<n;i++){
+        cin>>x[i];
+    }
+    build(0,0,n-1);
+    // print(st);
     for(int i=0;i<q;i++){
-        int a,b; cin>>a>>b;
-        cout<<query(a-1,b-1)<<endl;
+        int type; cin>>type;
+        if(type==1){
+            int k,u; cin>>k>>u;
+            update(k-1,u);   
+        }
+        else{
+            int a,b; cin>>a>>b;
+            cout<<query(a-1,b-1)<<endl;
+        }
     }
 }
 

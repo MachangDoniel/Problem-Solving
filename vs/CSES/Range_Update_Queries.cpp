@@ -286,44 +286,42 @@ int modInverse(int a, int m){
 
 
 // MyTask
-int n,q;
-vector<int> segmentTree;
-void buildSegmentTree(int index,vector<int>& x,int l,int r){
-    if(l==r){
-        segmentTree[index]=x[l];
-        return;
-    }
-    int mid=(l+r)/2;
-    buildSegmentTree(2*index+1,x,l,mid);
-    buildSegmentTree(2*index+2,x,mid+1,r);
-    segmentTree[index]=min(segmentTree[2*index+1],segmentTree[2*index+2]);
-}
-
-int query(int index,int left,int right,int l,int r){
-    if(l>r) return INT_MAX;
-    if(l==left && r==right) return segmentTree[index];
-    int mid=(right+left)/2;
-    int q1=query(2*index+1,left,mid,l,min(r,mid));
-    int q2=query(2*index+2,mid+1,right,max(l,mid+1),r);
-    return min(q1,q2);
-
-}
-
-int query(int l,int r){
-    return query(0,0,n-1,l,r);
-}
 
 void solve(int &t,int &T){
-    // ll in,n,m,i,j,k,x,y;
-    cin>>n>>q;
-    vector<int>x(n);
-    for(int i=0;i<n;i++) cin>>x[i];
-    segmentTree.resize(4*n);
-    buildSegmentTree(0,x,0,n-1);
-    // print(segmentTree);
-    for(int i=0;i<q;i++){
-        int a,b; cin>>a>>b;
-        cout<<query(a-1,b-1)<<endl;
+    int n, q;
+    cin >> n >> q;
+
+    vector<long long> x(n + 1), diff(n + 2, 0); // Use 1-based indexing
+    for (int i = 1; i <= n; i++) {
+        cin >> x[i];
+    }
+
+    // Process queries
+    vector<pair<int, int>> type2_queries; // Store type 2 queries
+    for (int i = 0; i < q; i++) {
+        int type;
+        cin >> type;
+        if (type == 1) {
+            int a, b, u;
+            cin >> a >> b >> u;
+            diff[a] += u;
+            diff[b + 1] -= u; // Stop the effect after b
+        } else if (type == 2) {
+            int k;
+            cin >> k;
+            type2_queries.emplace_back(i, k); // Store query for later output
+        }
+    }
+
+    // Apply prefix sums to calculate the final values
+    for (int i = 1; i <= n; i++) {
+        diff[i] += diff[i - 1]; // Prefix sum for diff array
+        x[i] += diff[i];        // Apply updates to the original array
+    }
+
+    // Output type 2 queries
+    for (auto [index, k] : type2_queries) {
+        cout << x[k] << endl;
     }
 }
 
@@ -331,7 +329,7 @@ main()
 {
     Good_Luck;
     int T=1; 
-    // cin>>T;
+    cin>>T;
     for(int t=1;t<=T;t++){
         solve(t,T);
     }

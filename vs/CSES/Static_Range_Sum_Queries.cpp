@@ -308,18 +308,79 @@ int modInverse(int a, int m){
 //     }
 // }
 
+// void solve(int &t,int &T){
+//     // ll in,n,m,i,j,k,x,y;
+//     int n,q; cin>>n>>q;
+//     SegmentTree st(n);
+//     for(int i=0;i<n;i++){
+//         int in; cin>>in;
+//         st.update(i,i,in);
+//     }
+//     while(q--){
+//         int l,r; cin>>l>>r;
+//         l--,r--;
+//         cout<<st.query(l,r)<<endl;
+//     }
+// }
+
+int n,q; 
+vector<int>x,st;
+
+void build(int index,int l,int r){
+    if(l==r){
+        st[index]=x[l];
+        return;
+    }
+    int mid=(l+r)/2;
+    build(2*index+1,l,mid);
+    build(2*index+2,mid+1,r);
+    st[index]=st[2*index+1]+st[2*index+2];
+}
+void update(int index,int left,int right,int pos,int value){
+    if(left==right) st[index]=value;
+    else{
+        int mid=(left+right)/2;
+        if(pos<=mid) update(2*index+1,left,mid,pos,value);
+        else update(2*index+2,mid+1,right,pos,value);
+        st[index]=st[2*index+1]+st[2*index+2];
+    }
+}
+void update(int pos,int value){
+    update(0,0,n-1,pos,value);
+}
+int query(int index,int left,int right,int l,int r){
+    if(l>r) return 0;
+    if(l==left && r==right) return st[index];
+    int mid=(right+left)/2;
+    int q1=query(2*index+1,left,mid,l,min(r,mid));
+    int q2=query(2*index+2,mid+1,right,max(l,mid+1),r);
+    return q1+q2;
+}
+
+int query(int l,int r){
+    return query(0,0,n-1,l,r);
+}
+
 void solve(int &t,int &T){
     // ll in,n,m,i,j,k,x,y;
-    int n,q; cin>>n>>q;
-    SegmentTree st(n);
+    cin>>n>>q;
+    x.resize(n);
+    st.resize(4*n);
     for(int i=0;i<n;i++){
-        int in; cin>>in;
-        st.update(i,i,in);
+        cin>>x[i];
     }
-    while(q--){
-        int l,r; cin>>l>>r;
-        l--,r--;
-        cout<<st.query(l,r)<<endl;
+    build(0,0,n-1);
+    // print(st);
+    for(int i=0;i<q;i++){
+        // int type; cin>>type;
+        // if(type==1){
+        //     int k,u; cin>>k>>u;
+        //     update(k-1,u);   
+        // }
+        // else{
+            int a,b; cin>>a>>b;
+            cout<<query(a-1,b-1)<<endl;
+        // }
     }
 }
 

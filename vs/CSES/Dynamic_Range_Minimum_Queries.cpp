@@ -313,6 +313,23 @@ int query(int l,int r){
     return query(0,0,n-1,l,r);
 }
 
+void update(int index,int left,int right,int pos,int value){
+    if(left==right) segmentTree[index]=value;
+    else{
+        int mid=(right+left)/2;
+        if(pos<=mid){
+            update(2*index+1,left,mid,pos,value);
+        }
+        else{
+            update(2*index+2,mid+1,right,pos,value);
+        }
+        segmentTree[index]=min(segmentTree[2*index+1],segmentTree[2*index+2]);
+    }
+}
+void update(int pos,int value){
+    update(0,0,n-1,pos,value);
+}
+
 void solve(int &t,int &T){
     // ll in,n,m,i,j,k,x,y;
     cin>>n>>q;
@@ -322,8 +339,15 @@ void solve(int &t,int &T){
     buildSegmentTree(0,x,0,n-1);
     // print(segmentTree);
     for(int i=0;i<q;i++){
-        int a,b; cin>>a>>b;
-        cout<<query(a-1,b-1)<<endl;
+        int type; cin>>type;
+        if(type==2){
+            int a,b; cin>>a>>b;
+            cout<<query(a-1,b-1)<<endl;
+        }
+        else{
+            int k,u; cin>>k>>u;
+            update(k-1,u);
+        }
     }
 }
 
