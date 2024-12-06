@@ -2,7 +2,7 @@
 using namespace std;
 
 // MyTask
-#define N 200005
+const int N=200005;
 bool vis[N];
 vector<int>adj_list[N];
 

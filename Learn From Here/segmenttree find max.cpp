@@ -7,7 +7,6 @@ using namespace std;
 const int INF=1e9;
 int n;
 vector<int>tree;
-
 void build(vector<int>&a,int index,int left,int right){
     if(left==right){
         tree[index]=a[left];
