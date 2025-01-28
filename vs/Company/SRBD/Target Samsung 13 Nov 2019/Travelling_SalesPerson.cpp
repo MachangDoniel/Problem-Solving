@@ -12,31 +12,31 @@ vector<vector<int>>adj;
 int visited_all;
 
 // O(n!) solution
-// int tsp(int mask,int pos){
-//     if(mask==visited_all){
-//         return adj[pos][0];
-//     }
-//     int ans=INT_MAX;
-//     for(int city=0;city<n;city++){
-//         if(!(mask&(1<<city))){
-//             int newAns=adj[pos][city]+tsp(mask|(1<<city),city);
-//             ans=min(ans,newAns);
-//         }
-//     }
-//     return ans;
-// }
-// void solve(int& t,int& T){
-//     cin>>n;
-//     adj.resize(n);
-//     for(int i=0;i<n;i++){
-//         adj[i].resize(n);
-//         for(int j=0;j<n;j++){
-//             cin>>adj[i][j];
-//         }
-//     }
-//     visited_all=(1<<n)-1;
-//     cout<<tsp(1,0)<<endl;
-// }
+int tsp(int mask,int pos){
+    if(mask==visited_all){
+        return adj[pos][0];
+    }
+    int ans=INT_MAX;
+    for(int city=0;city<n;city++){
+        if(!(mask&(1<<city))){
+            int newAns=adj[pos][city]+tsp(mask|(1<<city),city);
+            ans=min(ans,newAns);
+        }
+    }
+    return ans;
+}
+void solve(int& t,int& T){
+    cin>>n;
+    adj.resize(n);
+    for(int i=0;i<n;i++){
+        adj[i].resize(n);
+        for(int j=0;j<n;j++){
+            cin>>adj[i][j];
+        }
+    }
+    visited_all=(1<<n)-1;
+    cout<<tsp(1,0)<<endl;
+}
 
 //O((2^n)*n) solution
 vector<vector<int>>dp;

@@ -5,56 +5,49 @@
 #include <algorithm>
 using namespace std;
 
-int k;
-string s;
-vector<vector<int>>levels;
 
-int sToi(string s){
-    int ans=0;
-    for(int i=s.size()-1,mul=1;i>=0;i--,mul*=10){
-        ans+=mul*(s[i]-'0');
+int sToi(string node){
+    int value=0;
+    for(int i=node.size()-1,mul=1;i>=0;i--,mul*=10){
+        value+=(node[i]-'0')*mul;
     }
-    return ans;
+    return value;
 }
 
-void extractTree(int level,string str){
-    cout<<str<<endl;
-    if(str.size()==0 || str=="()") return;
-    string node,lst,rst;
-    bool flag=true,flag1=true;
-    int count=0;
-    for(int i=1;i<int(str.size()-1);i++){ // ignoring 1st '(' and last ')' brackets
-        if(flag){
-            if(str[i]!='(') node+=str[i];   // node value
-            else flag=false;
-        }
-        if(!flag){
-            if(str[i]=='(') count++;
-            else if(str[i]==')') count--;
-            
-            if(flag1) lst+=str[i];
-            else rst+=str[i];
-            
-            if(count==0) flag1=false;
-        }
-    }
-    cout<<sToi(node)<<" "<<lst<<" "<<rst<<endl;
-    levels[level].push_back(sToi(node));
-    if(lst.size()!=2) extractTree(level+1,lst);
-    if(rst.size()!=2) extractTree(level+1,rst);
-}
 
 int main() {
     /* Enter your code here. Read input from STDIN. Print output to STDOUT */ 
-    cin>>k;
-    cin>>s;
-    levels.resize(k+1);
-    extractTree(0,s);
-    int sum=0;
-    // for(int i=0;i<levels[k].size();i++){
-    //     sum+=levels[k][i];
+    int k;
+    string s;
+    vector<vector<int>>v(10);
+    cin>>k>>s;
+    int count=-1;
+    string node;
+    for(int i=0;i<int(s.size());i++){
+        if('0'<=s[i] && s[i]<='9'){
+            node+=s[i];
+        }
+        else{
+            if(!node.empty()){
+                int value=sToi(node);
+                v[count].push_back(value);
+            }
+            node.clear();
+            if(s[i]=='(') count++;
+            else if(s[i]==')') count--;
+        }
+    }
+    // for(int i=0;i<10;i++){
+    //     cout<<"i: "<<i<<endl;
+    //     for(int j=0;j<v[i].size();j++){
+    //         cout<<v[i][j]<<" ";
+    //     }
+    //     cout<<endl;
     // }
-    cout<<"ok"<<endl;
+    int sum=0;
+    for(int i=0;i<int(v[k].size());i++){
+        sum+=v[k][i];
+    }
     cout<<sum<<endl;
     return 0;
 }
