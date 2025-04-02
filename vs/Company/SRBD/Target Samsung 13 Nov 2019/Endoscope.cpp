@@ -1,3 +1,4 @@
+// Solution with DFS
 #include <cmath>
 #include <cstdio>
 #include <vector>

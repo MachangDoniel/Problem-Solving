@@ -59,7 +59,9 @@ struct DoubleHash {
 
  // common mistake
 int countSubstringWrong(string s,string ss){
-    int count=0,n=s.size(),m=ss.size();
+    int count=0;
+    int n=s.size();
+    int m=ss.size();
     for(int i=0,index=0;i<s.size();i++){
         if(s[index]==s[i]) index++;
         else{
@@ -89,11 +91,12 @@ int countSubstringRight(string s,string ss){
 int countSubstringDH(string s,string ss){
     int count=0,n=s.size(),m=ss.size();
     DoubleHash dh(s);
-    int val=dh.range_hash(0,m-1);
+    DoubleHash dhss(ss);
+    int val=dhss.range_hash(0,m-1);
     for(int i=0;i<s.size();i++){
         if(i+m-1<n && dh.range_hash(i,i+m-1)==val){
             count++;
-            i+=(m-1);
+            i++;
         }
     }
     // cout<<count<<endl;

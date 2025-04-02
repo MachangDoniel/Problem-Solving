@@ -1,1 +1,1 @@
-{"name":"Local: doublehash","url":"e:\\CP\\Learn From Here\\doublehash.cpp","tests":[{"id":1732341882945,"input":"ab a","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\Learn From Here\\doublehash.cpp","group":"local","local":true}
+{"name":"Local: doublehash","url":"e:\\CP\\Learn From Here\\doublehash.cpp","tests":[{"id":1732341882945,"input":"abcabca abca","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\CP\\Learn From Here\\doublehash.cpp","group":"local","local":true}
